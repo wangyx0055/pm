@@ -1,0 +1,13 @@
+1、Dao层：
+	增加：save*
+	删除：delete*
+	查询：find*
+	更新：save*
+	根据某某查某某：find*By*
+	根据某某删某某：delete*By*
+	在当前实体对应的Dao中，凡是根据Id，只进行增改当前实体操作的，命名：saveEntity();updateEntity();
+2、Service层：
+	增加：add*
+	删除：remove*
+	查询：find*
+	更新：update*

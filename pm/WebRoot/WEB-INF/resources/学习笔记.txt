@@ -1,0 +1,3 @@
+Spring3不能使用HibernateTemplate，因此只需要注入SessionFactory进行数据库操作。
+
+http://blog.csdn.net/liuyuxing19877/article/details/7241364
