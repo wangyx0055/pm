@@ -8,7 +8,7 @@ public class UserProjectVO {
 	private String projectId;
 	private String name;
 	private String describes;
-	private Timestamp createTime;
+	private String createTime;
 	
 	/**
 	 * 有关项目成员的数据
@@ -16,10 +16,10 @@ public class UserProjectVO {
 	private String email;
 	private String password;
 	private String nick;
-	private Timestamp regDate;
+	private String regDate;
 	private String status;
 	private String active;
-	
+	private String role;
 	
 	
 	public UserProjectVO(String userId, String projectId, String email,
@@ -53,10 +53,10 @@ public class UserProjectVO {
 	public void setNick(String nick) {
 		this.nick = nick;
 	}
-	public Timestamp getRegDate() {
+	public String getRegDate() {
 		return regDate;
 	}
-	public void setRegDate(Timestamp regDate) {
+	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
 	public String getStatus() {
@@ -95,21 +95,26 @@ public class UserProjectVO {
 	public void setDescribes(String describes) {
 		this.describes = describes;
 	}
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 	public UserProjectVO(String userId, String projectId, String name,
-			String describes, Date createTime) {
+			String describes, String createTime) {
 		super();
 		this.userId = userId;
 		this.projectId = projectId;
 		this.name = name;
 		this.describes = describes;
-		Timestamp ts = new Timestamp(createTime.getTime());
-		this.createTime = ts;
+		this.createTime = createTime;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }

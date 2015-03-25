@@ -13,7 +13,7 @@
 				data-toggle="modal" data-target="#addProModal">项目新增</button>
 			<li role="presentation" class="active"><a
 				href="javascript:void(0)">所有项目<span class="badge"><c:out
-							value="${allUserProjectVOs.size() }"></c:out></span></a></li>
+							value="${projects.size() }"></c:out></span></a></li>
 			<li role="presentation"><a href="javascript:void(0)">在实施的项目</a></li>
 			<li role="presentation"><a href="javascript:void(0)">已完成的项目</a></li>
 		</ul>
@@ -36,14 +36,22 @@
 					<td id="projectDesc"><c:out value="${uVO.getDescribes() }"></c:out></td>
 					<td id="projectCreateTime"><c:out
 							value="${uVO.getCreateTime() }"></c:out></td>
-					<td><c:if test="${user.getRole() == '0' }">
+					<td>
+						<button class="btn btn-link">
+							<span class="glyphicon glyphicon glyphicon-edit"></span>
+						</button>
+						<button id="deletePro" name='deletePro' class="btn btn-link">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+						<%-- <c:if test="${user.getRole() == '0' }">
 							<button class="btn btn-link">
 								<span class="glyphicon glyphicon glyphicon-edit"></span>
 							</button>
 							<button id="deletePro" name='deletePro' class="btn btn-link">
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
-						</c:if> <c:if test="${user.getRole() != '0' }">
+						</c:if> 
+						<c:if test="${user.getRole() != '0' }">
 							<button class="btn btn-link" disabled>
 								<span class="glyphicon glyphicon glyphicon-edit"></span>
 							</button>
@@ -51,7 +59,8 @@
 								disabled>
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
-						</c:if></td>
+						</c:if> --%>
+					</td>
 				</tr>
 			</c:forEach>
 		</table>

@@ -1,5 +1,6 @@
 package com.icker.pm.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -49,5 +50,23 @@ public class ProjectDaoImpl implements ProjectDao{
 	@Override
 	public List<Project> findAll() throws Exception {
 		return sessionFactory.getCurrentSession().createQuery("from Project").list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Project> findByUser(User user) throws Exception {
+		List<ProjectMember> pms = sessionFactory.getCurrentSession().createQuery("from ProjectMember pm where pm.userId = ?").setString(0, user.getId()).list();
+		List<Project> projects = new ArrayList<Project>();
+		for (ProjectMember projectMember : pms) {
+			Project project = new Project();
+			project = (Project) sessionFactory.getCurrentSession().get(Project.class, projectMember.getProjectId());
+			projects.add(project);
+		}
+		return projects;
+	}
+	@Override
+	public ProjectMember findProjectMember(ProjectMember projectMember)
+			throws Exception {
+		return (ProjectMember) sessionFactory.getCurrentSession().createQuery("from ProjectMember pm where pm.projectId = ? and pm.userId = ?").setString(0, projectMember.getProjectId()).setString(1, projectMember.getUserId()).uniqueResult();
 	}
 }

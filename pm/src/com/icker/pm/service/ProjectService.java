@@ -3,6 +3,7 @@ package com.icker.pm.service;
 import java.util.List;
 
 import com.icker.pm.pojo.Project;
+import com.icker.pm.pojo.ProjectMember;
 import com.icker.pm.pojo.User;
 
 public interface ProjectService {
@@ -12,4 +13,5 @@ public interface ProjectService {
 	public Project findById(Project project) throws Exception;
 	public List<Project> findByUser(User user) throws Exception;
 	public List<Project> findAll() throws Exception;
+	public ProjectMember findPMByUserPro(User user,Project project) throws Exception;
 }

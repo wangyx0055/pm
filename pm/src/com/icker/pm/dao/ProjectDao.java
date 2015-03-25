@@ -30,13 +30,8 @@ public interface ProjectDao {
 	 * @return
 	 */
 	public boolean deleteProject(Project project, ProjectMember projectMember, Task task, List<TasksAssign> tasksAssigns) throws Exception;
-	
-	/**
-	 * 通过项目ID查询项目
-	 * @param project
-	 * @return
-	 */
 	public Project findProjectById(Project project) throws Exception;
-	
+	public List<Project> findByUser(User user) throws Exception;
 	public List<Project> findAll() throws Exception;
+	public ProjectMember findProjectMember(ProjectMember projectMember) throws Exception;
 }

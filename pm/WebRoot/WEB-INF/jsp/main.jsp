@@ -35,13 +35,26 @@
 		<!-- 用于放置项目列表 -->
 		<div id="proList"></div>
 		<script>
-			$.ajax({
-				url : "projectController/getProjects",
-				data : "currentPageNo=1",
-				success : function(data) {
-					$("#proList").html(data);
-				}
+			$(document).ready(function(){
+				$('#projectList').click(function(){
+					$.ajax({
+						url: 'projectController/projectList',
+						type: 'post',
+						dataType:'html',
+						success: function(data) {
+							$("#proList").html(data);
+						}
+					});
+				});
+				/* $.ajax({
+					url : "projectController/getProjects",
+					data : "currentPageNo=1",
+					success : function(data) {
+						$("#proList").html(data);
+					}
+				}); */
 			});
+			
 		</script>
 
 		<jsp:include page="common/loginRegisterModal.jsp"></jsp:include>

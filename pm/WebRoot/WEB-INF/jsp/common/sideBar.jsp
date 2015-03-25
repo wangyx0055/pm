@@ -35,23 +35,26 @@
 
 		<!-- 功能列表组 -->
 		<div class="list-group listbar-listgroup">
-			<a class="list-group-item" href="userController/home"> <span
-				class="glyphicon glyphicon-home"
-				style="margin-left:10px; margin-right:30px;"></span> 登陆首页
-			</a> <a class="list-group-item" href="common/WelcomeServlet"> <span
-				class="glyphicon glyphicon-tasks"
-				style="margin-left:10px; margin-right:30px;"></span> 项目列表
-			</a> <a class="list-group-item" href="javascript:void(0)"> <span
-				class="glyphicon glyphicon-time"
-				style="margin-left:10px; margin-right:30px;"></span> 工时报告
-			</a> <a class="list-group-item" href="javascript:void(0)"> <span
-				class="glyphicon glyphicon-user"
-				style="margin-left:10px; margin-right:30px;"></span> 所有成员
-			</a> <a class="list-group-item" href="javascript:void(0)"> <span
-				class="glyphicon glyphicon-cog"
-				style="margin-left:10px; margin-right:30px;"></span> 系统设置
+			<a class="list-group-item" href="userController/home">
+				<span class="glyphicon glyphicon-home" style="margin-left:10px; margin-right:30px;"></span>
+				登陆首页
 			</a>
-
+			<a id='projectList' class="list-group-item" href="javascript:void(0)">
+				<span class="glyphicon glyphicon-tasks" style="margin-left:10px; margin-right:30px;"></span>
+				项目列表
+			</a>
+			<a class="list-group-item" href="javascript:void(0)">
+				<span class="glyphicon glyphicon-time" style="margin-left:10px; margin-right:30px;"></span>
+				工时报告
+			</a>
+			<a class="list-group-item" href="javascript:void(0)">
+				<span class="glyphicon glyphicon-user" style="margin-left:10px; margin-right:30px;"></span>
+				所有成员
+			</a>
+			<a class="list-group-item" href="javascript:void(0)">
+				<span class="glyphicon glyphicon-cog" style="margin-left:10px; margin-right:30px;"></span>
+				系统设置
+			</a>
 		</div>
 		<!-- 功能列表区结束 -->
 	</div>

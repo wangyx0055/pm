@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.icker.pm.dao.ProjectDao;
 import com.icker.pm.pojo.Project;
+import com.icker.pm.pojo.ProjectMember;
 import com.icker.pm.pojo.User;
 import com.icker.pm.service.ProjectService;
 
@@ -42,12 +43,28 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 	@Override
 	public List<Project> findByUser(User user) throws Exception {
-		return null;
+		try {
+			return projectDao.findByUser(user);
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
 	}
 	@Override
 	public List<Project> findAll() throws Exception {
 		try {
 			return projectDao.findAll();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	@Override
+	public ProjectMember findPMByUserPro(User user, Project project)
+			throws Exception {
+		try {
+			ProjectMember pm = new ProjectMember();
+			pm.setUserId(user.getId());
+			pm.setProjectId(project.getId());
+			return projectDao.findProjectMember(pm);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
