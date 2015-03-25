@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/util
@@ -42,6 +44,7 @@
 	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
 	<mvc:resources location="/WEB-INF/styles/" mapping="/styles/**" />
 	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**" />
+	<mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
 
 	<!-- 文件上传 -->
 	<bean id="multipartResolver"
@@ -50,7 +53,13 @@
 	</bean>
 
 	<!-- 拦截器 -->
-	<!-- <mvc:interceptors> <mvc:interceptor> 多个拦截器,顺序执行 <mvc:mapping path="/problemController/*" 
-		/>如果不配置或/*,将拦截所有的Controller <bean class="com.icker.pm.interceptor.CommonInterceptor"></bean> 
-		</mvc:interceptor> </mvc:interceptors> -->
+	<!-- <bean id="commonInterceptor" class="com.icker.pm.interceptor.CommonInterceptor">
+		<property name="mappingURL" value="/*"/>  
+	</bean> -->
+	<!-- <mvc:interceptors>
+		<mvc:interceptor>
+    		<bean class="com.icker.pm.interceptor.CommonInterceptor" ></bean>
+    	</mvc:interceptor>
+	</mvc:interceptors> -->
+	
 </beans>

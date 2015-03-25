@@ -21,6 +21,15 @@
     </context:component-scan>
     <!-- 默认的注解映射的支持 -->
 	<mvc:annotation-driven/>
+	
+	<!-- 配置拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>  
+			<mvc:mapping path="/*Controller/*" /><!-- 如果不配置或/*,将拦截所有的Controller -->
+			<bean class="com.icker.pm.interceptor.CommonInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 	<!-- 注解型事务控制 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 

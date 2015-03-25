@@ -19,7 +19,8 @@
 <link href="styles/backstage.css" rel="stylesheet">
 <script src="js/jquery.js"></script>
 <script src="js/bootstrap/js/bootstrap.js"></script>
-
+<script src="js/highcharts/highcharts.js"></script>
+<script src="js/highcharts/exporting.js"></script>
 </head>
 
 <body>
@@ -31,28 +32,27 @@
 				id="showTime" class="label label-primary pull-right"></span>
 		</h2>
 		<div class="line-spacing"></div>
-
+		
+		<!-- 项目报表 -->
+		<div id="chart"></div>
 		<!-- 用于放置项目列表 -->
-		<div id="proList"></div>
+		<div id="proList">
+			
+		</div>
 		<script>
 			$(document).ready(function(){
+				// 项目列表
 				$('#projectList').click(function(){
 					$.ajax({
 						url: 'projectController/projectList',
 						type: 'post',
+						data: 'currentPageNo=1',
 						dataType:'html',
 						success: function(data) {
 							$("#proList").html(data);
 						}
 					});
 				});
-				/* $.ajax({
-					url : "projectController/getProjects",
-					data : "currentPageNo=1",
-					success : function(data) {
-						$("#proList").html(data);
-					}
-				}); */
 			});
 			
 		</script>

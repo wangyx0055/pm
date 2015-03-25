@@ -23,8 +23,8 @@ public class ProjectMember implements java.io.Serializable {
 	private String id;
 	private String projectId;
 	private String userId;
-	private String role;
-	private String status;
+	private String role;	// 0表示创始人，1表示普通成员
+	private String status;	// 0表示 邮箱未审核通过，1表示正常，2表示被拒绝？
 
 	// Constructors
 
@@ -89,5 +89,4 @@ public class ProjectMember implements java.io.Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 }

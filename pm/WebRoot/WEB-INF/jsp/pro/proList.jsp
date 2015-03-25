@@ -3,17 +3,20 @@
 
 <!-- 内容区 -->
 <div class="panel panel-default">
-
 	<div class="panel-heading">
 		<h3 class="panel-title">项目列表</h3>
 	</div>
 	<div class="panel-body">
 		<ul class="nav nav-pills" role="tablist">
-			<button id="addPro" type="button" class="btn btn-success pull-right"
-				data-toggle="modal" data-target="#addProModal">项目新增</button>
-			<li role="presentation" class="active"><a
-				href="javascript:void(0)">所有项目<span class="badge"><c:out
-							value="${projects.size() }"></c:out></span></a></li>
+			<button id="addPro" type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#addProModal">项目新增</button>
+			<li role="presentation" class="active">
+				<a href="javascript:void(0)">
+					所有项目
+					<span class="badge">
+						<c:out value="${size }"></c:out>
+					</span>
+				</a>
+			</li>
 			<li role="presentation"><a href="javascript:void(0)">在实施的项目</a></li>
 			<li role="presentation"><a href="javascript:void(0)">已完成的项目</a></li>
 		</ul>
@@ -29,15 +32,17 @@
 			</tr>
 			<c:forEach items="${upVOs }" var="uVO">
 				<tr>
-					<td id="pId"><c:out value="${uVO.getProjectId() }"></c:out></td>
-					<td><a name="projectName" href="javascript:void(0)"
-						id="projectName"> <c:out value="${uVO.getName() }"></c:out>
-					</a></td>
-					<td id="projectDesc"><c:out value="${uVO.getDescribes() }"></c:out></td>
-					<td id="projectCreateTime"><c:out
-							value="${uVO.getCreateTime() }"></c:out></td>
+					<td id="pId" class="hide"><c:out value="${uVO.getProjectId() }"></c:out></td>
+					<td id="sequence"><c:out value="${uVO.getSequence() }"></c:out></td>
 					<td>
-						<button class="btn btn-link">
+						<a name="projectName" href="javascript:void(0)" id="projectName">
+							<c:out value="${uVO.getName() }"></c:out>
+						</a>
+					</td>
+					<td id="projectDesc"><c:out value="${uVO.getDescribes() }"></c:out></td>
+					<td id="projectCreateTime"><c:out value="${uVO.getCreateTime() }"></c:out></td>
+					<td>
+						<button id="editPro" name='editPro' class="btn btn-link">
 							<span class="glyphicon glyphicon glyphicon-edit"></span>
 						</button>
 						<button id="deletePro" name='deletePro' class="btn btn-link">
@@ -81,42 +86,35 @@
 					</c:forEach>
 					<li><a href="javascript:void(0)" id="last">&raquo;</a></li>
 					<%-- <input type="hidden" id="totalPageNoHidden" value="${page.totalPageNo }"> --%>
-
-					<script>
-						$("#last").data("totalPageNoHidden",
-								"${page.totalPageNo }");
-						$("#first").click(function(e) {
-							pageClick(1);
-						});
-						$("#last")
-								.click(
-										function(e) {
-
-											//var totalPageNoHidden = $("#totalPageNoHidden").val();
-											var totalPageNoHidden = $("#last")
-													.data("totalPageNoHidden");
-											console.log("这是我的测试！！"
-													+ totalPageNoHidden);
-											pageClick(totalPageNoHidden);
-										});
-						$("a[name='pageNo']").click(function(e) {
-							var currentPageNo = $(this).text();
-							pageClick(currentPageNo);
-						});
-						function pageClick(currentPageNo) {
-							$.ajax({
-								url : "pro/ProListServlet",
-								data : "currentPageNo=" + currentPageNo,
-								success : function(data) {
-									$("#proList").html(data);
-								}
-							});
-						}
-					</script>
 				</ul>
 			</div>
 		</div>
-
+		<script type="text/javascript">
+			$("#last").data("totalPageNoHidden","${page.totalPageNo }");
+			$("#first").click(function(e) {
+				pageClick(1);
+			});
+			$("#last").click(
+				function(e) {
+					//var totalPageNoHidden = $("#totalPageNoHidden").val();
+					var totalPageNoHidden = $("#last").data("totalPageNoHidden");
+					console.log("这是我的测试！！"+ totalPageNoHidden);
+					pageClick(totalPageNoHidden);
+				});
+			$("a[name='pageNo']").click(function(e) {
+				var currentPageNo = $(this).text();
+				pageClick(currentPageNo);
+			});
+			function pageClick(currentPageNo) {
+				$.ajax({
+					url : "pro/ProListServlet",
+					data : "currentPageNo=" + currentPageNo,
+					success : function(data) {
+						$("#proList").html(data);
+					}
+				});
+			}
+		</script>
 	</div>
 </div>
 
@@ -132,7 +130,7 @@
 				<h4 class="modal-title">项目删除</h4>
 			</div>
 			<div class="modal-body">
-				<p>确认删除当前选中项目吗？该操作将删除相关的其余数据！！</p>
+				<p>确定要删除当前选中项目吗？该操作将删除相关的数据！！</p>
 				<input type="hidden" id="hiddenProId">
 			</div>
 			<div class="modal-footer">
@@ -164,7 +162,7 @@
 
 <!-- 新增项目模态框 -->
 <div id="addProModal" class="modal fade" tabindex="-1" role="dialog"
-	aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -174,7 +172,6 @@
 				<h4 class="modal-title" id="myModalLabel">项目新增</h4>
 			</div>
 			<div class="modal-body">
-
 				<form id="addProjectForm" class="form-horizontal" role="form">
 					<div class="form-group">
 						<label for="proName" class="col-sm-2 control-label">项目名称</label>
@@ -202,7 +199,7 @@
 						</div>
 						<div class="col-sm-3">
 							<input type="text" class="form-control" id="proUserPassword"
-								value="初始密码：111111" disabled>
+								value="111111" disabled>
 						</div>
 						<label class="col-sm-1 control-label" style="margin-left:-10px;">
 							<a href="javascript:addMember()"><span
@@ -224,116 +221,84 @@
 
 
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						//项目详情
-						$("a[name='projectName']").click(
-								function(e) {
-									var proId = $(this).parent("td").parent(
-											"tr").children("#pId").text();
-									$(this).attr(
-											"href",
-											"project/ProjectDetailsServlet?proId="
-													+ proId);
-								});
+$(document).ready(function() {
+	//项目详情
+	$("a[name='projectName']").click(
+		function(e) {
+			var proId = $(this).parent("td").parent("tr").children("#pId").text();
+			$(this).attr(
+				"href",
+				"project/ProjectDetailsServlet?proId=" + proId);
+		});
 
-						//删除项目
-						$("button[name='deletePro']").click(
-								function(e) {
-									var proId = $(this).parent("td").parent(
-											"tr").children("#pId").text();
-									$("#hiddenProId").val(proId);
-									$("#deleteProModal").modal("show");
-								});
-						$("#btnSave")
-								.click(
-										function(e) {
-											var proId = $("#hiddenProId").val();
-											$
-													.ajax({
-														url : "project/ProjectDeleteServlet",
-														data : "proId=" + proId,
-														dataType : "json",
-														success : function(data) {
-															if (data.flag) {
-																$(
-																		"#deleteProModal")
-																		.modal(
-																				"hide");
-																location.href = "common/WelcomeServlet";
-															} else {
-																$(
-																		"#deleteProModal")
-																		.modal(
-																				"hide");
-																$("#failDel")
-																		.modal(
-																				"show");
-															}
-														}
-													});
-										});
-
-						//新增项目
-						$("#savePro")
-								.click(
-										function() {
-											var proUserEmails = "";
-											var proUserNicks = "";
-											var proUserPasswords = "";
-
-											//名字的each可以选中所有，id只能选择一个
-											$("[name='addMember']")
-													.each(
-															function() {
-																proUserEmails += $(
-																		this)
-																		.find(
-																				"#proUserEmail")
-																		.val()
-																		+ ",";
-																proUserNicks += $(
-																		this)
-																		.find(
-																				"#proUserNick")
-																		.val()
-																		+ ",";
-																proUserPasswords += $(
-																		this)
-																		.find(
-																				"#proUserPassword")
-																		.val()
-																		+ ",";
-															});
-
-											$
-													.ajax({
-														url : "user/AddProServlet",
-														data : "proName="
-																+ $("#proName")
-																		.val()
-																+ "&proDesc="
-																+ $("#proDesc")
-																		.val()
-																+ "&proUserEmails="
-																+ proUserEmails
-																+ "&proUserNicks="
-																+ proUserNicks
-																+ "&proUserPasswords="
-																+ proUserPasswords,
-														dataType : "json",
-														success : function(data) {
-															if (data.flag) {
-																location.href = "common/WelcomeServlet";
-															} else {
-																alert("新建项目失败！！！");
-															}
-														}
-													});
-										});
-					});
-	function addMember() {
-		$("#prodescDiv").after($("#addMember").clone());
+	//删除项目
+	$("button[name='deletePro']").click(function(e) {
+		var proId = $(this).parent("td").parent("tr").children("#pId").text();
+		$("#hiddenProId").val(proId);
+		$("#deleteProModal").modal("show");
+	});
+	$("#btnSave").click(function(e) {
+		var proId = $("#hiddenProId").val();
+		$.ajax({
+			url: "projectController/deleteProject",
+			data: "id=" + proId,
+			type: 'post',
+			dataType: "json",
+			success: function(data) {
+				$("#deleteProModal").modal("hide");
+			}
+		});
+	});
+	$('#deleteProModal').on('hidden.bs.modal', function(){
+		showProjects();
+	});
+	
+	//新增项目
+	$("#savePro").click(function() {
+		var proName = $("#proName").val();
+		var proDesc = $("#proDesc").val();
+		var proUserEmails = new Array();
+		var proUserNicks = new Array();
+		var proUserPasswords = new Array();
+		//名字的each可以选中所有，id只能选择一个
+		var i = 0;
+		$("[name='addMember']").each(function() {
+			proUserEmails[i] = $(this).find("#proUserEmail").val();
+			proUserNicks[i] = $(this).find("#proUserNick").val();
+			proUserPasswords[i] = $(this).find("#proUserPassword").val();
+			i++;
+		});
+		$.ajax({
+			url: 'projectController/addProject',
+			data: 'proName='+proName+'&proDesc='+proDesc+'&proUserEmails='+proUserEmails+'&proUserNicks='+proUserNicks+'&proUserPasswords='+proUserPasswords,
+			type: 'post',
+			async: false,
+			success: function(data) {
+				$('#addProModal').modal('hide');
+			},
+			error: function(data) {
+				alert("新建项目失败！！！");
+			}
+		});
+		$('#addProModal').on('hidden.bs.modal', function(){
+			showProjects();
+		});
+	});
+	
+	function showProjects() {
+		$.ajax({
+			url: 'projectController/projectList',
+			type: 'post',
+			async: false,
+			dataType:'html',
+			success: function(data) {
+				$("#proList").html(data);
+			}
+		});
 	}
+});
+
+function addMember() {
+	$("#prodescDiv").after($("#addMember").clone());
+}
 </script>

@@ -6,7 +6,7 @@ package com.icker.pm.common.util;
  *
  */
 public class PageUtil {
-	public final Integer eachPageMaxSize = 3;		//每页最大显示数据条数
+	public final Integer eachPageMaxSize = 10;		//每页最大显示数据条数
 	public Integer currentPageNo = 1;		//当前页号
 	public Integer totalPageNo;				//总页数（总页号）
 	public Integer totalDataSize;			//总数据条数

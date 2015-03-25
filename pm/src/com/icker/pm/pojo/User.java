@@ -25,8 +25,10 @@ public class User implements java.io.Serializable {
 	private String password;
 	private String name;
 	private String regDate;
-	private String status;
-	private String active;
+	private String status;	//1表示可用，0表示不可用
+	private String active;	//已激活，未激活
+	
+	private String nick;	//昵称，扩展。
 
 	// Constructors
 
@@ -36,22 +38,24 @@ public class User implements java.io.Serializable {
 
 	/** minimal constructor */
 	public User(String email, String password, String name, String regDate,
-			String status) {
+			String status, String nick) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.regDate = regDate;
 		this.status = status;
+		this.nick = nick;
 	}
 
 	/** full constructor */
 	public User(String email, String password, String name, String regDate,
-			String status, String active) {
+			String status, String nick, String active) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.regDate = regDate;
 		this.status = status;
+		this.nick = nick;
 		this.active = active;
 	}
 
@@ -104,6 +108,15 @@ public class User implements java.io.Serializable {
 		this.regDate = regDate;
 	}
 
+	@Column(name = "nick")
+	public String getNick() {
+		return this.nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+	
 	@Column(name = "status", nullable = false, length = 1)
 	public String getStatus() {
 		return this.status;

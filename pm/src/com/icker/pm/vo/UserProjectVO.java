@@ -9,6 +9,7 @@ public class UserProjectVO {
 	private String name;
 	private String describes;
 	private String createTime;
+	private Integer sequence;
 	
 	/**
 	 * 有关项目成员的数据
@@ -115,6 +116,12 @@ public class UserProjectVO {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public Integer getSequence() {
+		return sequence;
+	}
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
 	}
 	
 }

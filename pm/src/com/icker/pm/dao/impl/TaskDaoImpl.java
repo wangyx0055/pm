@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.icker.pm.dao.TaskDao;
+import com.icker.pm.pojo.Project;
 import com.icker.pm.pojo.Task;
 import com.icker.pm.vo.EmailTimerTaskVO;
 
@@ -19,7 +20,13 @@ public class TaskDaoImpl implements TaskDao {
 	private SessionFactory sessionFactory;
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
-
+	public void setJdbcTemplate(NamedParameterJdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Task> findTasksByProjectId(String projectId) throws Exception{
@@ -36,11 +43,8 @@ public class TaskDaoImpl implements TaskDao {
 		return null;
 	}
 
-	public void setJdbcTemplate(NamedParameterJdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	@Override
+	public void deleteTaskByProject(Project project) throws Exception{
+		sessionFactory.getCurrentSession().createQuery("delete from Task t where t.projectId = ?").setString(0, project.getId()).executeUpdate();
 	}
 }
