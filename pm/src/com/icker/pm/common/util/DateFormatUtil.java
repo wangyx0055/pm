@@ -13,7 +13,7 @@ public class DateFormatUtil {
 	 * @return
 	 */
 	public static String DateToString(Date date){
-		FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+		FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss");
 		String dateStr = dateFormat.format(date);
 		return dateStr;
 	}

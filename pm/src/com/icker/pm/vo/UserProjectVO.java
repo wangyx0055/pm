@@ -1,8 +1,5 @@
 package com.icker.pm.vo;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 public class UserProjectVO {
 	private String userId;
 	private String projectId;
