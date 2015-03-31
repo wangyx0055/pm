@@ -1,3 +1,11 @@
 Spring3不能使用HibernateTemplate，因此只需要注入SessionFactory进行数据库操作。
 
 http://blog.csdn.net/liuyuxing19877/article/details/7241364
+
+JPA 实体 生命周期
+1、瞬时态（新建态）	瞬时态是刚刚new出来的实体对象
+2、持久态（受控态）	持久态是从数据库中查找出来的实体对象，session没有关闭
+3、游离态			游离态是从数据库中查找出来的实体对象，session已经关闭
+4、删除态			删除态是删除了数据库后的实体对象
+
+

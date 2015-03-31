@@ -24,6 +24,12 @@ public class Constant {
 	/**被拒绝2	*/
 	public static String IS_REDUCE = "2";
 	
-	
+	/**
+	 * Project的status
+	 */
+	/** 0：在实施	*/
+	public static String IS_DOING = "0";
+	/** 1：已经完成	*/
+	public static String HAVING_DONE = "1";
 	
 }

@@ -1,92 +1,94 @@
 package com.icker.pm.pojo;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author Icker
  */
 @Entity
 @Table(name = "projectmember", catalog = "pm")
-public class ProjectMember implements java.io.Serializable {
+public class ProjectMember {
+	/** 联合主键 */
+	@EmbeddedId
+	private ProjectMemberId id;
+	/** 权限，0创始人，1普通项目成员，2客户，3超级管理员，4其他 */
+	@Column(name = "role", length = 1)
+	private String role;
+	/** 用于邮箱验证，0邮箱未审核通过，1正常，2被拒绝 */
+	@Column(name = "status", length = 1)
+	private String status;
 
-	// Fields
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1278196347661515061L;
-	private String id;
-	private String projectId;
-	private String userId;
-	private String role;	// 0表示创始人，1表示普通成员
-	private String status;	// 0表示 邮箱未审核通过，1表示正常，2表示被拒绝？
-
-	// Constructors
-
-	/** default constructor */
 	public ProjectMember() {
 	}
 
-	/** full constructor */
-	public ProjectMember(String projectId, String userId, String role,
-			String status) {
-		this.projectId = projectId;
-		this.userId = userId;
+	public ProjectMember(ProjectMemberId id, String role, String status) {
+		super();
+		this.id = id;
 		this.role = role;
 		this.status = status;
 	}
 
-	// Property accessors
-	@GenericGenerator(name = "generator", strategy = "uuid.hex")
-	@Id
-	@GeneratedValue(generator = "generator")
-	@Column(name = "id", unique = true, nullable = false, length = 32)
-	public String getId() {
-		return this.id;
+	public ProjectMemberId getId() {
+		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(ProjectMemberId id) {
 		this.id = id;
 	}
 
-	@Column(name = "projectId", nullable = false, length = 32)
-	public String getProjectId() {
-		return this.projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
-	@Column(name = "userId", nullable = false, length = 32)
-	public String getUserId() {
-		return this.userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	@Column(name = "role", nullable = false, length = 1)
 	public String getRole() {
-		return this.role;
+		return role;
 	}
 
 	public void setRole(String role) {
 		this.role = role;
 	}
 
-	@Column(name = "status", nullable = false, length = 1)
 	public String getStatus() {
-		return this.status;
+		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjectMember other = (ProjectMember) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
+		return true;
 	}
 }

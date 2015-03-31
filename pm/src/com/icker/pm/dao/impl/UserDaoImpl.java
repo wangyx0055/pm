@@ -2,52 +2,42 @@ package com.icker.pm.dao.impl;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.icker.pm.dao.UserDao;
 import com.icker.pm.pojo.User;
 
 @Repository
-public class UserDaoImpl implements UserDao {
-	@Autowired
-	private SessionFactory sessionFactory;
-	@Autowired
-	private NamedParameterJdbcTemplate jdbcTemplate;
-
-	public void setJdbcTemplate(NamedParameterJdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
 	@Override
-	public String saveUser(User user) throws Exception {
-		return (String) sessionFactory.getCurrentSession().save(user);
+	public boolean saveUser(User user) throws Exception {
+		return super.save(user);
+	}
+	
+	@Override
+	public boolean updateUser(User user) throws Exception {
+		return super.update(user);
 	}
 
 	@Override
 	public User findUserById(String userId) throws Exception {
-		return (User) sessionFactory.getCurrentSession()
-				.get(User.class, userId);
+		return (User) super.findById(User.class, userId);
+	}
+
+	@Override
+	public List<User> findAll() throws Exception {
+		return super.findAll("from User");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<User> findAll() throws Exception {
-		return sessionFactory.getCurrentSession().createQuery("from User user")
-				.list();
-	}
-
-	@Override
 	public User findByEmail(String email) throws Exception {
-		return (User) sessionFactory.getCurrentSession()
-				.createQuery("from User user where user.email = :email")
-				.setString("email", email).uniqueResult();
+		List<User> users = super.getEntityManager().createQuery("from User user where user.email = ?0").setParameter(0, email).getResultList();
+		if(!users.isEmpty()) 
+			return users.get(0);
+		else 
+			return null;
 	}
 
 }

@@ -11,41 +11,20 @@ import com.icker.pm.dao.ResourceDao;
 import com.icker.pm.pojo.Resource;
 
 @Repository
-public class ResourceDaoImpl implements ResourceDao {
-
-	@Autowired
-	private SessionFactory sessionFactory;
-	@Autowired
-	private NamedParameterJdbcTemplate jdbcTemplate;
-
+public class ResourceDaoImpl extends BaseDao<Resource> implements ResourceDao {
+	
 	@Override
-	public String saveResource(Resource resource) throws Exception{
-		return (String) sessionFactory.getCurrentSession().save(resource);
+	public boolean saveResource(Resource resource) throws Exception{
+		return super.save(resource);
 	}
 
 	@Override
 	public void deleteResourceById(Resource resource) throws Exception{
-		sessionFactory.getCurrentSession().delete(resource);
+		super.delete(resource);
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Resource> findResourceByProject(String projectId) throws Exception{
-		return sessionFactory.getCurrentSession()
-				.createQuery("from Resource r where r.proid = :proid")
-				.setString("proid", projectId).list();
-	}
-
 	@Override
 	public Resource findResourceById(Resource resource) throws Exception{
-		return (Resource) sessionFactory.getCurrentSession().get(Resource.class, resource.getId());
-	}
-
-	public void setJdbcTemplate(NamedParameterJdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+		return (Resource) super.findById(Resource.class, resource.getId());
 	}
 }

@@ -11,7 +11,7 @@ public interface ResourceDao {
 	 * @param resource
 	 * @return
 	 */
-	public String saveResource(Resource resource) throws Exception;
+	public boolean saveResource(Resource resource) throws Exception;
 	
 	/**
 	 * 根据id删除文件
@@ -25,7 +25,7 @@ public interface ResourceDao {
 	 * @param proId
 	 * @return
 	 */
-	public List<Resource> findResourceByProject(String projectId) throws Exception;
+//	public List<Resource> findResourceByProject(String projectId) throws Exception;
 	
 	/**
 	 * 根据id查找文件

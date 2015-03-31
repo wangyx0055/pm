@@ -7,120 +7,49 @@
 		<h3 class="panel-title">项目列表</h3>
 	</div>
 	<div class="panel-body">
-		<ul class="nav nav-pills" role="tablist">
-			<button id="addPro" type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#addProModal">项目新增</button>
+		<ul id="tablist" class="nav nav-pills" role="tablist">
+			<button id="addPro" type="button" class="btn btn-success pull-right" data-toggle="modal">项目新增</button>
 			<li role="presentation" class="active">
-				<a href="javascript:void(0)">
+				<a href="#first" aria-controls="first" role="tab" data-toggle="tab">
 					所有项目
 					<span class="badge">
 						<c:out value="${size }"></c:out>
 					</span>
 				</a>
 			</li>
-			<li role="presentation"><a href="javascript:void(0)">在实施的项目</a></li>
-			<li role="presentation"><a href="javascript:void(0)">已完成的项目</a></li>
+			<li role="presentation">
+				<a href="#second" aria-controls="first" role="tab" data-toggle="tab">
+					在实施的项目
+					<span class="badge">
+						<c:out value="${countIsDoing }"></c:out>
+					</span>
+				</a>
+			</li>
+			<li role="presentation">
+				<a href="#third" aria-controls="first" role="tab" data-toggle="tab">
+					已完成的项目
+					<span class="badge">
+						<c:out value="${countHaveDone }"></c:out>
+					</span>
+				</a>
+			</li>
 		</ul>
 		<br>
-
-		<table class="table table-striped table-hover">
-			<tr>
-				<th>项目编号</th>
-				<th>名称</th>
-				<th>描述</th>
-				<th>创建时间</th>
-				<th>操作</th>
-			</tr>
-			<c:forEach items="${upVOs }" var="uVO">
-				<tr>
-					<td id="pId" class="hide"><c:out value="${uVO.getProjectId() }"></c:out></td>
-					<td id="sequence"><c:out value="${uVO.getSequence() }"></c:out></td>
-					<td>
-						<a name="projectName" href="javascript:void(0)" id="projectName">
-							<c:out value="${uVO.getName() }"></c:out>
-						</a>
-					</td>
-					<td id="projectDesc"><c:out value="${uVO.getDescribes() }"></c:out></td>
-					<td id="projectCreateTime"><c:out value="${uVO.getCreateTime() }"></c:out></td>
-					<td>
-						<button id="editPro" name='editPro' class="btn btn-link">
-							<span class="glyphicon glyphicon glyphicon-edit"></span>
-						</button>
-						<button id="deletePro" name='deletePro' class="btn btn-link">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-						<%-- <c:if test="${user.getRole() == '0' }">
-							<button class="btn btn-link">
-								<span class="glyphicon glyphicon glyphicon-edit"></span>
-							</button>
-							<button id="deletePro" name='deletePro' class="btn btn-link">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</c:if> 
-						<c:if test="${user.getRole() != '0' }">
-							<button class="btn btn-link" disabled>
-								<span class="glyphicon glyphicon glyphicon-edit"></span>
-							</button>
-							<button id="deletePro" name='deletePro' class="btn btn-link"
-								disabled>
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</c:if> --%>
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-
-		<!-- 分页 -->
-		<div class="row">
-			<div class="col-md-offset-4">
-				<ul class="pagination">
-					<li><a href="javascript:void(0)" id="first">&laquo;</a></li>
-					<c:forEach var="i" begin="1" end="${page.totalPageNo }" step="1">
-						<c:if test="${page.currentPageNo==i }">
-							<li class="active"><a href="javascript:void(0)"
-								name="pageNo">${i }</a></li>
-						</c:if>
-						<c:if test="${page.currentPageNo!=i }">
-							<li><a href="javascript:void(0)" name="pageNo">${i }</a></li>
-						</c:if>
-					</c:forEach>
-					<li><a href="javascript:void(0)" id="last">&raquo;</a></li>
-					<%-- <input type="hidden" id="totalPageNoHidden" value="${page.totalPageNo }"> --%>
-				</ul>
-			</div>
-		</div>
 		<script type="text/javascript">
-			$("#last").data("totalPageNoHidden","${page.totalPageNo }");
-			$("#first").click(function(e) {
-				pageClick(1);
+			$('#tablist li a').click(function (e) {
+				e.preventDefault();
+				$(this).tab('show');
 			});
-			$("#last").click(
-				function(e) {
-					//var totalPageNoHidden = $("#totalPageNoHidden").val();
-					var totalPageNoHidden = $("#last").data("totalPageNoHidden");
-					console.log("这是我的测试！！"+ totalPageNoHidden);
-					pageClick(totalPageNoHidden);
-				});
-			$("a[name='pageNo']").click(function(e) {
-				var currentPageNo = $(this).text();
-				pageClick(currentPageNo);
-			});
-			function pageClick(currentPageNo) {
-				$.ajax({
-					url : "pro/ProListServlet",
-					data : "currentPageNo=" + currentPageNo,
-					success : function(data) {
-						$("#proList").html(data);
-					}
-				});
-			}
 		</script>
+		
+		<!-- 项目列表 -->
+		<jsp:include page="projects.jsp"></jsp:include>
 	</div>
 </div>
 
 <!-- 内容区结束 -->
 <!-- 确认删除选中项目 -->
-<div id="deleteProModal" class="modal fade">
+<div id="deleteProModal" class="modal fade" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -217,7 +146,65 @@
 	</div>
 </div>
 
-
+<!-- 编辑项目模态框 -->
+<div id="editProModal" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">项目编辑</h4>
+			</div>
+			<div class="modal-body">
+				<form id="editProjectForm" class="form-horizontal" role="form">
+					<input type="hidden" id="editProId">
+					<div class="form-group">
+						<label for="proName" class="col-sm-2 control-label">项目名称</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="editProName"
+								placeholder="项目名称" required autofocus>
+						</div>
+					</div>
+					<div id="editProdescDiv" class="form-group">
+						<label for="proDesc" class="col-sm-2 control-label">项目描述</label>
+						<div class="col-sm-10">
+							<textarea rows="3" class="form-control" id="editProDesc"
+								placeholder="项目描述" required></textarea>
+						</div>
+					</div>
+					<div class="form-group" id="editAddMember" name="editAddMember">
+						<label class="col-sm-2 control-label">邀请成员</label>
+							<input type="hidden" class="form-control" name="userId" id="userId"
+								placeholder="用户ID" required>
+						<div class="col-sm-4">
+							<input type="email" class="form-control" name="uEMail" id="uEMail"
+								placeholder="电子邮件" required disabled>
+						</div>
+						<div class="col-sm-3">
+							<input type="text" class="form-control" name="userName" id="userName"
+								placeholder="昵称" required disabled>
+						</div>
+						<div class="col-sm-3">
+							<input type="text" class="form-control" name="userPassword" id="userPassword"
+								value="111111" disabled>
+						</div>
+						<!-- <label class="col-sm-1 control-label" style="margin-left:-10px;">
+							<a href="javascript:editAddMember()"><span
+								class="glyphicon glyphicon-plus"></span></a>
+						</label> -->
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button id="editProject" type="button" class="btn btn-primary"
+					form="addProjectForm">提交</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <script type="text/javascript">
@@ -253,13 +240,110 @@ $(document).ready(function() {
 		showProjects();
 	});
 	
+	//编辑项目
+	$("button[name='editPro']").click(function(e) {
+		var proName = $(this).parent("td").parent("tr").children("td").children("#projectName").text();
+		var proDesc = $(this).parent("td").parent("tr").children("#projectDesc").text();
+		var pId = $(this).parent("td").parent("tr").children("#pId").text();
+		$.ajax({
+			url: "projectController/projectMembers",
+			data: "id="+pId,
+			type: "post",
+			success:function(data) {
+				$("#editProModal").modal("show");
+				$("#editProName").val(proName.trim());
+				$("#editProDesc").val(proDesc.trim());
+				$("#editProId").val(pId);
+			
+				// 去除之前的多余的邀请表单
+				var sum = 0;
+				$("div[name=editAddMember]").each(function(){
+					sum++;
+					if(sum>=2) {
+						$(this.remove());
+					}
+				});
+				// 克隆邀请表单
+				for (var i = 0; i < data.members.length-1; i++) {
+					$("#editProdescDiv").after($("#editAddMember").clone());
+					//editAddMember();
+				}
+				// 赋值
+				var i = 0;
+				$("input[name='uEMail']").each(function(){
+					$(this).val(data.members[i++].email);
+				});
+				i = 0;
+				$("input[name='userName']").each(function(){
+					$(this).val(data.members[i++].name);
+				});
+				i = 0;
+				$("input[name='userId']").each(function(){
+					$(this).val(data.members[i++].id);
+				});
+			},
+			error: function(data) {
+				alert("asdasd");
+			}
+		});
+	});
+	$("#editProject").click(function(e) {
+		var proId = $("#editProId").val();
+		var proName = $("#editProName").val();
+		var proDesc = $("#editProDesc").val();
+		var userIds= new Array();
+		var userEmails = new Array();
+		var userNames= new Array();
+		var userPasswords = new Array();
+		
+		var i = 0;
+		$("[name='editAddMember']").each(function() {
+			userIds[i] = $(this).find("#userId").val();
+			userEmails[i] = $(this).find("#uEMail").val();
+			userNames[i] = $(this).find("#userName").val();
+			userPasswords[i] = $(this).find("#userPassword").val();
+			i++;
+		});
+		$.ajax({
+			url: "projectController/editProject",
+			data: "id="+proId+"&name="+proName+"&description="+proDesc,
+			type: "post",
+			async: false,
+			success:function(data) {
+				if(data.success) 
+					$('#editProModal').modal('hide');
+				else 
+					alert(data.errMsg);
+			},
+			error: function(data) {
+				alert("error");
+			}
+		});
+		$('#editProModal').on('hidden.bs.modal', function(){
+			showProjects();
+		});
+	});
+	
 	//新增项目
+	$("#addPro").click(function() {
+		// data-target="#addProModal"
+		// 去除之前的多余的邀请表单
+		$("#addProModal").modal('show');
+		var sum = 0;
+		$("div[name='addMember']").each(function(){
+			sum++;
+			if(sum>=2) {
+				$(this.remove());
+			}
+		});
+	});
 	$("#savePro").click(function() {
 		var proName = $("#proName").val();
 		var proDesc = $("#proDesc").val();
 		var proUserEmails = new Array();
 		var proUserNicks = new Array();
 		var proUserPasswords = new Array();
+		
 		//名字的each可以选中所有，id只能选择一个
 		var i = 0;
 		$("[name='addMember']").each(function() {
@@ -285,6 +369,7 @@ $(document).ready(function() {
 		});
 	});
 	
+	// 显示项目列表
 	function showProjects() {
 		$.ajax({
 			url: 'projectController/projectList',
@@ -301,4 +386,14 @@ $(document).ready(function() {
 function addMember() {
 	$("#prodescDiv").after($("#addMember").clone());
 }
+var index = 0;
+function editAddMember() {
+	$("#editProdescDiv").after($("#editAddMember").clone().attr({"id":"editAddMember"+index,"name":"newMember"}));
+	index++;
+	$("div[name='newMember']").each(function(){
+		$(this).children("input[name='userId']").val(null);
+		console.log($(this).children("input[name='userId']").val());
+	});
+}
+
 </script>

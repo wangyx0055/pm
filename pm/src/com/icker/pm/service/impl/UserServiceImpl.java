@@ -11,55 +11,30 @@ import com.icker.pm.pojo.User;
 import com.icker.pm.service.UserService;
 
 @Service
-@Transactional(rollbackFor = { Exception.class, RuntimeException.class })
+@Transactional
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserDao userDao;
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
 	
 	@Override
-	public String addUser(User user) throws Exception {
-		String id = null;
-		try {
-			id = userDao.saveUser(user);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-		return id;
+	public boolean addUser(User user) throws Exception {
+		return userDao.saveUser(user);
 	}
 
 	@Override
-	public String updateUser(User user) throws Exception {
-		String id = null;
-		try {
-			id = userDao.saveUser(user);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-		return id;
+	public boolean updateUser(User user) throws Exception {
+		return userDao.updateUser(user);
 	}
 
 	@Override
 	public User findUserById(String userId) throws Exception {
-		User user = null;
-		try {
-			user = userDao.findUserById(userId);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-		return user;
+		return userDao.findUserById(userId);
 	}
 
 	@Override
 	public List<User> findAll() throws Exception {
-		try {
-			return userDao.findAll();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+		return userDao.findAll();
 	}
 
 	@Override
@@ -76,10 +51,6 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User findUserByEmail(String email) throws Exception {
-		try {
-			return userDao.findByEmail(email);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+		return userDao.findByEmail(email);
 	}
 }

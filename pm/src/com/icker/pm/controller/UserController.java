@@ -1,29 +1,27 @@
 package com.icker.pm.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.icker.pm.pojo.User;
 import com.icker.pm.service.UserService;
 
 @Controller
 @RequestMapping("/userController")
+@SessionAttributes(value={"user"})
 public class UserController {
 	@Autowired
 	private UserService userService;
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 	
 	@RequestMapping("/login")
-	public String login(User user, HttpServletRequest request) {
+	public String login(User user, ModelMap modelMap) {
 		try {
 			if (userService.hasUser(user)) {
 				user = userService.findUserByEmail(user.getEmail());
-				request.getSession().setAttribute("user", user);
+				modelMap.addAttribute("user", user);
 				return "main";
 			}
 		} catch (Exception e) {
@@ -33,8 +31,8 @@ public class UserController {
 	}
 	
 	@RequestMapping("/home")
-	public String home(HttpServletRequest request) {
-		if(null == request.getSession().getAttribute("user"))
+	public String home(ModelMap modelMap) {
+		if(null == modelMap.get("user"))
 			return "/";
 		return "main";
 	}

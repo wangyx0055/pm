@@ -23,12 +23,12 @@
 	<mvc:annotation-driven/>
 	
 	<!-- 配置拦截器 -->
-	<mvc:interceptors>
+	<!-- <mvc:interceptors>
 		<mvc:interceptor>  
-			<mvc:mapping path="/*Controller/*" /><!-- 如果不配置或/*,将拦截所有的Controller -->
+			<mvc:mapping path="/*Controller/*" />如果不配置或/*,将拦截所有的Controller
 			<bean class="com.icker.pm.interceptor.CommonInterceptor"></bean>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 	
 	<!-- 注解型事务控制 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
@@ -55,25 +55,34 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">false</prop>
 			</props>
 		</property>
 	</bean>
-	<!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"> 
-		<property name="dataSource" ref="dataSource"></property> </bean> -->
-	<!-- 以下的比jdbcTemplate更好 -->
-	<bean id="jdbcTemplate"
-		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-		<constructor-arg>
-			<ref bean="dataSource" />
-		</constructor-arg>
-	</bean>
 
 	<!-- 事务配置：1、拦截型的；2、代理型的；3、注解型的。 -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
+	<!-- <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
 		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	</bean> -->
 	
+	<!-- 配置JPA，以及事务 -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.icker"></property>
+		<property name="persistenceUnitName" value="prameworkset-jpa"></property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="database" value="MYSQL" />
+				<!-- <property name="generateDdl" value="true"></property> -->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
 </beans>
