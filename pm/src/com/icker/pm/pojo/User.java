@@ -1,5 +1,6 @@
 package com.icker.pm.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +18,10 @@ import org.hibernate.annotations.GenericGenerator;
 /**
  * @author Icker
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "user", catalog = "pm")
-public class User {
+public class User implements Serializable{
 	/** 用户id */
 	@Id
 	@GeneratedValue(generator = "generator")     

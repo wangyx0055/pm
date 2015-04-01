@@ -14,28 +14,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<!-- Bootstrap -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="././css/bootstrap.css" rel="stylesheet">
-    <link href="././css/backstage.css" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
-        <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
     
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="././js/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="././js/bootstrap.js"></script>
+    <link href="styles/bootstrap.css" rel="stylesheet">
+	<link href="styles/backstage.css" rel="stylesheet">
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap/js/bootstrap.js"></script>
+	<script src="js/highcharts/highcharts.js"></script>
+	<script src="js/highcharts/exporting.js"></script>
     
   </head>
   
   <body>
   	<div class="container container-own">
-		<jsp:include page="<%=basePath %>/jsp/common/header.jsp"></jsp:include>
-		
-	    <jsp:include page="<%=basePath %>/jsp/common/sideBar.jsp"></jsp:include>
-	    <h2><i>${projects.name }</i><span id="showTime2" class="label pull-right"></span><span id="showTime" class="label label-primary pull-right"></span></h2>
+		<jsp:include page="../common/header.jsp"></jsp:include>
+	    <jsp:include page="../common/sideBar.jsp"></jsp:include>
+	    <h2><i>${project.name }</i><span id="showTime2" class="label pull-right"></span><span id="showTime" class="label label-primary pull-right"></span></h2>
 	    <div class="line-spacing"></div>
 	    
 	    <!-- 内容区 -->	
@@ -53,8 +46,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</ul>
 		        </div>
 		        <div class="jumbotron" style="background-color: #ffffff">
-				 <label class="label label-success" style="font-size:24px;">${projects.name }</label><hr>
-				 ${projects.describes }
+				 <label class="label label-success" style="font-size:24px;">${project.name }</label><hr>
+				 ${project.description }
 				</div>
 	        </div>
 	        <div class="col-md-1" style="background-color:#ffffff; border-radius:15px;">
@@ -68,14 +61,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
     	<!-- 内容区结束 -->
     	
-    	<input id="hiddenProId" type="hidden" value="${projects.id }">
+    	<input id="hiddenProId" type="hidden" value="${project.id }">
     	<script type="text/javascript">
     		$(document).ready(function(){
     			var proId = $("#hiddenProId").val();
     			
     			//项目概览
     			$("#proDetails").click(function(e){
-    				$(this).attr("href","project/ProjectDetailsServlet?proId="+proId);
+    				$(this).attr("href","projectController/ProjectDetails?id="+proId);
     			});
     			//文件
     			$("#files").click(function(e){
@@ -87,10 +80,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			});
     			
     			$.ajax({
-    				url:"pro/ProjectMemberServlet",
-    				data:"proId="+proId,
+    				url:"projectController/projectMember",
+    				data:"id="+proId,
     				success:function(data){
-    					$("#proMem").children("hr:last").before(data);
+    					for(var i = 0; i < data.length; i++) {
+    						var a = Math.ceil(Math.random()*6);
+    						var style = "label label-default";
+        					switch(a) {
+        						case 1: style = "label label-default";break;
+        						case 2: style = "label label-primary";break;
+        						case 3: style = "label label-success";break;
+        						case 4: style = "label label-info";break;
+        						case 5: style = "label label-warning";break;
+        						case 6: style = "label label-danger";break;
+        					}
+    						$("#proMem").children("hr:last").before("<span class='"+style+"'>"+data[i].name+"</span><br>");
+    					}
     				}
     			});
     			
@@ -100,3 +105,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

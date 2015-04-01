@@ -39,7 +39,7 @@
 				<span class="glyphicon glyphicon-home" style="margin-left:10px; margin-right:30px;"></span>
 				登陆首页
 			</a>
-			<a id='projectList' class="list-group-item" href="javascript:void(0)">
+			<a id='projectList' class="list-group-item" href="projectController/projectList">
 				<span class="glyphicon glyphicon-tasks" style="margin-left:10px; margin-right:30px;"></span>
 				项目列表
 			</a>
@@ -56,6 +56,7 @@
 				系统设置
 			</a>
 		</div>
+		
 		<!-- 功能列表区结束 -->
 	</div>
 	<!--  -->

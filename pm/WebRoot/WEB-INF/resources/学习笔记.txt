@@ -8,4 +8,5 @@ JPA 实体 生命周期
 3、游离态			游离态是从数据库中查找出来的实体对象，session已经关闭
 4、删除态			删除态是删除了数据库后的实体对象
 
-
+一个项目只需要一个SessionFactory就够了。一个SessionFactory连接一个数据库。产生多个session
+session生命周期极其短暂，事务结束就没有了。

@@ -2,6 +2,7 @@ package com.icker.pm.dao;
 
 import java.util.List;
 
+import com.icker.pm.pojo.Project;
 import com.icker.pm.pojo.User;
 
 public interface UserDao {
@@ -10,4 +11,5 @@ public interface UserDao {
 	public User findUserById(String userId) throws Exception;
 	public List<User> findAll() throws Exception;
 	public User findByEmail(String email) throws Exception;
+	public List<User> findUsersByProject(Project project) throws Exception;
 }

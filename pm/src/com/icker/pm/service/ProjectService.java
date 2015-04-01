@@ -23,4 +23,5 @@ public interface ProjectService {
 	public int findCount(User user, String status) throws Exception;
 	public List<Project> findByUser(User user, String status) throws Exception;
 	public List<Project> pagingFindByUser(User user, PageUtil pageUtil, String status) throws Exception;
+	public List<Map<String, Object>> findUsers(Project project) throws Exception;
 }

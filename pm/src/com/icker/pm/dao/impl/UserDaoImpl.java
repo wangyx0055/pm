@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.icker.pm.dao.UserDao;
+import com.icker.pm.pojo.Project;
 import com.icker.pm.pojo.User;
 
 @Repository
@@ -38,6 +39,13 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 			return users.get(0);
 		else 
 			return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> findUsersByProject(Project project) throws Exception {
+		String hql = "select pm.id.user from ProjectMember pm join pm.id.project p where p.id = ?0";
+		return super.getEntityManager().createQuery(hql).setParameter(0, project.getId()).getResultList();
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.icker.pm.pojo;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "message", catalog = "pm")
-public class Message {
+public class Message implements Serializable{
 	/** 评论、消息ID */
 	@Id
 	@GeneratedValue(generator = "generator")

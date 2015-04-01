@@ -30,7 +30,6 @@
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 						<li><a id="signOut" href="user/ExitServlet">安全退出</a></li>
 					</ul>
-
 				</c:if>
 				<c:if test="${user == null}">
 					<button id="login" type="button" class="btn btn-link"

@@ -1,5 +1,44 @@
+<%@page import="com.icker.pm.*"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+  	<title>项目管理系统--项目概览</title>
+    <base href="<%=basePath%>">
+	
+	<!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="styles/bootstrap.css" rel="stylesheet">
+	<link href="styles/backstage.css" rel="stylesheet">
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap/js/bootstrap.js"></script>
+	<script src="js/highcharts/highcharts.js"></script>
+	<script src="js/highcharts/exporting.js"></script>
+    
+  </head>
+<body>
+
+<div class="container container-own">
+		<jsp:include page="../common/header.jsp"></jsp:include>
+		<jsp:include page="../common/sideBar.jsp"></jsp:include>
+		<h2>
+			<i>Project List</i><span id="showTime2" class="label pull-right"></span><span
+				id="showTime" class="label label-primary pull-right"></span>
+		</h2>
+		<div class="line-spacing"></div>
+		
+		<!-- 项目报表 -->
+		<div id="chart"></div>
+		<!-- 用于放置项目列表 -->
+		<div id="proList">
+
 
 <!-- 内容区 -->
 <div class="panel panel-default">
@@ -9,8 +48,8 @@
 	<div class="panel-body">
 		<ul id="tablist" class="nav nav-pills" role="tablist">
 			<button id="addPro" type="button" class="btn btn-success pull-right" data-toggle="modal">项目新增</button>
-			<li role="presentation" class="active">
-				<a href="#first" aria-controls="first" role="tab" data-toggle="tab">
+			<li role="presentation">
+				<a name="fst" href="#first" aria-controls="first" role="tab" data-toggle="tab">
 					所有项目
 					<span class="badge">
 						<c:out value="${size }"></c:out>
@@ -18,7 +57,7 @@
 				</a>
 			</li>
 			<li role="presentation">
-				<a href="#second" aria-controls="first" role="tab" data-toggle="tab">
+				<a name = "sec" href="#second" aria-controls="second" role="tab" data-toggle="tab">
 					在实施的项目
 					<span class="badge">
 						<c:out value="${countIsDoing }"></c:out>
@@ -26,7 +65,7 @@
 				</a>
 			</li>
 			<li role="presentation">
-				<a href="#third" aria-controls="first" role="tab" data-toggle="tab">
+				<a name = "thd" href="#third" aria-controls="third" role="tab" data-toggle="tab">
 					已完成的项目
 					<span class="badge">
 						<c:out value="${countHaveDone }"></c:out>
@@ -35,15 +74,55 @@
 			</li>
 		</ul>
 		<br>
+		<!-- 项目列表 -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane" id="first"></div>
+			<div role="tabpanel" class="tab-pane" id="second"></div>
+			<div role="tabpanel" class="tab-pane" id="third"></div>
+		</div>
 		<script type="text/javascript">
+			$('#tablist a:first').tab('show');
 			$('#tablist li a').click(function (e) {
 				e.preventDefault();
-				$(this).tab('show');
+				if(this.name == "fst") {
+					$.ajax({
+						url: "projectController/allPros",
+						type: "post",
+						dataType: "html",
+						success: function(data){
+							$("#first").html(data);
+						},
+						error: function(data) {
+							alert("error"+data.err);
+						}
+					});
+				} else if(this.name == "sec") {
+					$.ajax({
+						url: "projectController/isDoingPros",
+						type: "post",
+						dataType: "html",
+						success: function(data){
+							$("#second").html(data);
+						},
+						error: function(data) {
+							alert("error"+data.err);
+						}
+					});
+				} else if(this.name == "thd") {
+					$.ajax({
+						url: "projectController/haveDonePros",
+						type: "post",
+						dataType: "html",
+						success: function(data){
+							$("#third").html(data);
+						},
+						error: function(data) {
+							alert("error"+data.err);
+						}
+					});
+				}
 			});
 		</script>
-		
-		<!-- 项目列表 -->
-		<jsp:include page="projects.jsp"></jsp:include>
 	</div>
 </div>
 
@@ -160,6 +239,7 @@
 			<div class="modal-body">
 				<form id="editProjectForm" class="form-horizontal" role="form">
 					<input type="hidden" id="editProId">
+					<input type="hidden" id="proType">
 					<div class="form-group">
 						<label for="proName" class="col-sm-2 control-label">项目名称</label>
 						<div class="col-sm-10">
@@ -209,19 +289,34 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	$.ajax({
+		url: "projectController/allPros",
+		type: "post",
+		dataType: "html",
+		async: false,
+		success: function(data){
+			$("#first").html(data);
+		},
+		error: function(data) {
+			alert("error"+data.err);
+		}
+	});
+	
 	//项目详情
 	$("a[name='projectName']").click(
 		function(e) {
 			var proId = $(this).parent("td").parent("tr").children("#pId").text();
 			$(this).attr(
 				"href",
-				"project/ProjectDetailsServlet?proId=" + proId);
-		});
+				"projectController/ProjectDetails?id=" + proId);
+	});
 
 	//删除项目
 	$("button[name='deletePro']").click(function(e) {
 		var proId = $(this).parent("td").parent("tr").children("#pId").text();
 		$("#hiddenProId").val(proId);
+		var type = $(this).parent("td").parent("tr").children("#type").text();
+		$("#type").val(type);
 		$("#deleteProModal").modal("show");
 	});
 	$("#btnSave").click(function(e) {
@@ -237,7 +332,7 @@ $(document).ready(function() {
 		});
 	});
 	$('#deleteProModal').on('hidden.bs.modal', function(){
-		showProjects();
+		showProjects($("#type").val());
 	});
 	
 	//编辑项目
@@ -245,6 +340,7 @@ $(document).ready(function() {
 		var proName = $(this).parent("td").parent("tr").children("td").children("#projectName").text();
 		var proDesc = $(this).parent("td").parent("tr").children("#projectDesc").text();
 		var pId = $(this).parent("td").parent("tr").children("#pId").text();
+		var type = $(this).parent("td").parent("tr").children("#type").text();
 		$.ajax({
 			url: "projectController/projectMembers",
 			data: "id="+pId,
@@ -254,7 +350,8 @@ $(document).ready(function() {
 				$("#editProName").val(proName.trim());
 				$("#editProDesc").val(proDesc.trim());
 				$("#editProId").val(pId);
-			
+				$("#proType").val(type);
+				
 				// 去除之前的多余的邀请表单
 				var sum = 0;
 				$("div[name=editAddMember]").each(function(){
@@ -320,13 +417,12 @@ $(document).ready(function() {
 			}
 		});
 		$('#editProModal').on('hidden.bs.modal', function(){
-			showProjects();
+			showProjects($("#proType").val());
 		});
 	});
 	
 	//新增项目
 	$("#addPro").click(function() {
-		// data-target="#addProModal"
 		// 去除之前的多余的邀请表单
 		$("#addProModal").modal('show');
 		var sum = 0;
@@ -370,8 +466,61 @@ $(document).ready(function() {
 	});
 	
 	// 显示项目列表
-	function showProjects() {
-		$.ajax({
+	function showProjects(flg) {
+		if(flg == '1') {
+			$.ajax({
+				url: "projectController/allPros",
+				type: "post",
+				dataType: "html",
+				success: function(data){
+					$("#first").html(data);
+					 location.reload();
+				},
+				error: function(data) {
+					alert("error"+data.err);
+				}
+			});
+		} else if(flg == '2') {
+			$.ajax({
+				url: "projectController/isDoingPros",
+				type: "post",
+				dataType: "html",
+				success: function(data){
+					$("#second").html(data);
+					 location.reload();
+				},
+				error: function(data) {
+					alert("error"+data.err);
+				}
+			});
+		} else if(flg == '3'){
+			$.ajax({
+				url: "projectController/haveDonePros",
+				type: "post",
+				dataType: "html",
+				success: function(data){
+					$("#first").html(data);
+					location.reload();
+				},
+				error: function(data) {
+					alert("error"+data.err);
+				}
+			});
+		} else {
+			$.ajax({
+				url: "projectController/allPros",
+				type: "post",
+				dataType: "html",
+				success: function(data){
+					$("#first").html(data);
+					 location.reload();
+				},
+				error: function(data) {
+					alert("error"+data.err);
+				}
+			});
+		}
+		/* $.ajax({
 			url: 'projectController/projectList',
 			type: 'post',
 			async: false,
@@ -379,7 +528,7 @@ $(document).ready(function() {
 			success: function(data) {
 				$("#proList").html(data);
 			}
-		});
+		}); */
 	}
 });
 
@@ -395,5 +544,7 @@ function editAddMember() {
 		console.log($(this).children("input[name='userId']").val());
 	});
 }
-
 </script>
+</div>
+</div>
+<body>

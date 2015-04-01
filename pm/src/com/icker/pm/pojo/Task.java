@@ -1,5 +1,6 @@
 package com.icker.pm.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "task", catalog = "pm")
-public class Task {
+public class Task implements Serializable{
 
 	/** 任务Id */
 	@Id

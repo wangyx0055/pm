@@ -212,6 +212,20 @@ public class ProjectServiceImpl implements ProjectService{
 	public List<Project> findByUser(User user, String status) throws Exception {
 		return projectDao.findByUser(user, status);
 	}
+	@Override
+	public List<Map<String, Object>> findUsers(Project project) throws Exception {
+		List<User> users = userDao.findUsersByProject(project);
+		List<Map<String, Object>> maps = new ArrayList<Map<String,Object>>();
+		for (User user : users) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", user.getId());
+			map.put("name", user.getName());
+			map.put("password", user.getPassword());
+			map.put("email", user.getEmail());
+			maps.add(map);
+		}
+		return maps;
+	}
 	
 	
 	

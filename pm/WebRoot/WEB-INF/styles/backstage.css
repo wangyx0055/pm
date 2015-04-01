@@ -9,10 +9,10 @@ body{
 
 /* 导航栏 */
 .navbar{
-	position:fixed;
+	position:absolute;
 	right:0;
-	top:0;
-	width:82%;
+	top:-60px;
+	width:100%;
 }
 .navbar-brand-own{
 	margin-left:220px;
@@ -68,7 +68,6 @@ body{
 	border-right:5px rgba(103,145,196,1.00) solid;
 }
 .listbar-listgroup a:visited {
-	background-color:#111111;
 	color:#d2d2d2;
 	border-right:5px rgba(103,145,196,1.00) solid;
 }
@@ -76,6 +75,11 @@ body{
 	background-color:#111111;
 	color:#d2d2d2;
 	border-right:5px rgba(103,145,196,1.00) solid;
+}
+.actived {
+	background-color:#111111;
+	color:#d2d2d2;
+	/* border-right:5px rgba(103,145,196,1.00) solid; */
 }
 /* 左侧列表栏结束 */
 

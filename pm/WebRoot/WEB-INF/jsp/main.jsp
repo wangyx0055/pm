@@ -37,26 +37,7 @@
 		<div id="chart"></div>
 		<!-- 用于放置项目列表 -->
 		<div id="proList">
-			
 		</div>
-		<script>
-			$(document).ready(function(){
-				// 项目列表
-				$('#projectList').click(function(){
-					$.ajax({
-						url: 'projectController/projectList',
-						type: 'post',
-						data: 'currentPageNo=1',
-						dataType:'html',
-						success: function(data) {
-							$("#proList").html(data);
-						}
-					});
-				});
-			});
-			
-		</script>
-
 		<jsp:include page="common/loginRegisterModal.jsp"></jsp:include>
 	</div>
 </body>

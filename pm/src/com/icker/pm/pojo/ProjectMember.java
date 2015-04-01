@@ -1,5 +1,7 @@
 package com.icker.pm.pojo;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "projectmember", catalog = "pm")
-public class ProjectMember {
+public class ProjectMember implements Serializable{
 	/** 联合主键 */
 	@EmbeddedId
 	private ProjectMemberId id;
