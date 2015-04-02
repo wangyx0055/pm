@@ -61,7 +61,7 @@
 <div class="row">
 	<div class="col-md-offset-4">
 		<ul class="pagination">
-			<li><a href="javascript:void(0)" id="first">&laquo;</a></li>
+			<li><a href="javascript:void(0)" name="former">&laquo;</a></li>
 			<c:forEach var="i" begin="1" end="${isDoingPage.totalPageNo }"
 				step="1">
 				<c:if test="${isDoingPage.currentPageNo==i }">
@@ -71,20 +71,19 @@
 					<li><a href="javascript:void(0)" name="pageNo">${i }</a></li>
 				</c:if>
 			</c:forEach>
-			<li><a href="javascript:void(0)" id="last">&raquo;</a></li>
-			<%-- <input type="hidden" id="totalPageNoHidden" value="${page.totalPageNo }"> --%>
+			<li><a href="javascript:void(0)" name="last">&raquo;</a></li>
+			<input type="hidden" id="isDoingPageTotalNoHidden" value="${isDoingPage.totalPageNo }">
 		</ul>
 	</div>
 </div>
 <script type="text/javascript">
-	$("#last").data("totalPageNoHidden", "${isDoingPage.totalPageNo }");
-	$("#first").click(function(e) {
+	$("a[name='last']").data("totalPageNoHidden", "${isDoingPage.totalPageNo }");
+	$("a[name='former']").click(function(e) {
 		pageClick(1);
 	});
-	$("#last").click(function(e) {
-		//var totalPageNoHidden = $("#totalPageNoHidden").val();
-		var totalPageNoHidden = $("#last").data("totalPageNoHidden");
-		console.log("这是我的测试！！" + totalPageNoHidden);
+	$("a[name='last']").click(function(e) {
+		var totalPageNoHidden = $("#isDoingPageTotalNoHidden").val();
+		//var totalPageNoHidden = $("a[name='last']").data("totalPageNoHidden");
 		pageClick(totalPageNoHidden);
 	});
 	$("a[name='pageNo']").click(function(e) {
@@ -93,10 +92,12 @@
 	});
 	function pageClick(currentPageNo) {
 		$.ajax({
-			url : "pro/ProListServlet",
+			url : "projectController/isDoingPros",
 			data : "currentPageNo=" + currentPageNo,
+			type: "post",
+			dataType :"html",
 			success : function(data) {
-				$("#proList").html(data);
+				$("#second").html(data);
 			}
 		});
 	}

@@ -40,7 +40,16 @@ public class ProjectController {
 	@RequestMapping("/projectList")
 	public ModelAndView projectList(ModelMap modelMap, ModelAndView modelAndView) {
 		User user = (User) modelMap.get("user");
-		modelAndView = getProjects(modelAndView, user);
+		List<Project> projects = null;
+		try {
+			projects = projectService.findByUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 分页
+		PageUtil pageUtil = new PageUtil(projects.size());
+		modelAndView = getProjects(modelAndView, user, pageUtil);
+		modelAndView.addObject("size", projects.size());
 		return modelAndView;
 	}
 	
@@ -52,10 +61,19 @@ public class ProjectController {
 	 */
 	@ResponseBody
 	@RequestMapping("/allPros")
-	public ModelAndView allPros(ModelMap modelMap, ModelAndView modelAndView) {
+	public ModelAndView allPros(ModelMap modelMap, ModelAndView modelAndView, PageUtil pageUtil) {
 		User user = (User) modelMap.get("user");
-		modelAndView = getProjects(modelAndView, user);
+		List<Project> projects = null;
+		try {
+			projects = projectService.findByUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 分页
+		pageUtil.setTotalDataSize(projects.size());
+		modelAndView = getProjects(modelAndView, user, pageUtil);
 		modelAndView.setViewName("pro/projects");
+		modelAndView.addObject("size", projects.size());
 		return modelAndView;
 	}
 	
@@ -67,9 +85,9 @@ public class ProjectController {
 	 */
 	@ResponseBody
 	@RequestMapping("/isDoingPros")
-	public ModelAndView isDoingPros(ModelMap modelMap, ModelAndView modelAndView) {
+	public ModelAndView isDoingPros(PageUtil page, ModelMap modelMap, ModelAndView modelAndView) {
 		User user = (User) modelMap.get("user");
-		modelAndView = getIsDoingPros(modelAndView, user);
+		modelAndView = getIsDoingPros(modelAndView, user, page);
 		return modelAndView;
 	}
 
@@ -81,9 +99,9 @@ public class ProjectController {
 	 */
 	@ResponseBody
 	@RequestMapping("/haveDonePros")
-	public ModelAndView haveDonePros(ModelMap modelMap, ModelAndView modelAndView) {
+	public ModelAndView haveDonePros(PageUtil page, ModelMap modelMap, ModelAndView modelAndView) {
 		User user = (User) modelMap.get("user");
-		modelAndView = getHaveDonePros(modelAndView, user);
+		modelAndView = getHaveDonePros(modelAndView, user, page);
 		return modelAndView;
 	}
 	
@@ -93,13 +111,11 @@ public class ProjectController {
 	 * @param user
 	 * @return
 	 */
-	private ModelAndView getProjects(ModelAndView modelAndView, User user) {
+	private ModelAndView getProjects(ModelAndView modelAndView, User user, PageUtil pageUtil) {
 		// 查询用户所有的项目
 		try {
 			List<UserProjectVO> upVOs = new ArrayList<UserProjectVO>();
-			List<Project> projects = projectService.findByUser(user);
-			// 分页
-			PageUtil pageUtil = new PageUtil(projects.size());
+			
 			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)
 					* pageUtil.getEachPageMaxSize()); // 设置起始行
 			List<Project> pagingPros = projectService.pagingFindByUser(user,
@@ -116,7 +132,6 @@ public class ProjectController {
 			List<Project> haveDone = projectService.findByUser(user, Constant.HAVING_DONE);
 			List<Project> isDoing = projectService.findByUser(user, Constant.IS_DOING);
 			
-			modelAndView.addObject("size", projects.size());
 			modelAndView.addObject("countHaveDone", haveDone.size());
 			modelAndView.addObject("countIsDoing", isDoing.size());
 			modelAndView.addObject("upVOs", upVOs);
@@ -128,12 +143,12 @@ public class ProjectController {
 		return modelAndView;
 	}
 	
-	private ModelAndView getIsDoingPros(ModelAndView modelAndView, User user) {
+	private ModelAndView getIsDoingPros(ModelAndView modelAndView, User user, PageUtil pageUtil) {
 		try {
 			List<UserProjectVO> isDoingPros = new ArrayList<UserProjectVO>();
 			List<Project> isDoing = projectService.findByUser(user, Constant.IS_DOING);
 			// 分页
-			PageUtil pageUtil = new PageUtil(isDoing.size());
+			pageUtil.setTotalDataSize(isDoing.size());
 			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)* pageUtil.getEachPageMaxSize()); // 设置起始行
 			List<Project> pagingPros = projectService.pagingFindByUser(user,pageUtil,Constant.IS_DOING);
 			int sequence = 1;
@@ -152,12 +167,13 @@ public class ProjectController {
 		return modelAndView;
 	}
 	
-	private ModelAndView getHaveDonePros(ModelAndView modelAndView, User user) {
+	private ModelAndView getHaveDonePros(ModelAndView modelAndView, User user, PageUtil pageUtil) {
 		try {
 			List<UserProjectVO> haveDonePros = new ArrayList<UserProjectVO>();
 			List<Project> haveDone = projectService.findByUser(user, Constant.HAVING_DONE);
 			// 分页
-			PageUtil pageUtil = new PageUtil(haveDone.size());
+//			pageUtil = new PageUtil(haveDone.size());
+			pageUtil.setTotalDataSize(haveDone.size());
 			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)* pageUtil.getEachPageMaxSize()); // 设置起始行
 			List<Project> pagingPros = projectService.pagingFindByUser(user,pageUtil,Constant.HAVING_DONE);
 			int sequence = 1;
@@ -311,4 +327,23 @@ public class ProjectController {
 		}
 		return maps;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/pagingProjects")
+	public ModelAndView pagingProjects(PageUtil page, ModelAndView modelAndView, ModelMap modelMap) {
+		
+		modelAndView.setViewName("pro/projects");
+		return modelAndView;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

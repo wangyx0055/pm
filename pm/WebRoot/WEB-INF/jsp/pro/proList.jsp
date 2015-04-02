@@ -87,6 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if(this.name == "fst") {
 					$.ajax({
 						url: "projectController/allPros",
+						data: "currentPageNo=1",
 						type: "post",
 						dataType: "html",
 						success: function(data){
@@ -470,6 +471,7 @@ $(document).ready(function() {
 		if(flg == '1') {
 			$.ajax({
 				url: "projectController/allPros",
+				data: "currentPageNo=1",
 				type: "post",
 				dataType: "html",
 				success: function(data){
@@ -509,6 +511,7 @@ $(document).ready(function() {
 		} else {
 			$.ajax({
 				url: "projectController/allPros",
+				data: "currentPageNo=1",
 				type: "post",
 				dataType: "html",
 				success: function(data){
@@ -520,15 +523,6 @@ $(document).ready(function() {
 				}
 			});
 		}
-		/* $.ajax({
-			url: 'projectController/projectList',
-			type: 'post',
-			async: false,
-			dataType:'html',
-			success: function(data) {
-				$("#proList").html(data);
-			}
-		}); */
 	}
 });
 
@@ -541,7 +535,6 @@ function editAddMember() {
 	index++;
 	$("div[name='newMember']").each(function(){
 		$(this).children("input[name='userId']").val(null);
-		console.log($(this).children("input[name='userId']").val());
 	});
 }
 </script>
