@@ -1,227 +1,133 @@
-package com.icker.pm.pojo;
+package com.icker.pm.vo;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
-/**
- * @author Icker
- */
-@SuppressWarnings("serial")
-@Entity
-@Table(name = "task", catalog = "pm")
-public class Task implements Serializable{
-
+public class TaskVO {
 	/** 任务Id */
-	@Id
-	@GeneratedValue(generator = "generator")
-	@GenericGenerator(name = "generator", strategy = "uuid")
-	@Column(name = "id", length = 32)
 	private String id;
+	/** 序号 */
+	private Integer sequence;
 	/** 任务名称 */
-	@Column(name = "name", length = 30)
 	private String name;
 	/** 任务描述 */
-	@Column(name = "description")
 	private String description;
 	/** 任务开始时间 */
-	@Column(name = "start_date")
 	private String startDate;
 	/** 任务截止时间 */
-	@Column(name = "end_date")
 	private String endDate;
 	/** 任务实际完成时间 */
-	@Column(name = "finish_date")
 	private String finishDate;
 	/** 任务创建时间 */
-	@Column(name = "create_date")
 	private String createTime;
 	/** 任务实现优先级；1：优先级高；2：优先级中；3：优先级低 */
-	@Column(name = "priority")
 	private String priority;
 	/** 任务实现进度 0-100整数 */
-	@Column(name = "progress")
 	private Integer progress;
-	/** 任务所属项目 */
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "projectid", referencedColumnName = "id")
-	private Project project;
-	/** 任务创建者，分配者 */
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "creator", referencedColumnName = "id")
-	private User creator;
-	/** 任务所属，执行者，负责人 */
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "performer", referencedColumnName = "id")
-	private User performer;
+	/** 任务所属项目，主键ID */
+	private String project;
+	/** 任务创建者，分配者，主键ID */
+	private String creator;
+	/** 任务所属，执行者，负责人，名称 */
+	private String performer;
+	/** 任务所属，执行者，负责人，主键ID */
+	private String performerId;
 	/** 父任务 */
-	@Column(length = 32)
 	private String parentId;
-
-	/** 父任务关联表 */
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
-	@JoinTable(name = "task_parents", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "parent_id"))
-	private Set<Task> parentTasks;
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
-	@JoinTable(name = "task_children", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "child_id"))
-	private Set<Task> childrenTasks;
-
-	/**
-	 * 级联配置
-	 */
-	/** 任务的写字板 */
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "task")
-	private List<Discuss> discusses;
-
-	public Task() {
-	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	public Integer getSequence() {
+		return sequence;
+	}
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 	public String getStartDate() {
 		return startDate;
 	}
-
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
-
 	public String getEndDate() {
 		return endDate;
 	}
-
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-
 	public String getFinishDate() {
 		return finishDate;
 	}
-
 	public void setFinishDate(String finishDate) {
 		this.finishDate = finishDate;
 	}
-
 	public String getCreateTime() {
 		return createTime;
 	}
-
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
-
-	public Integer getProgress() {
-		return progress;
-	}
-
-	public void setProgress(Integer progress) {
-		this.progress = progress;
-	}
-
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
-	}
-
-	public User getPerformer() {
-		return performer;
-	}
-
-	public void setPerformer(User performer) {
-		this.performer = performer;
-	}
-
-	public String getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
-
 	public String getPriority() {
 		return priority;
 	}
-
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
-
-	public Set<Task> getParentTasks() {
-		return parentTasks;
+	public Integer getProgress() {
+		return progress;
 	}
-
-	public void setParentTasks(Set<Task> parentTasks) {
-		this.parentTasks = parentTasks;
+	public void setProgress(Integer progress) {
+		this.progress = progress;
 	}
-
-	public Set<Task> getChildrenTasks() {
-		return childrenTasks;
+	public String getProject() {
+		return project;
 	}
-
-	public void setChildrenTasks(Set<Task> childrenTasks) {
-		this.childrenTasks = childrenTasks;
+	public void setProject(String project) {
+		this.project = project;
 	}
-
-	public List<Discuss> getDiscusses() {
-		return discusses;
+	public String getCreator() {
+		return creator;
 	}
-
-	public void setDiscusses(List<Discuss> discusses) {
-		this.discusses = discusses;
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
-
-	public Task(String id, String name, String description, String startDate,
-			String endDate, String finishDate, String createTime, String priority,
-			Integer progress, Project project, User creator, User performer, String parentId) {
+	public String getPerformer() {
+		return performer;
+	}
+	public void setPerformer(String performer) {
+		this.performer = performer;
+	}
+	public String getPerformerId() {
+		return performerId;
+	}
+	public void setPerformerId(String performerId) {
+		this.performerId = performerId;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+	public TaskVO() {
+		super();
+	}
+	public TaskVO(String id, String name, String description, String startDate,
+			String endDate, String finishDate, String createTime,
+			String priority, Integer progress, String project, String creator,
+			String performer, String performerId, String parentId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -231,26 +137,22 @@ public class Task implements Serializable{
 		this.finishDate = finishDate;
 		this.createTime = createTime;
 		this.priority = priority;
+		this.progress = progress;
 		this.project = project;
 		this.creator = creator;
 		this.performer = performer;
+		this.performerId = performerId;
 		this.parentId = parentId;
-		this.progress = progress;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((childrenTasks == null) ? 0 : childrenTasks.hashCode());
-		result = prime * result
 				+ ((createTime == null) ? 0 : createTime.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result
-				+ ((discusses == null) ? 0 : discusses.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
 				+ ((finishDate == null) ? 0 : finishDate.hashCode());
@@ -259,9 +161,9 @@ public class Task implements Serializable{
 		result = prime * result
 				+ ((parentId == null) ? 0 : parentId.hashCode());
 		result = prime * result
-				+ ((parentTasks == null) ? 0 : parentTasks.hashCode());
-		result = prime * result
 				+ ((performer == null) ? 0 : performer.hashCode());
+		result = prime * result
+				+ ((performerId == null) ? 0 : performerId.hashCode());
 		result = prime * result
 				+ ((priority == null) ? 0 : priority.hashCode());
 		result = prime * result
@@ -271,7 +173,6 @@ public class Task implements Serializable{
 				+ ((startDate == null) ? 0 : startDate.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -280,12 +181,7 @@ public class Task implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Task other = (Task) obj;
-		if (childrenTasks == null) {
-			if (other.childrenTasks != null)
-				return false;
-		} else if (!childrenTasks.equals(other.childrenTasks))
-			return false;
+		TaskVO other = (TaskVO) obj;
 		if (createTime == null) {
 			if (other.createTime != null)
 				return false;
@@ -300,11 +196,6 @@ public class Task implements Serializable{
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
-			return false;
-		if (discusses == null) {
-			if (other.discusses != null)
-				return false;
-		} else if (!discusses.equals(other.discusses))
 			return false;
 		if (endDate == null) {
 			if (other.endDate != null)
@@ -331,15 +222,15 @@ public class Task implements Serializable{
 				return false;
 		} else if (!parentId.equals(other.parentId))
 			return false;
-		if (parentTasks == null) {
-			if (other.parentTasks != null)
-				return false;
-		} else if (!parentTasks.equals(other.parentTasks))
-			return false;
 		if (performer == null) {
 			if (other.performer != null)
 				return false;
 		} else if (!performer.equals(other.performer))
+			return false;
+		if (performerId == null) {
+			if (other.performerId != null)
+				return false;
+		} else if (!performerId.equals(other.performerId))
 			return false;
 		if (priority == null) {
 			if (other.priority != null)

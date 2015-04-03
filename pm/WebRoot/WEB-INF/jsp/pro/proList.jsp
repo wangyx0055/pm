@@ -303,15 +303,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	//项目详情
-	$("a[name='projectName']").click(
-		function(e) {
-			var proId = $(this).parent("td").parent("tr").children("#pId").text();
-			$(this).attr(
-				"href",
-				"projectController/ProjectDetails?id=" + proId);
-	});
-
 	//删除项目
 	$("button[name='deletePro']").click(function(e) {
 		var proId = $(this).parent("td").parent("tr").children("#pId").text();
@@ -336,55 +327,7 @@ $(document).ready(function() {
 		showProjects($("#type").val());
 	});
 	
-	//编辑项目
-	$("button[name='editPro']").click(function(e) {
-		var proName = $(this).parent("td").parent("tr").children("td").children("#projectName").text();
-		var proDesc = $(this).parent("td").parent("tr").children("#projectDesc").text();
-		var pId = $(this).parent("td").parent("tr").children("#pId").text();
-		var type = $(this).parent("td").parent("tr").children("#type").text();
-		$.ajax({
-			url: "projectController/projectMembers",
-			data: "id="+pId,
-			type: "post",
-			success:function(data) {
-				$("#editProModal").modal("show");
-				$("#editProName").val(proName.trim());
-				$("#editProDesc").val(proDesc.trim());
-				$("#editProId").val(pId);
-				$("#proType").val(type);
-				
-				// 去除之前的多余的邀请表单
-				var sum = 0;
-				$("div[name=editAddMember]").each(function(){
-					sum++;
-					if(sum>=2) {
-						$(this.remove());
-					}
-				});
-				// 克隆邀请表单
-				for (var i = 0; i < data.members.length-1; i++) {
-					$("#editProdescDiv").after($("#editAddMember").clone());
-					//editAddMember();
-				}
-				// 赋值
-				var i = 0;
-				$("input[name='uEMail']").each(function(){
-					$(this).val(data.members[i++].email);
-				});
-				i = 0;
-				$("input[name='userName']").each(function(){
-					$(this).val(data.members[i++].name);
-				});
-				i = 0;
-				$("input[name='userId']").each(function(){
-					$(this).val(data.members[i++].id);
-				});
-			},
-			error: function(data) {
-				alert("asdasd");
-			}
-		});
-	});
+	
 	$("#editProject").click(function(e) {
 		var proId = $("#editProId").val();
 		var proName = $("#editProName").val();

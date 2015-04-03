@@ -19,6 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  * @author Icker
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "resource", catalog = "pm")
 public class Resource implements Serializable{

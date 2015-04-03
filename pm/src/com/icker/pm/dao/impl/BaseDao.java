@@ -30,6 +30,11 @@ public class BaseDao<T> {
 		return entityManager.find(c, id);
 	}
 
+	public Object findByParam(Class<T> c, Object param, String hql) {
+		
+		return entityManager.find(c, param);
+	}
+	
 	public boolean save(Object object) {
 		entityManager.persist(object);
 		return true;

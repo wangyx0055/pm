@@ -19,4 +19,9 @@ public class MainController {
 	public String login(User user) {
 		return "user/login";
 	}
+	
+	@RequestMapping("/error")
+	public String error(User user) {
+		return "error";
+	}
 }

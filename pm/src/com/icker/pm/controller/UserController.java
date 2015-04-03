@@ -32,8 +32,6 @@ public class UserController {
 	
 	@RequestMapping("/home")
 	public String home(ModelMap modelMap) {
-		if(null == modelMap.get("user"))
-			return "/";
 		return "main";
 	}
 }

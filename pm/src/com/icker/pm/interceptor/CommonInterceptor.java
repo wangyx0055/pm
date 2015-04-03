@@ -4,13 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class CommonInterceptor implements HandlerInterceptor {
-	private Logger log = Logger.getLogger(CommonInterceptor.class);
-
 	public CommonInterceptor() {
 	}
 
@@ -36,7 +33,6 @@ public class CommonInterceptor implements HandlerInterceptor {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		log.info("---------------------------------访问之前设置UTF-8--------------------------------------");
 		if(null == request.getSession().getAttribute("user")){
 			if(!StringUtils.isBlank((String)request.getParameter("email")) && !StringUtils.isBlank(request.getParameter("password")))
 				request.getRequestDispatcher("/userController/login/").forward(request, response);
@@ -55,7 +51,6 @@ public class CommonInterceptor implements HandlerInterceptor {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		log.info("---------------------------------访问之后设置UTF-8--------------------------------------");
 	}
 
 	/**

@@ -21,4 +21,10 @@ public class TaskDaoImpl extends BaseDao<Task> implements TaskDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Task> findAll(Project project) throws Exception {
+//		super.findByParam(Task.class, project.getId(), hql);
+		return null;
+	}
 }

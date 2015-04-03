@@ -10,6 +10,7 @@ import javax.persistence.Table;
 /**
  * @author Icker
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "projectmember", catalog = "pm")
 public class ProjectMember implements Serializable{
