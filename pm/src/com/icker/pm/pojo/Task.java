@@ -54,19 +54,19 @@ public class Task implements Serializable{
 	/** 任务实现优先级；1：优先级高；2：优先级中；3：优先级低 */
 	@Column(name = "priority")
 	private String priority;
-	/** 任务实现进度 0-100整数 */
+	/** 任务实现进度 0-100浮点数 */
 	@Column(name = "progress")
-	private Integer progress;
+	private Double progress;
 	/** 任务所属项目 */
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectid", referencedColumnName = "id")
 	private Project project;
 	/** 任务创建者，分配者 */
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	/** 任务所属，执行者，负责人 */
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "performer", referencedColumnName = "id")
 	private User performer;
 	/** 父任务 */
@@ -147,11 +147,11 @@ public class Task implements Serializable{
 		this.createTime = createTime;
 	}
 
-	public Integer getProgress() {
+	public Double getProgress() {
 		return progress;
 	}
 
-	public void setProgress(Integer progress) {
+	public void setProgress(Double progress) {
 		this.progress = progress;
 	}
 
@@ -221,7 +221,7 @@ public class Task implements Serializable{
 
 	public Task(String id, String name, String description, String startDate,
 			String endDate, String finishDate, String createTime, String priority,
-			Integer progress, Project project, User creator, User performer, String parentId) {
+			Double progress, Project project, User creator, User performer, String parentId) {
 		super();
 		this.id = id;
 		this.name = name;

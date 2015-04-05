@@ -19,8 +19,8 @@ public class TaskVO {
 	private String createTime;
 	/** 任务实现优先级；1：优先级高；2：优先级中；3：优先级低 */
 	private String priority;
-	/** 任务实现进度 0-100整数 */
-	private Integer progress;
+	/** 任务实现进度 0-100浮点数 */
+	private Double progress;
 	/** 任务所属项目，主键ID */
 	private String project;
 	/** 任务创建者，分配者，主键ID */
@@ -85,10 +85,10 @@ public class TaskVO {
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
-	public Integer getProgress() {
+	public Double getProgress() {
 		return progress;
 	}
-	public void setProgress(Integer progress) {
+	public void setProgress(Double progress) {
 		this.progress = progress;
 	}
 	public String getProject() {
@@ -126,7 +126,7 @@ public class TaskVO {
 	}
 	public TaskVO(String id, String name, String description, String startDate,
 			String endDate, String finishDate, String createTime,
-			String priority, Integer progress, String project, String creator,
+			String priority, Double progress, String project, String creator,
 			String performer, String performerId, String parentId) {
 		super();
 		this.id = id;

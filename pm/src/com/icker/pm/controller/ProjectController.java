@@ -336,7 +336,25 @@ public class ProjectController {
 		return modelAndView;
 	}
 	
-	
+	/**
+	 * 查找项目所属用户
+	 * @param project
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/findUsers")
+	public Map<String, Object> findUsers(Project project, ModelAndView modelAndView, ModelMap modelMap) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<Map<String, Object>> users = projectService.findUsers(project);
+			map.put("users", users);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
 	
 	
 	

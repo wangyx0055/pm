@@ -1,0 +1,9 @@
+.slider-bar {
+	display: block;
+	width: 0px;
+	position: relative;
+	cursor: pointer;
+}
+.progress {
+	cursor: pointer;
+}
