@@ -273,7 +273,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			});
     			//写字板
     			$("#writeBoard").click(function(e){
-    				$(this).attr("href","jsp/textEdit/textEdit.jsp");
+    				$(this).attr("href","discussController/findDiscuss?id="+proId);
     			});
     			// 任务列表
     			$("#taskList").click(function(e){

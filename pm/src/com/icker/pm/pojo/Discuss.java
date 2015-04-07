@@ -46,16 +46,16 @@ public class Discuss implements Serializable{
 	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "author", insertable = true, updatable = true, referencedColumnName = "id", nullable = false)
 	private User author;
-	/** 所属任务 */
+	/** 所属项目 */
 	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "taskId", insertable = true, updatable = true, referencedColumnName = "id", nullable = false)
-	private Task task;
+	@JoinColumn(name = "projectId", insertable = true, updatable = true, referencedColumnName = "id", nullable = false)
+	private Project project;
 
 	public Discuss() {
 	}
 
 	public Discuss(String id, String content, String title, String type,
-			String createTime, User author, Task task) {
+			String createTime, User author, Project project) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -63,7 +63,7 @@ public class Discuss implements Serializable{
 		this.type = type;
 		this.createTime = createTime;
 		this.author = author;
-		this.task = task;
+		this.project = project;
 	}
 
 	public String getId() {
@@ -114,12 +114,12 @@ public class Discuss implements Serializable{
 		this.author = author;
 	}
 
-	public Task getTask() {
-		return task;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setTask(Task task) {
-		this.task = task;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class Discuss implements Serializable{
 		result = prime * result
 				+ ((createTime == null) ? 0 : createTime.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((task == null) ? 0 : task.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -166,10 +166,10 @@ public class Discuss implements Serializable{
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (task == null) {
-			if (other.task != null)
+		if (project == null) {
+			if (other.project != null)
 				return false;
-		} else if (!task.equals(other.task))
+		} else if (!project.equals(other.project))
 			return false;
 		if (title == null) {
 			if (other.title != null)

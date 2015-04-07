@@ -55,7 +55,10 @@ public class Project implements Serializable{
 	/** 项目中的文件 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "project")
 	private List<Resource> resources;
-
+	/** 任务的写字板 */
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "project")
+	private List<Discuss> discusses;
+	
 	public Project() {
 	}
 
@@ -131,6 +134,14 @@ public class Project implements Serializable{
 		this.resources = resources;
 	}
 
+	public List<Discuss> getDiscusses() {
+		return discusses;
+	}
+
+	public void setDiscusses(List<Discuss> discusses) {
+		this.discusses = discusses;
+	}
+
 	public Project(String name, String description, String createTime) {
 		super();
 		this.name = name;
@@ -171,6 +182,8 @@ public class Project implements Serializable{
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
+				+ ((discusses == null) ? 0 : discusses.hashCode());
+		result = prime * result
 				+ ((messages == null) ? 0 : messages.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
@@ -205,6 +218,11 @@ public class Project implements Serializable{
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (discusses == null) {
+			if (other.discusses != null)
+				return false;
+		} else if (!discusses.equals(other.discusses))
 			return false;
 		if (messages == null) {
 			if (other.messages != null)

@@ -1,7 +1,6 @@
 package com.icker.pm.pojo;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -80,13 +78,6 @@ public class Task implements Serializable{
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "task_children", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "child_id"))
 	private Set<Task> childrenTasks;
-
-	/**
-	 * 级联配置
-	 */
-	/** 任务的写字板 */
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "task")
-	private List<Discuss> discusses;
 
 	public Task() {
 	}
@@ -211,14 +202,6 @@ public class Task implements Serializable{
 		this.childrenTasks = childrenTasks;
 	}
 
-	public List<Discuss> getDiscusses() {
-		return discusses;
-	}
-
-	public void setDiscusses(List<Discuss> discusses) {
-		this.discusses = discusses;
-	}
-
 	public Task(String id, String name, String description, String startDate,
 			String endDate, String finishDate, String createTime, String priority,
 			Double progress, Project project, User creator, User performer, String parentId) {
@@ -249,8 +232,6 @@ public class Task implements Serializable{
 		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result
-				+ ((discusses == null) ? 0 : discusses.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
 				+ ((finishDate == null) ? 0 : finishDate.hashCode());
@@ -300,11 +281,6 @@ public class Task implements Serializable{
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
-			return false;
-		if (discusses == null) {
-			if (other.discusses != null)
-				return false;
-		} else if (!discusses.equals(other.discusses))
 			return false;
 		if (endDate == null) {
 			if (other.endDate != null)

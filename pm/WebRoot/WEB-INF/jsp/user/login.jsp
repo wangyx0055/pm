@@ -17,6 +17,7 @@
 <link href="styles/bootstrap.css" rel="stylesheet">
 <link href="styles/login.css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/strapdown.js"></script>
 <script type="text/javascript" src="js/bootstrap/js/bootstrap.js"></script>
 </head>
 
@@ -38,7 +39,9 @@
 			<button class="btn btn-lg btn-primary btn-block" type="submit">登
 				陆</button>
 		</form>
+		
 	</div>
 	<!-- /container -->
+	
 </body>
 </html>
