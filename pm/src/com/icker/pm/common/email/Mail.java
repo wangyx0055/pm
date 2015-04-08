@@ -9,14 +9,14 @@ public class Mail {
 	private Properties properties = PropertiesUtil.loadProperties();
 	
 	//发送邮件的SMTP服务器主机
-	private String mailServerHost;
+	private String mailServerHost = "smtp.sina.com";
 	//发送邮件的SMTP服务器端口
-	private String mailServerPort;
+	private String mailServerPort = "25";
 	//发送者的地址
-	private String fromAddress;
+	private String fromAddress = "cgyubg@sina.com";
 	//登录邮箱的账号密码
-	private String username;
-	private String password;
+	private String username = "cgyubg@sina.com";
+	private String password = "summer1993";
 	
 	//主题
 	private String subject;
@@ -97,5 +97,4 @@ public class Mail {
 	public void setProperties(Properties properties) {
 		this.properties = properties;
 	}
-	
 }

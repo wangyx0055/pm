@@ -10,7 +10,7 @@ import java.util.Properties;
 import com.icker.pm.common.email.Mail;
 
 public class PropertiesUtil {
-	static String path = Mail.class.getResource("/web.properties").getPath();
+	static String path = Mail.class.getResource("/config.properties").getPath();
 	public static Properties loadProperties(){
 		Properties properties = new Properties();
 		try {

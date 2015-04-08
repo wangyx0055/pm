@@ -1,5 +1,6 @@
 package com.icker.pm.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -12,9 +13,19 @@ import com.icker.pm.vo.EmailTimerTaskVO;
 @Repository
 public class TaskDaoImpl extends BaseDao<Task> implements TaskDao {
 
+	@Override
 	public List<EmailTimerTaskVO> findEmailVO() throws Exception{
-		// TODO Auto-generated method stub
-		return null;
+		List<EmailTimerTaskVO> vos = new ArrayList<EmailTimerTaskVO>();
+		List<Task> tasks = super.findAll("from Task t");
+		for (Task task : tasks) {
+			EmailTimerTaskVO vo = new EmailTimerTaskVO();
+			vo.setEmail(task.getCreator().getEmail());
+			vo.setEndTime(task.getEndDate());
+			vo.setNick(task.getCreator().getName());
+			vo.setTaskName(task.getName());
+			vos.add(vo);
+		}
+		return vos;
 	}
 
 	@Override

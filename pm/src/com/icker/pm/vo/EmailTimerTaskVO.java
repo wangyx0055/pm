@@ -1,8 +1,5 @@
 package com.icker.pm.vo;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 /**
  * 任务：任务名称、截止时间、任务执行者邮箱、昵称
  * @author Icker
@@ -10,18 +7,18 @@ import java.util.Date;
  */
 public class EmailTimerTaskVO {
 	private String taskName;
-	private Timestamp endTime;
+	private String endTime;
 	private String email;
 	private String nick;
 	
 	public EmailTimerTaskVO() {
 		super();
 	}
-	public EmailTimerTaskVO(String taskName, Date endTime,
+	public EmailTimerTaskVO(String taskName, String endTime,
 			String email, String nick) {
 		super();
 		this.taskName = taskName;
-		this.endTime = new Timestamp(endTime.getTime());
+		this.endTime = endTime;
 		this.email = email;
 		this.nick = nick;
 	}
@@ -31,10 +28,10 @@ public class EmailTimerTaskVO {
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
-	public Timestamp getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Timestamp endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 	public String getEmail() {

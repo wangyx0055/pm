@@ -5,12 +5,14 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
        ">
        
      <!-- 开启注解支持 -->
@@ -20,11 +22,13 @@
     	<context:include-filter type="regex" expression=".dao.*"/>
     </context:component-scan>
     <!-- 默认的注解映射的支持 -->
-	<mvc:annotation-driven/>
+	<mvc:annotation-driven />
+	<!-- 定时器注解支持 -->
+	<task:annotation-driven />
 	
 	<!-- 配置拦截器 -->
 	<mvc:interceptors>
-		<mvc:interceptor>  
+		<mvc:interceptor>
 			<mvc:mapping path="/*Controller/*" /><!-- 如果不配置或,将拦截所有的Controller -->
 			<bean class="com.icker.pm.interceptor.CommonInterceptor"></bean>
 		</mvc:interceptor>
