@@ -53,7 +53,7 @@ public class Task implements Serializable{
 	@Column(name = "priority")
 	private String priority;
 	/** 任务实现进度 0-100浮点数 */
-	@Column(name = "progress")
+	@Column(name = "progress", scale=2)
 	private Double progress;
 	/** 任务所属项目 */
 	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)

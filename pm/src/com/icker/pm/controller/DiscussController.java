@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.icker.pm.common.enumerate.DiscussType;
+import com.icker.pm.pojo.Discuss;
 import com.icker.pm.pojo.Project;
+import com.icker.pm.pojo.User;
 import com.icker.pm.service.DiscussService;
 import com.icker.pm.service.ProjectService;
 import com.icker.pm.vo.DiscussVO;
@@ -70,4 +73,106 @@ public class DiscussController {
 		result.put("discusses", result);
 		return list;
 	}
+	
+	/**
+	 * 新增写字板
+	 * @param vo
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/addDiscuss")
+	public ModelAndView addDiscuss(DiscussVO vo, ModelAndView modelAndView, ModelMap modelMap) {
+		User user = (User) modelMap.get("user");
+		vo.setAuthorId(user.getId());
+		try {
+			discussService.save(vo);
+			Project project = new Project();
+			project.setId(vo.getProjectId());
+			List<DiscussVO> discusses = discussService.findAllVOs(project);
+			modelAndView.addObject("discusses", discusses);
+			modelAndView.setViewName("discuss/discussList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
+	/**
+	 * 根据写字板类型查找
+	 * @param type
+	 * @param project
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/discusses")
+	public ModelAndView discusses(String type, Project project, ModelAndView modelAndView, ModelMap modelMap) {
+		try {
+			List<DiscussVO> discusses = null;
+			if(StringUtils.isBlank(type))
+				discusses = discussService.findAllVOs(project);
+			else
+				discusses = discussService.findByType(project, type);
+			modelAndView.addObject("discusses", discusses);
+			modelAndView.setViewName("discuss/discussList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
+	/**
+	 * 更新写字板
+	 * @param vo
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/editDiscuss")
+	public ModelAndView editDiscuss(DiscussVO vo, ModelAndView modelAndView, ModelMap modelMap) {
+		try {
+			Discuss discuss = discussService.findById(vo.getId());
+			vo.setAuthorId(discuss.getAuthor().getId());
+			vo.setProjectId(discuss.getProject().getId());
+			vo.setCreateTime(discuss.getCreateTime());
+			discussService.update(vo);
+			List<DiscussVO> discusses = discussService.findAllVOs(discuss.getProject());
+			modelAndView.addObject("discusses", discusses);
+			modelAndView.setViewName("discuss/discussList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
+	/**
+	 * 删除写字板
+	 * @param discuss
+	 * @param projectId
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/deleteDiscuss")
+	public ModelAndView deleteDiscuss(Discuss discuss, String projectId, ModelAndView modelAndView, ModelMap modelMap) {
+		try {
+			Discuss dis = discussService.findById(discuss);
+			Project project = new Project();
+			project.setId(projectId);
+			Project p = projectService.findById(project);
+			discussService.remove(dis);
+			List<DiscussVO> discusses = discussService.findAllVOs(p);
+			modelAndView.addObject("discusses", discusses);
+			modelAndView.setViewName("discuss/discussList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
 }

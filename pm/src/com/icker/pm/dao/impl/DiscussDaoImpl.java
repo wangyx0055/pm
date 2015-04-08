@@ -28,4 +28,9 @@ public class DiscussDaoImpl extends BaseDao<Discuss> implements DiscussDao {
 		return (Discuss) super.findById(Discuss.class, discuss.getId());
 	}
 
+	@Override
+	public Discuss findById(String id) throws Exception {
+		return (Discuss) super.findById(Discuss.class, id);
+	}
+
 }

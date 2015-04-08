@@ -31,7 +31,7 @@ public class Discuss implements Serializable{
 	@Column(name = "id", length = 32)
 	private String id;
 	/** 写字板内容 */
-	@Column(name = "content")
+	@Column(name = "content", columnDefinition="TEXT")
 	private String content;
 	/** 写字板标题 */
 	@Column(name = "title", length = 50)

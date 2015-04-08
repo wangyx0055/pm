@@ -37,6 +37,29 @@
 				<span class="glyphicon glyphicon-trash"></span>
 				</a>
 			</td>
+			<td name="taskTD10" class="hide"><c:out value="${discuss.content }"></c:out></td>
 		</tr>
 	</c:forEach>
 </table>
+<script type="text/javascript">
+$(document).ready(function(data) {
+	$("a[name='editDiscuss']").click(function(){
+		var discussId = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD0']").text().trim();
+		var title = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD4']").text().trim();
+		var type = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD1']").text().trim();
+		var content = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD10']").text().trim();
+		$("#editDiscussModal").modal('show');
+		$('#edit_content').code(content);
+		$('#edit_discuss_title').val(title);
+		$('#edit_discuss_type').val(type);
+		$('#edit_discuss_id').val(discussId);
+	});
+
+	$("a[name='deleteDiscuss']").click(function(){
+		var discussId = $(this).parent("td[name='taskTD9']").parent("tr").children("td[name='taskTD0']").text().trim();
+		$("#delete_discuss_modal").modal('show');
+		$("#delete_discuss").val(discussId);
+	});
+});
+
+</script>

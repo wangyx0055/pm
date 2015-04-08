@@ -13,4 +13,8 @@ public interface DiscussService {
 	public boolean remove(Discuss discuss) throws Exception;
 	public Discuss findById(Discuss discuss) throws Exception;
 	public List<DiscussVO> findAllVOs(Project project) throws Exception;
+	public boolean save(DiscussVO vo) throws Exception;
+	public List<DiscussVO> findByType(Project project, String type) throws Exception;
+	public void update(DiscussVO vo) throws Exception;
+	public Discuss findById(String id) throws Exception;
 }

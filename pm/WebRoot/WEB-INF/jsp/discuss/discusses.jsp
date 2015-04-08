@@ -18,7 +18,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link href="styles/backstage.css" rel="stylesheet">
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap/js/bootstrap.js"></script>
-	
+  	
+    <!-- add summernote -->
+    <link rel="stylesheet" href="js/bootstrap/summernote/dist/font-awesome.min.css" />
+    <link href="js/bootstrap/summernote/dist/summernote.css" rel="stylesheet">
+    <script src="js/bootstrap/summernote/dist/summernote.js"></script>
+    <script src="js/bootstrap/summernote/lang/summernote-zh-CN.js"></script>
   </head>
   
   <body>
@@ -74,7 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        		<div class="col-xs-4">
   							<div class="input-group">
   								<span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
-		        				<select class="form-control" selector="select"></select>
+		        				<select id="find_discuss" class="form-control" selector="select"></select>
 							</div>
 						</div>
   						<div class="col-xs-4">
@@ -100,9 +105,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        			dataType: "json",
 		        			success: function(data) {
 		        				var discusses = data;
-		        				console.log(data);
 		        				var op = "<option value=''>"+'所有写字板'+"</option>";
-		        				$("select[selector='select']").append(op);
+		        				$("#find_discuss").append(op);
 		        				for(var i = 0; i < discusses.length; i++) {
 		        					var option = "<option value='"+discusses[i].type+"'>"+discusses[i].typeName+"</option>";
 		        					$("select[selector='select']").append(option);
@@ -113,12 +117,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        				alert("error"+data);
 		        			}
 		        		});
-		        		$("select[selector='select']").change(function(e) {
-		        			var value = $("select[selector='select']").val();
-		        			var text = $("select[selector='select']").find("option[value="+value+"]").text();
-							/* $.ajax({
-								url: "taskController/userTasks",
-								data: "performer="+value+"&id="+proId,
+		        		$("#find_discuss").change(function(e) {
+		        			var value = $("#find_discuss").val();
+		        			var text = $("#find_discuss").find("option[value="+value+"]").text();
+							$.ajax({
+								url: "discussController/discusses",
+								data: "type="+value+"&id="+proId,
 								type: "post",
 								dataType: "html",
 								success: function(data) {
@@ -128,7 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								error: function(data) {
 									alert("error"+data);
 								}
-							}); */
+							});
 		        		});
 		        	</script>
 		        	<div style="height: 20px;"></div>
@@ -144,7 +148,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
     	<!-- 内容区结束 -->
     	
-    	
     </div>
     
     
@@ -159,22 +162,196 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<h4 class="modal-title" id="myModalLabel">新增写字板</h4>
 				</div>
 				<div class="modal-body">
+				<form id="addDiscussForm" class="form-horizontal" role="form">
 					<div class="row">
 						<div class="col-sm-12">
-		        			<jsp:include page="writeboard.jsp"></jsp:include>
-		        		</div>
+							<div class="form-group">
+								<label for="discuss_title" class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-4">
+									<input name="discuss_title" type="text" class="form-control" placeholder="标题">
+								</div>
+								<div class="col-sm-4">
+									<div class="input-group">
+  										<span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+		        						<select id="discuss_type" class="form-control" selector="select"></select>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div id="summernote"></div>
+		        		</div>
+		        		<script type="text/javascript">
+		        			$(document).ready(function() {
+		        				$('#summernote').summernote({
+		        					lang: 'zh-CN',
+		        					height : 300,
+		        					minHeight : null,
+		        					maxHeight : null,
+		        					focus : true
+		        				});
+		        			});
+		        		</script>
+					</div>
+				</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 					<button id="saveDiscuss" type="button" class="btn btn-primary" form="addDiscussForm">提交</button>
 				</div>
+				<script type="text/javascript">
+					$("#saveDiscuss").click(function(){
+						var projectId = $('#hiddenProId').val();
+						var title = $("input[name='discuss_title']").val();
+						var type = $('#discuss_type').val();
+						var content = $('#summernote').code();
+						$.ajax({
+							url: "discussController/addDiscuss",
+							data: "title="+title+"&content="+content+"&type="+type+"&projectId="+projectId,
+							type: "post",
+							dataType: "html",
+							success: function(data) {
+								$("#addDiscussModal").modal('hide');
+								$("#infoTable").empty();
+								$("#infoTable").html(data);
+							},
+							error: function(data) {
+								alert("error"+data);
+							}
+						});
+					});
+				</script>
     		</div>
   		</div>
 	</div><!-- 新增写字板结束 -->
 	
+	
+	
+	
+	<!-- 编辑写字板 -->
+	<div id="editDiscussModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static">
+  		<div class="modal-dialog modal-lg">
+    		<div class="modal-content">
+    			<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">更新写字板</h4>
+				</div>
+				<div class="modal-body">
+				<form id="editDiscussForm" class="form-horizontal" role="form">
+					<input type="hidden" id="edit_discuss_id">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label for="edit_discuss_title" class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-4">
+									<input id="edit_discuss_title" name="edit_discuss_title" type="text" class="form-control" placeholder="标题">
+								</div>
+								<div class="col-sm-4">
+									<div class="input-group">
+  										<span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+		        						<select id="edit_discuss_type" class="form-control" selector="select"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div id="edit_content"></div>
+		        		</div>
+		        		<script type="text/javascript">
+		        			$(document).ready(function() {
+		        				$('#edit_content').summernote({
+		        					lang: 'zh-CN',
+		        					height : 300,
+		        					minHeight : null,
+		        					maxHeight : null,
+		        					focus : true
+		        				});
+		        			});
+		        		</script>
+					</div>
+				</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button id="edit_discuss" type="button" class="btn btn-primary" form="editDiscussForm">提交</button>
+				</div>
+				<script type="text/javascript">
+					$("#edit_discuss").click(function(){
+						var discussId = $("#edit_discuss_id").val();
+						var projectId = $('#hiddenProId').val();
+						var title = $("input[name='edit_discuss_title']").val();
+						var type = $('#edit_discuss_type').val();
+						var content = $('#edit_content').code();
+						$.ajax({
+							url: "discussController/editDiscuss",
+							data: "title="+title+"&content="+content+"&type="+type+"&projectId="+projectId+"&id="+discussId,
+							type: "post",
+							dataType: "html",
+							success: function(data) {
+								$("#editDiscussModal").modal('hide');
+								$("#infoTable").empty();
+								$("#infoTable").html(data);
+							},
+							error: function(data) {
+								alert("error"+data);
+							}
+						});
+					});
+				</script>
+    		</div>
+  		</div>
+	</div><!-- 编辑写字板结束 -->
+	
+	<!-- 删除写字板 -->
+	<div id="delete_discuss_modal" class="modal fade" aria-hidden="true" data-backdrop="static">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">删除写字板</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<input type="hidden" id="delete_discuss">
+	        <p>确定要删除当前写字板吗？</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">不</button>
+	        <button id="delete_discuss_btn" type="button" class="btn btn-primary">是的</button>
+	        <script type="text/javascript">
+	        	$("#delete_discuss_btn").click(function(e){
+	        		var discuss_id = $("#delete_discuss").val();
+	        		var project_id = $("#hiddenProId").val();
+	        		$.ajax({
+	        			url: "discussController/deleteDiscuss",
+	        			data: "id="+discuss_id+"&projectId="+project_id,
+	        			type: "post",
+	        			dataType: "html",
+	        			success: function(data) {
+	        				$("#delete_discuss_modal").modal('hide');
+	        				$("#infoTable").empty();
+							$("#infoTable").html(data);
+	        			},
+	        			error: function(data) {
+	        				alert("error"+data);
+	        			}
+	        		});
+	        	});
+	        </script>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- 删除写字板结束 -->
+	
   </body>
 </html>
+
 
 
 
