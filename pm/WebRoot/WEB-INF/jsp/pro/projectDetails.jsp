@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  <li role="presentation"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="files">文件</a></li>
+					  <li role="presentation"><a href="javascript:void(0)" id="files">文件资料</a></li>
 					</ul>
 		        </div>
 		        
@@ -69,10 +69,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			$("#proDetails").click(function(e){
     				$(this).attr("href","projectController/ProjectDetails?id="+proId);
     			});
-    			//文件
-    			$("#files").click(function(e){
-    				$(this).attr("href","jsp/pro/proFile.jsp");
-    			});
+    			//文件资料
+				$("#files").click(function(e){
+					$(this).attr("href","resourceController/resources?id="+proId);
+				});
     			//写字板
     			$("#writeBoard").click(function(e){
     				$(this).attr("href","discussController/findDiscuss?id="+proId);

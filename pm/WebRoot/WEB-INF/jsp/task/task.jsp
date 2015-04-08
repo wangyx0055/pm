@@ -55,10 +55,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  <li role="presentation" class="active"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="files">文件</a></li>
+					  <li role="presentation"><a href="javascript:void(0)" id="files">文件资料</a></li>
 					</ul>
 		        </div>
-		        
+		    	<script type="text/javascript">
+		    		$(document).ready(function(){
+		    			var proId = $("#hiddenProId").val();
+		    			//项目概览
+		    			$("#proDetails").click(function(e){
+		    				$(this).attr("href","projectController/ProjectDetails?id="+proId);
+		    			});
+		    			//文件资料
+						$("#files").click(function(e){
+							$(this).attr("href","resourceController/resources?id="+proId);
+						});
+		    			//写字板
+		    			$("#writeBoard").click(function(e){
+		    				$(this).attr("href","discussController/findDiscuss?id="+proId);
+		    			});
+		    			// 任务列表
+		    			$("#taskList").click(function(e){
+		    				$(this).attr("href","taskController/tasks?id="+proId);
+		    			});
+		    		});
+		    	</script>
 		        <!-- 主体内容 -->
 		        <div class="jumbotron" style="background-color: #ffffff">
 		        	<div class="row">
@@ -258,29 +278,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        <jsp:include page="../common/pro/members.jsp"></jsp:include>
         </div>
     	<!-- 内容区结束 -->
-    	
-    	<input id="hiddenProId" type="hidden" value="${project.id }">
-    	<script type="text/javascript">
-    		$(document).ready(function(){
-    			var proId = $("#hiddenProId").val();
-    			//项目概览
-    			$("#proDetails").click(function(e){
-    				$(this).attr("href","projectController/ProjectDetails?id="+proId);
-    			});
-    			//文件
-    			$("#files").click(function(e){
-    				$(this).attr("href","jsp/pro/proFile.jsp");
-    			});
-    			//写字板
-    			$("#writeBoard").click(function(e){
-    				$(this).attr("href","discussController/findDiscuss?id="+proId);
-    			});
-    			// 任务列表
-    			$("#taskList").click(function(e){
-    				$(this).attr("href","taskController/tasks?id="+proId);
-    			});
-    		});
-    	</script>
     </div>
     
     

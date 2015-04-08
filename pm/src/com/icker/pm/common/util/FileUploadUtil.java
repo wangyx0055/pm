@@ -28,7 +28,7 @@ public class FileUploadUtil {
 	 * @param request
 	 * @return 返回文件存储相对路径
 	 */
-	public static Map<String, String> monofileUpload(HttpServletRequest request) {
+	public static Map<String, String> monofileUpload(HttpServletRequest request) throws Exception {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH");
 		/** 构建图片保存的目录 **/
@@ -82,7 +82,7 @@ public class FileUploadUtil {
 	 * @return 返回原文件名以及所有路径
 	 */
 	public static List<Map<String, String>> multifileUpload(
-			MultipartFile[] myfiles, HttpServletRequest request) {
+			MultipartFile[] myfiles, HttpServletRequest request) throws Exception{
 		// 如果只是上传一个文件，则只需要MultipartFile类型接收文件即可，而且无需显式指定@RequestParam注解
 		// 如果想上传多个文件，那么这里就要用MultipartFile[]类型来接收文件，并且还要指定@RequestParam注解
 		// 并且上传多个文件时，前台表单中的所有<input
