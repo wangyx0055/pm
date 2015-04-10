@@ -11,7 +11,7 @@
 <table class="table table-striped table-hover">
 	<tr>
 		<th></th>
-		<th>序号</th>
+		<th>#</th>
 		<th>名称</th>
 		<th>负责人</th>
 		<th>进度</th>

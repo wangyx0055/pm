@@ -9,7 +9,7 @@
 %>
 <table class="table table-striped table-hover">
 	<tr>
-		<th>序号</th>
+		<th>#</th>
 		<th>标题</th>
 		<th>发布者</th>
 		<th>所属</th>

@@ -29,5 +29,6 @@ public interface ProjectDao {
 	public int findCountOfPro(User user, String status) throws Exception;
 	public List<Project> findByUser(User user, String status) throws Exception;
 	public List<Project> pagingFindByUser(User user, PageUtil pageUtil, String status) throws Exception;
+	public Project findById(String id) throws Exception;
 	
 }

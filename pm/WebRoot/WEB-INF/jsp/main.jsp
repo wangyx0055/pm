@@ -21,6 +21,7 @@
 <script src="js/bootstrap/js/bootstrap.js"></script>
 <script src="js/highcharts/highcharts.js"></script>
 <script src="js/highcharts/exporting.js"></script>
+
 </head>
 
 <body>
@@ -34,7 +35,9 @@
 		<div class="line-spacing"></div>
 		
 		<!-- 项目报表 -->
-		<div id="chart"></div>
+		<div id="chart">
+			
+		</div>
 		<!-- 用于放置项目列表 -->
 		<div id="proList">
 		</div>

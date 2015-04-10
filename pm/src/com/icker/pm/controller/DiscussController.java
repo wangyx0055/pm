@@ -63,14 +63,12 @@ public class DiscussController {
 	@RequestMapping("/discussTypes")
 	public List<Map<String, Object>> discussTypes(ModelAndView modelAndView, ModelMap modelMap) {
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < DiscussType.values().length; i++) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("type", String.valueOf(i));
 			map.put("typeName", DiscussType.getTypeName(String.valueOf(i)));
 			list.add(map);
 		}
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("discusses", result);
 		return list;
 	}
 	

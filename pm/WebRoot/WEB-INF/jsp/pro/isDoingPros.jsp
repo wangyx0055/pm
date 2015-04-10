@@ -9,7 +9,7 @@
 
 <table class="table table-striped table-hover">
 	<tr>
-		<th>项目编号</th>
+		<th>#</th>
 		<th>名称</th>
 		<th>描述</th>
 		<th>创建时间</th>

@@ -36,9 +36,18 @@ public class Resource implements Serializable{
 	/** 文件路径 */
 	@Column(name = "path", length = 64)
 	private String path;
-	/** 文件类型 */
+	/** 业务层：文件类型 */
 	@Column(name = "type", nullable = false, length = 1)
 	private String type;
+	/** 文件上传时间 */
+	@Column(name = "uptime", length = 32)
+	private String upTime;
+	/** 格式层：文件类型，格式：jpg、doc */
+	@Column(name = "format", length = 32)
+	private String format;
+	/** 文件大小: 单位是 KB */
+	@Column(name = "size")
+	private Double size;
 	/** 上传者 */
 	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "uploader", insertable = true, updatable = true, referencedColumnName = "id")
@@ -109,7 +118,31 @@ public class Resource implements Serializable{
 	public void setProject(Project project) {
 		this.project = project;
 	}
+	
+	public String getUpTime() {
+		return upTime;
+	}
+	
+	public void setUpTime(String upTime) {
+		this.upTime = upTime;
+	}
 
+	public String getFormat() {
+		return format;
+	}
+	
+	public void setFormat(String format) {
+		this.format = format;
+	}
+	
+	public Double getSize() {
+		return size;
+	}
+	
+	public void setSize(Double size) {
+		this.size = size;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

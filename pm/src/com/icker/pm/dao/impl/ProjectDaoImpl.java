@@ -120,4 +120,9 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 		return list;
 	}
 
+	@Override
+	public Project findById(String id) throws Exception {
+		return (Project) super.findById(Project.class, id);
+	}
+
 }

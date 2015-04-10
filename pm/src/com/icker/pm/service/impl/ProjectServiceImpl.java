@@ -226,6 +226,10 @@ public class ProjectServiceImpl implements ProjectService{
 		}
 		return maps;
 	}
+	@Override
+	public Project findProject(String id) throws Exception {
+		return projectDao.findById(id);
+	}
 	
 	
 	
