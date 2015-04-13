@@ -10,9 +10,12 @@ public class Constant {
 	/**
 	 * ProjectMember的role
 	 */
+	/** 项目经理 */
 	public static String ROLE_CREATOR = "0";
+	/** 项目成员 */
 	public static String ROLE_MEMBER = "1";
-	public static String ROLE_CUSTOMER = "2";	// 客户
+	/** 客户 */
+	public static String ROLE_CUSTOMER = "2";
 	
 	/**
 	 * ProjectMember的status
@@ -31,5 +34,17 @@ public class Constant {
 	public static String IS_DOING = "0";
 	/** 1：已经完成	*/
 	public static String HAVING_DONE = "1";
+	
+	
+	/**
+	 * Milestone的status
+	 */
+	/** 延期 */
+	public static String MILE_EXTENSION = "3";
+	/** 未完成 */
+	public static String MILE_UNFINISHED = "2";
+	/** 已完成 */
+	public static String MILE_COMPLETED = "1";
+	
 	
 }

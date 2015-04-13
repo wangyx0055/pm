@@ -74,6 +74,9 @@ public class User implements Serializable{
 	/** 执行的任务 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "performer")
 	private List<Task> performedTasks;
+	/** 执行的里程碑 */
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "performer")
+	private List<Milestone> milestones;
 	
 	public String getId() {
 		return id;
@@ -193,6 +196,14 @@ public class User implements Serializable{
 	
 	public void setSendMsges(List<Message> sendMsges) {
 		this.sendMsges = sendMsges;
+	}
+	
+	public List<Milestone> getMilestones() {
+		return milestones;
+	}
+	
+	public void setMilestones(List<Milestone> milestones) {
+		this.milestones = milestones;
 	}
 
 	public void addProjectMember(ProjectMember projectMember) {

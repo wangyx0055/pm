@@ -18,20 +18,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link href="styles/bootstrap.css" rel="stylesheet">
 	<link href="styles/backstage.css" rel="stylesheet">
 	<link href="styles/slider.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" media="screen" href="styles/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" type="text/css" media="all" href="styles/daterangepicker-bs3.css"/>
+	<link href="js/bootstrap/datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
 	
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery-ui-1.10.3.mouse_core.js"></script>
 	
 	<script src="js/bootstrap/js/bootstrap.js"></script>
+	<!-- 添加进度条滑动js -->
 	<script src="js/bootstrap/expand/bootstrapslider.js"></script>
 	<script src="js/jquery.ui.touch-punch.js"></script>
-	<script src="js/bootstrap/js/bootstrap-datetimepicker.js"></script>
-	<script src="js/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	
-	<script src="js/highcharts/highcharts.js"></script>
-	<script src="js/highcharts/exporting.js"></script>
+	<!-- 添加bootstra-detetimepicker.js -->
+	<script type="text/javascript" src="js/bootstrap/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="js/bootstrap/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
   </head>
   
   <body>
@@ -51,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <ul class="nav nav-pills" role="tablist">
 					  <li role="presentation"><a href="javascript:void(0)" id="proDetails">项目概览</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="msgEdition">消息版</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="milepost">里程碑</a></li>
+					  <li role="presentation"><a href="javascript:void(0)" id="milestone">里程碑</a></li>
 					  <li role="presentation" class="active"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
@@ -59,26 +58,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</ul>
 		        </div>
 		    	<script type="text/javascript">
-		    		$(document).ready(function(){
-		    			var proId = $("#hiddenProId").val();
-		    			//项目概览
-		    			$("#proDetails").click(function(e){
-		    				$(this).attr("href","projectController/ProjectDetails?id="+proId);
-		    			});
-		    			//文件资料
-						$("#files").click(function(e){
-							$(this).attr("href","resourceController/resources?id="+proId);
-						});
-		    			//写字板
-		    			$("#writeBoard").click(function(e){
-		    				$(this).attr("href","discussController/findDiscuss?id="+proId);
-		    			});
-		    			// 任务列表
-		    			$("#taskList").click(function(e){
-		    				$(this).attr("href","taskController/tasks?id="+proId);
-		    			});
-		    		});
-		    	</script>
+    				$(document).ready(function(){
+    					var proId = $("#hiddenProId").val();
+    					//项目概览
+    					$("#proDetails").click(function(e){
+    						$(this).attr("href","projectController/ProjectDetails?id="+proId);
+    					});
+    					//消息版
+    					$("#msgEdition").click(function(e){
+    						$(this).attr("href","messageController/message?id="+proId);
+    					});
+    					//里程碑
+    					$("#milestone").click(function(e){
+    						$(this).attr("href","milestoneController/milestone?id="+proId);
+    					});
+    					//文件资料
+    					$("#files").click(function(e){
+    						$(this).attr("href","resourceController/resources?id="+proId);
+    					});
+    					//写字板
+    					$("#writeBoard").click(function(e){
+    						$(this).attr("href","discussController/findDiscuss?id="+proId);
+    					});
+    					// 任务列表
+    					$("#taskList").click(function(e){
+    						$(this).attr("href","taskController/tasks?id="+proId);
+    					});
+    				});
+    			</script>
 		        <!-- 主体内容 -->
 		        <div class="jumbotron" style="background-color: #ffffff">
 		        	<div class="row">
@@ -375,15 +382,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$(document).ready(function(){
 								$("#startDate").datetimepicker({
 									language:  'zh-CN',
-									format: 'yyyy/mm/dd hh:mm:ss',
-						    	    weekStart: 1,
-						   	    	todayBtn:  1,
-						       		autoclose: 1,
-						   	    	todayHighlight: 1,
-							      	startView: 2,
-						   	    	minView: 2,
-							       	inputMask: true,
-							       	forceParse: 0
+							        weekStart: 1,
+							        todayBtn:  1,
+									autoclose: 1,
+									todayHighlight: 1,
+									startView: 2,
+									forceParse: 0,
+									format: 'yyyy/mm/dd hh:ii:ss',
+							        showMeridian: 1
 								});
 							});
 						</script>
@@ -396,15 +402,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$(document).ready(function(){
 								$("#endDate").datetimepicker({
 									language:  'zh-CN',
-									format: 'yyyy/mm/dd hh:mm:ss',
-						    	    weekStart: 1,
-						   	    	todayBtn:  1,
-						       		autoclose: 1,
-						   	    	todayHighlight: 1,
-						        	startView: 2,
-						        	minView: 2,
-						        	inputMask: true,
-						        	forceParse: 0
+							        weekStart: 1,
+							        todayBtn:  1,
+									autoclose: 1,
+									todayHighlight: 1,
+									startView: 2,
+									forceParse: 0,
+									format: 'yyyy/mm/dd hh:ii:ss',
+							        showMeridian: 1
 								});
 							});
 						</script>
@@ -491,15 +496,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$(document).ready(function(){
 								$("#editStartDate").datetimepicker({
 									language:  'zh-CN',
-									format: 'yyyy/mm/dd hh:mm:ss',
-						    	    weekStart: 1,
-						   	    	todayBtn:  1,
-						       		autoclose: 1,
-						   	    	todayHighlight: 1,
-							      	startView: 2,
-						   	    	minView: 2,
-							       	inputMask: true,
-							       	forceParse: 0
+							        weekStart: 1,
+							        todayBtn:  1,
+									autoclose: 1,
+									todayHighlight: 1,
+									startView: 2,
+									forceParse: 0,
+									format: 'yyyy/mm/dd hh:ii:ss',
+							        showMeridian: 1
 								});
 							});
 						</script>
@@ -512,15 +516,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$(document).ready(function(){
 								$("#editEndDate").datetimepicker({
 									language:  'zh-CN',
-									format: 'yyyy/mm/dd hh:mm:ss',
-						    	    weekStart: 1,
-						   	    	todayBtn:  1,
-						       		autoclose: 1,
-						   	    	todayHighlight: 1,
-						        	startView: 2,
-						        	minView: 2,
-						        	inputMask: true,
-						        	forceParse: 0
+							        weekStart: 1,
+							        todayBtn:  1,
+									autoclose: 1,
+									todayHighlight: 1,
+									startView: 2,
+									forceParse: 0,
+									format: 'yyyy/mm/dd hh:ii:ss',
+							        showMeridian: 1
 								});
 							});
 						</script>

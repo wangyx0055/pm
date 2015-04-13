@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            <ul class="nav nav-pills" role="tablist">
 					  <li role="presentation"><a href="javascript:void(0)" id="proDetails">项目概览</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="msgEdition">消息版</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="milepost">里程碑</a></li>
+					  <li role="presentation"><a href="javascript:void(0)" id="milestone">里程碑</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
 					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
@@ -55,6 +55,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					//项目概览
     					$("#proDetails").click(function(e){
     						$(this).attr("href","projectController/ProjectDetails?id="+proId);
+    					});
+    					//消息版
+    					$("#msgEdition").click(function(e){
+    						$(this).attr("href","messageController/message?id="+proId);
+    					});
+    					//里程碑
+    					$("#milestone").click(function(e){
+    						$(this).attr("href","milestoneController/milestone?id="+proId);
     					});
     					//文件资料
     					$("#files").click(function(e){
@@ -72,9 +80,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			</script>
 
 		        <!-- 主体内容 -->
-		        <div class="jumbotron" style="background-color: #ffffff">
+		        <div>
 		            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-					  
 					  <div class="panel panel-info">
 						<div class="panel-heading" role="tab" id="headingTwo">
 						  <h4 class="panel-title">

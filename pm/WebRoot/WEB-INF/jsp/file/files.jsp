@@ -79,7 +79,7 @@
 					cor = "label label-primary";
 					break;
 				default:
-					cor = "label";
+					cor = "";
 					break;
 				}
 				$(this).parent("tr").children("td[name='taskTD5']");
