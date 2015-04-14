@@ -9,15 +9,14 @@ public class Mail {
 	private Properties properties = PropertiesUtil.loadProperties();
 	
 	//发送邮件的SMTP服务器主机
-	private String mailServerHost = "smtp.sina.com";
+	private String mailServerHost;
 	//发送邮件的SMTP服务器端口
-	private String mailServerPort = "25";
+	private String mailServerPort;
 	//发送者的地址
-	private String fromAddress = "cgyubg@sina.com";
+	private String fromAddress;
 	//登录邮箱的账号密码
-	private String username = "cgyubg@sina.com";
-	private String password = "summer1993";
-	
+	private String username;
+	private String password;
 	//主题
 	private String subject;
 	//内容
@@ -31,13 +30,13 @@ public class Mail {
 	public Mail(String subject, String content, String toAddress) {
 		mailServerHost = properties.getProperty("mail.smtp.host");
 		mailServerPort = properties.getProperty("mail.smtp.port");
-		properties.put("mail.smtp.host", properties.getProperty("mail.smtp.host"));
-		properties.put("mail.smtp.port", properties.getProperty("mail.smtp.port"));
-		properties.put("mail.smtp.auth", properties.getProperty("mail.smtp.auth"));
-		
 		fromAddress = properties.getProperty("mail.username");
 		username = properties.getProperty("mail.username");
 		password = properties.getProperty("mail.password");
+		
+		properties.put("mail.smtp.host", properties.getProperty("mail.smtp.host"));
+		properties.put("mail.smtp.port", properties.getProperty("mail.smtp.port"));
+		properties.put("mail.smtp.auth", properties.getProperty("mail.smtp.auth"));
 		
 		this.subject = subject;
 		this.content = content;

@@ -29,7 +29,16 @@
 			</list>
 		</property>
 	</bean>
-	<!-- <mvc:view-controller path="/" view-name="problemController/"/> -->
+	
+	
+	<mvc:view-controller path="/" view-name="user/login"/>
+	<!-- 使用mvc:resources必须加上mvc:annotation-driven -->
+	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
+	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
+	<mvc:resources location="/WEB-INF/styles/" mapping="/styles/**" />
+	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**" />
+	<mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
+
 	<!-- 视图处理 -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -38,14 +47,7 @@
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	<!-- 使用mvc:resources必须加上mvc:annotation-driven -->
-
-	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
-	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
-	<mvc:resources location="/WEB-INF/styles/" mapping="/styles/**" />
-	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**" />
-	<mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
-
+	
 	<!-- 文件上传 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"

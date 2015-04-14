@@ -3,6 +3,7 @@ package com.icker.pm.vo;
 import com.icker.pm.pojo.User;
 
 
+@SuppressWarnings("serial")
 public class UserVO extends User{
 	private String role;
 	

@@ -22,7 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "discuss", catalog = "pm")
-public class Discuss implements Serializable{
+public class Discuss implements Serializable {
 
 	/** 写字板ID */
 	@Id
@@ -31,7 +31,7 @@ public class Discuss implements Serializable{
 	@Column(name = "id", length = 32)
 	private String id;
 	/** 写字板内容 */
-	@Column(name = "content", columnDefinition="TEXT")
+	@Column(name = "content", columnDefinition = "TEXT")
 	private String content;
 	/** 写字板标题 */
 	@Column(name = "title", length = 50)
