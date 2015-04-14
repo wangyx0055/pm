@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.icker.pm.common.email.Mail;
-import com.icker.pm.common.email.MailSender;
 import com.icker.pm.common.util.DateFormatUtil;
 import com.icker.pm.dao.TaskDao;
+import com.icker.pm.server.email.Mail;
+import com.icker.pm.server.email.MailSender;
 import com.icker.pm.vo.EmailTimerTaskVO;
 
 /**
@@ -30,7 +30,7 @@ public class TaskTimer {
 	/**
 	 * Scheduled中的数据使用cron表达式用于定时，详情请看onenote
 	 */
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "0 0 0 * * ?")
 	public void job() {
 
 		/*

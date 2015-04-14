@@ -68,9 +68,10 @@
 			<button class="btn btn-lg btn-primary btn-block" type="submit">登
 				陆</button>
 		</form>
-
 	</div>
 	<!-- /container -->
-
+<a href="viewPDF.shtml">PDF视图打开 </a>
+<br>
+<a href="viewExcel.shtml">Excel视图打开</a>
 </body>
 </html>

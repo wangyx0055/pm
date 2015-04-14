@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Properties;
 
-import com.icker.pm.common.email.Mail;
+import com.icker.pm.server.email.Mail;
 
 public class PropertiesUtil {
 	static String path = Mail.class.getResource("/config.properties").getPath();
