@@ -55,6 +55,16 @@ public class Milestone implements Serializable{
 	/** 状态 1:已完成；2：未完成；3：已延期 */
 	@Column(name = "status", length = 1)
 	private String status;
+	/** 描述信息 */
+	@Column(name = "description")
+	private String description;
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public String getId() {
 		return id;
 	}
@@ -126,6 +136,9 @@ public class Milestone implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
 				+ ((finishDate == null) ? 0 : finishDate.hashCode());
@@ -136,6 +149,7 @@ public class Milestone implements Serializable{
 		result = prime * result
 				+ ((progress == null) ? 0 : progress.hashCode());
 		result = prime * result + ((project == null) ? 0 : project.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 	@Override
@@ -147,6 +161,16 @@ public class Milestone implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Milestone other = (Milestone) obj;
+		if (creator == null) {
+			if (other.creator != null)
+				return false;
+		} else if (!creator.equals(other.creator))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 		if (endDate == null) {
 			if (other.endDate != null)
 				return false;
@@ -181,6 +205,11 @@ public class Milestone implements Serializable{
 			if (other.project != null)
 				return false;
 		} else if (!project.equals(other.project))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
 			return false;
 		return true;
 	}

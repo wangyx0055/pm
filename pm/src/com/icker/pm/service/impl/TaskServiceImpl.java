@@ -1,13 +1,15 @@
 package com.icker.pm.service.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.icker.pm.common.constant.Constant;
+import com.icker.pm.common.util.DateFormatUtil;
 import com.icker.pm.dao.ProjectDao;
 import com.icker.pm.dao.TaskDao;
 import com.icker.pm.dao.UserDao;
@@ -27,10 +29,10 @@ public class TaskServiceImpl implements TaskService {
 	private ProjectDao projectDao;
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Override
 	public List<Task> findAll(Project project) throws Exception {
-		return null;
+		return taskDao.findAll(project);
 	}
 
 	@Override
@@ -60,13 +62,14 @@ public class TaskServiceImpl implements TaskService {
 	 * 根据项目id和执行者id查找任务信息
 	 */
 	@Override
-	public List<TaskVO> findTaskVOs(String performer, Project project) throws Exception {
+	public List<TaskVO> findTaskVOs(String performer, Project project)
+			throws Exception {
 		List<TaskVO> vos = new ArrayList<TaskVO>();
 		Project p = projectDao.findProjectById(project);
 		List<Task> tasks = p.getTasks();
 		int sequence = 1;
 		for (Task task : tasks) {
-			if(task.getPerformer().getId().equals(performer)) {
+			if (task.getPerformer().getId().equals(performer)) {
 				TaskVO vo = new TaskVO();
 				vo.setId(task.getId());
 				vo.setName(task.getName());
@@ -88,32 +91,9 @@ public class TaskServiceImpl implements TaskService {
 	 * 根据名称对任务进行模糊查询
 	 */
 	@Override
-	public List<TaskVO> findTaskVOsByName(String name, Project project)
+	public List<Task> findByName(String name, Project project, String status)
 			throws Exception {
-		List<TaskVO> vos = new ArrayList<TaskVO>();
-		List<Task> tasks = taskDao.findByName(name);
-		Iterator<Task> iterator = tasks.iterator();
-		while (iterator.hasNext()) {
-			Task task = (Task) iterator.next();
-			if(!task.getProject().getId().equals(project.getId())) 
-				iterator.remove();
-		}
-		int sequence = 1;
-		for (Task task : tasks) {
-			TaskVO vo = new TaskVO();
-			vo.setId(task.getId());
-			vo.setName(task.getName());
-			vo.setPerformer(task.getPerformer().getName());
-			vo.setPerformerId(task.getPerformer().getId());
-			vo.setProgress(task.getProgress());
-			vo.setPriority(task.getPriority());
-			vo.setEndDate(task.getEndDate());
-			vo.setStartDate(task.getStartDate());
-			vo.setDescription(task.getDescription());
-			vo.setSequence(sequence++);
-			vos.add(vo);
-		}
-		return vos;
+		return taskDao.findByName(name, project, status);
 	}
 
 	@Override
@@ -132,6 +112,7 @@ public class TaskServiceImpl implements TaskService {
 		Project project = projectDao.findProjectById(task.getProject());
 		t.setProject(project);
 		t.setStartDate(task.getStartDate());
+		t.setStatus(task.getStatus());
 		taskDao.saveTask(t);
 	}
 
@@ -155,4 +136,36 @@ public class TaskServiceImpl implements TaskService {
 		taskDao.delete(task);
 	}
 
+	@Override
+	public void completeTask(Task task) throws Exception {
+		Task t = taskDao.findTask(task.getId());
+		t.setStatus(Constant.TASK_STATUS_COMPLETED);
+		t.setFinishDate(DateFormatUtil.DateToString(new Date()));
+		taskDao.update(t);
+	}
+
+	@Override
+	public List<Task> findByStatus(String proId, String status)
+			throws Exception {
+		return taskDao.findByStatus(proId, status);
+	}
+
+	@Override
+	public List<Task> findAll(String performer, Project project, String status)
+			throws Exception {
+		return taskDao.findAll(performer, project, status);
+	}
+
+	@Override
+	public void releaseTask(Task task) throws Exception {
+		Task t = taskDao.findTask(task.getId());
+		t.setStatus(Constant.TASK_STATUS_UNFINISHED);
+		t.setFinishDate(null);
+		taskDao.update(t);
+	}
+
+	@Override
+	public Task findById(String id) throws Exception {
+		return taskDao.findTask(id);
+	}
 }

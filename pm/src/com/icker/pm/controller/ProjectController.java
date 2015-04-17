@@ -25,18 +25,18 @@ import com.icker.pm.vo.UserProjectVO;
 @Controller
 @RequestMapping("/projectController")
 @SessionAttributes(value = { "user" })
-public class ProjectController {
+public class ProjectController extends ExceptionController {
 
 	@Autowired
 	private ProjectService projectService;
 
 	/**
 	 * 显示所有项目
+	 * 
 	 * @param modelMap
 	 * @param modelAndView
 	 * @return
 	 */
-//	@ResponseBody
 	@RequestMapping("/projectList")
 	public ModelAndView projectList(ModelMap modelMap, ModelAndView modelAndView) {
 		User user = (User) modelMap.get("user");
@@ -52,16 +52,18 @@ public class ProjectController {
 		modelAndView.addObject("size", projects.size());
 		return modelAndView;
 	}
-	
+
 	/**
 	 * 显示所有项目
+	 * 
 	 * @param modelMap
 	 * @param modelAndView
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("/allPros")
-	public ModelAndView allPros(ModelMap modelMap, ModelAndView modelAndView, PageUtil pageUtil) {
+	public ModelAndView allPros(ModelMap modelMap, ModelAndView modelAndView,
+			PageUtil pageUtil) {
 		User user = (User) modelMap.get("user");
 		List<Project> projects = null;
 		try {
@@ -76,16 +78,18 @@ public class ProjectController {
 		modelAndView.addObject("size", projects.size());
 		return modelAndView;
 	}
-	
+
 	/**
 	 * 显示正在实施的项目
+	 * 
 	 * @param modelMap
 	 * @param modelAndView
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("/isDoingPros")
-	public ModelAndView isDoingPros(PageUtil page, ModelMap modelMap, ModelAndView modelAndView) {
+	public ModelAndView isDoingPros(PageUtil page, ModelMap modelMap,
+			ModelAndView modelAndView) {
 		User user = (User) modelMap.get("user");
 		modelAndView = getIsDoingPros(modelAndView, user, page);
 		return modelAndView;
@@ -93,29 +97,33 @@ public class ProjectController {
 
 	/**
 	 * 显示已经完成的项目
+	 * 
 	 * @param modelMap
 	 * @param modelAndView
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("/haveDonePros")
-	public ModelAndView haveDonePros(PageUtil page, ModelMap modelMap, ModelAndView modelAndView) {
+	public ModelAndView haveDonePros(PageUtil page, ModelMap modelMap,
+			ModelAndView modelAndView) {
 		User user = (User) modelMap.get("user");
 		modelAndView = getHaveDonePros(modelAndView, user, page);
 		return modelAndView;
 	}
-	
+
 	/**
 	 * 分页查询所有项目的私有方法
+	 * 
 	 * @param modelAndView
 	 * @param user
 	 * @return
 	 */
-	private ModelAndView getProjects(ModelAndView modelAndView, User user, PageUtil pageUtil) {
+	private ModelAndView getProjects(ModelAndView modelAndView, User user,
+			PageUtil pageUtil) {
 		// 查询用户所有的项目
 		try {
 			List<UserProjectVO> upVOs = new ArrayList<UserProjectVO>();
-			
+
 			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)
 					* pageUtil.getEachPageMaxSize()); // 设置起始行
 			List<Project> pagingPros = projectService.pagingFindByUser(user,
@@ -129,9 +137,11 @@ public class ProjectController {
 				upVOs.add(upVO);
 			}
 
-			List<Project> haveDone = projectService.findByUser(user, Constant.HAVING_DONE);
-			List<Project> isDoing = projectService.findByUser(user, Constant.IS_DOING);
-			
+			List<Project> haveDone = projectService.findByUser(user,
+					Constant.HAVING_DONE);
+			List<Project> isDoing = projectService.findByUser(user,
+					Constant.IS_DOING);
+
 			modelAndView.addObject("countHaveDone", haveDone.size());
 			modelAndView.addObject("countIsDoing", isDoing.size());
 			modelAndView.addObject("upVOs", upVOs);
@@ -142,18 +152,24 @@ public class ProjectController {
 		}
 		return modelAndView;
 	}
-	
-	private ModelAndView getIsDoingPros(ModelAndView modelAndView, User user, PageUtil pageUtil) {
+
+	private ModelAndView getIsDoingPros(ModelAndView modelAndView, User user,
+			PageUtil pageUtil) {
 		try {
 			List<UserProjectVO> isDoingPros = new ArrayList<UserProjectVO>();
-			List<Project> isDoing = projectService.findByUser(user, Constant.IS_DOING);
+			List<Project> isDoing = projectService.findByUser(user,
+					Constant.IS_DOING);
 			// 分页
 			pageUtil.setTotalDataSize(isDoing.size());
-			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)* pageUtil.getEachPageMaxSize()); // 设置起始行
-			List<Project> pagingPros = projectService.pagingFindByUser(user,pageUtil,Constant.IS_DOING);
+			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)
+					* pageUtil.getEachPageMaxSize()); // 设置起始行
+			List<Project> pagingPros = projectService.pagingFindByUser(user,
+					pageUtil, Constant.IS_DOING);
 			int sequence = 1;
 			for (Project project : pagingPros) {
-				UserProjectVO upVO = new UserProjectVO(user.getId(),project.getId(), project.getName(),project.getDescription(), project.getCreateTime());
+				UserProjectVO upVO = new UserProjectVO(user.getId(),
+						project.getId(), project.getName(),
+						project.getDescription(), project.getCreateTime());
 				upVO.setSequence(sequence++);
 				isDoingPros.add(upVO);
 			}
@@ -166,19 +182,25 @@ public class ProjectController {
 		}
 		return modelAndView;
 	}
-	
-	private ModelAndView getHaveDonePros(ModelAndView modelAndView, User user, PageUtil pageUtil) {
+
+	private ModelAndView getHaveDonePros(ModelAndView modelAndView, User user,
+			PageUtil pageUtil) {
 		try {
 			List<UserProjectVO> haveDonePros = new ArrayList<UserProjectVO>();
-			List<Project> haveDone = projectService.findByUser(user, Constant.HAVING_DONE);
+			List<Project> haveDone = projectService.findByUser(user,
+					Constant.HAVING_DONE);
 			// 分页
-//			pageUtil = new PageUtil(haveDone.size());
+			// pageUtil = new PageUtil(haveDone.size());
 			pageUtil.setTotalDataSize(haveDone.size());
-			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)* pageUtil.getEachPageMaxSize()); // 设置起始行
-			List<Project> pagingPros = projectService.pagingFindByUser(user,pageUtil,Constant.HAVING_DONE);
+			pageUtil.setCurrentPageBeginNo((pageUtil.currentPageNo - 1)
+					* pageUtil.getEachPageMaxSize()); // 设置起始行
+			List<Project> pagingPros = projectService.pagingFindByUser(user,
+					pageUtil, Constant.HAVING_DONE);
 			int sequence = 1;
 			for (Project project : pagingPros) {
-				UserProjectVO upVO = new UserProjectVO(user.getId(),project.getId(), project.getName(),project.getDescription(), project.getCreateTime());
+				UserProjectVO upVO = new UserProjectVO(user.getId(),
+						project.getId(), project.getName(),
+						project.getDescription(), project.getCreateTime());
 				upVO.setSequence(sequence++);
 				haveDonePros.add(upVO);
 			}
@@ -194,6 +216,7 @@ public class ProjectController {
 
 	/**
 	 * 添加项目
+	 * 
 	 * @param proUserEmails
 	 * @param proUserNicks
 	 * @param proUserPasswords
@@ -228,6 +251,7 @@ public class ProjectController {
 
 	/**
 	 * 删除项目
+	 * 
 	 * @param project
 	 * @param modelAndView
 	 * @param modelMap
@@ -248,6 +272,7 @@ public class ProjectController {
 
 	/**
 	 * 编辑项目之前返回有用信息
+	 * 
 	 * @param project
 	 * @return
 	 */
@@ -257,8 +282,8 @@ public class ProjectController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User creator = (User) modelMap.get("user");
-			List<Map<String, Object>> maps = projectService
-					.findUsersByProject(project, creator);
+			List<Map<String, Object>> maps = projectService.findUsersByProject(
+					project, creator);
 			result.put("members", maps);
 			result.put("success", true);
 		} catch (Exception e) {
@@ -269,6 +294,7 @@ public class ProjectController {
 
 	/**
 	 * 编辑项目
+	 * 
 	 * @param project
 	 * @param modelAndView
 	 * @param modelMap
@@ -281,7 +307,8 @@ public class ProjectController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			Project oldPro = projectService.findById(project);
-			if(oldPro.getName().equals(project.getName()) && oldPro.getDescription().equals(project.getDescription())) {
+			if (oldPro.getName().equals(project.getName())
+					&& oldPro.getDescription().equals(project.getDescription())) {
 				map.put("success", false);
 				map.put("errMsg", "未做任何修改！");
 			} else {
@@ -295,9 +322,10 @@ public class ProjectController {
 		}
 		return map;
 	}
-	
+
 	/**
 	 * 项目详情
+	 * 
 	 * @param project
 	 * @param modelAndView
 	 * @param modelMap
@@ -315,11 +343,12 @@ public class ProjectController {
 		}
 		return modelAndView;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/projectMember")
-	public List<Map<String, Object>> projectMember(Project project, ModelAndView modelAndView, ModelMap modelMap) {
-		List<Map<String, Object>> maps = new ArrayList<Map<String,Object>>();
+	public List<Map<String, Object>> projectMember(Project project,
+			ModelAndView modelAndView, ModelMap modelMap) {
+		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
 		try {
 			maps = projectService.findUsers(project);
 		} catch (Exception e) {
@@ -327,17 +356,19 @@ public class ProjectController {
 		}
 		return maps;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/pagingProjects")
-	public ModelAndView pagingProjects(PageUtil page, ModelAndView modelAndView, ModelMap modelMap) {
-		
+	public ModelAndView pagingProjects(PageUtil page,
+			ModelAndView modelAndView, ModelMap modelMap) {
+
 		modelAndView.setViewName("pro/projects");
 		return modelAndView;
 	}
-	
+
 	/**
 	 * 查找项目所属用户
+	 * 
 	 * @param project
 	 * @param modelAndView
 	 * @param modelMap
@@ -345,7 +376,8 @@ public class ProjectController {
 	 */
 	@ResponseBody
 	@RequestMapping("/findUsers")
-	public Map<String, Object> findUsers(Project project, ModelAndView modelAndView, ModelMap modelMap) {
+	public Map<String, Object> findUsers(Project project,
+			ModelAndView modelAndView, ModelMap modelMap) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<Map<String, Object>> users = projectService.findUsers(project);
@@ -355,13 +387,5 @@ public class ProjectController {
 		}
 		return map;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

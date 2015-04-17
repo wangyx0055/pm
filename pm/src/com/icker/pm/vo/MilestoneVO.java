@@ -21,6 +21,14 @@ public class MilestoneVO {
 	private String performerId;
 	/** 状态 1:已完成；2：未完成；3：已延期 */
 	private String status;
+	/** 描述 */
+	private String description;
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public int getSequence() {
 		return sequence;
 	}
@@ -116,6 +124,9 @@ public class MilestoneVO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result
 				+ ((finishDate == null) ? 0 : finishDate.hashCode());
@@ -131,6 +142,7 @@ public class MilestoneVO {
 				+ ((projectId == null) ? 0 : projectId.hashCode());
 		result = prime * result
 				+ ((projectName == null) ? 0 : projectName.hashCode());
+		result = prime * result + sequence;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
@@ -143,6 +155,16 @@ public class MilestoneVO {
 		if (getClass() != obj.getClass())
 			return false;
 		MilestoneVO other = (MilestoneVO) obj;
+		if (creator == null) {
+			if (other.creator != null)
+				return false;
+		} else if (!creator.equals(other.creator))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 		if (endDate == null) {
 			if (other.endDate != null)
 				return false;
@@ -187,6 +209,8 @@ public class MilestoneVO {
 			if (other.projectName != null)
 				return false;
 		} else if (!projectName.equals(other.projectName))
+			return false;
+		if (sequence != other.sequence)
 			return false;
 		if (status == null) {
 			if (other.status != null)

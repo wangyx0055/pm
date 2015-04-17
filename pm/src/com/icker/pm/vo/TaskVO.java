@@ -3,6 +3,8 @@ package com.icker.pm.vo;
 public class TaskVO {
 	/** 任务Id */
 	private String id;
+	/** 状态 0：未完成；1：完成；2：延期 */
+	private String status;
 	/** 序号 */
 	private Integer sequence;
 	/** 任务名称 */
@@ -36,6 +38,12 @@ public class TaskVO {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public Integer getSequence() {
 		return sequence;

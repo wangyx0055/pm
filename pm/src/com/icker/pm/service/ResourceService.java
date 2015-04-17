@@ -14,4 +14,6 @@ public interface ResourceService {
 	public boolean delete(ResourceVO vo) throws Exception;
 
 	public List<Resource> findByType(Resource resource) throws Exception;
+
+	public List<Resource> findByName(String projectId, String name) throws Exception;
 }

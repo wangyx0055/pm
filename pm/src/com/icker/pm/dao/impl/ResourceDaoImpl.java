@@ -10,19 +10,19 @@ import com.icker.pm.pojo.Resource;
 
 @Repository
 public class ResourceDaoImpl extends BaseDao<Resource> implements ResourceDao {
-	
+
 	@Override
-	public boolean saveResource(Resource resource) throws Exception{
+	public boolean saveResource(Resource resource) throws Exception {
 		return super.save(resource);
 	}
 
 	@Override
-	public void deleteResourceById(Resource resource) throws Exception{
+	public void deleteResourceById(Resource resource) throws Exception {
 		super.delete(resource);
 	}
-	
+
 	@Override
-	public Resource findResourceById(Resource resource) throws Exception{
+	public Resource findResourceById(Resource resource) throws Exception {
 		return (Resource) super.findById(Resource.class, resource.getId());
 	}
 
@@ -30,7 +30,8 @@ public class ResourceDaoImpl extends BaseDao<Resource> implements ResourceDao {
 	@Override
 	public List<Resource> findAll(Project project) throws Exception {
 		String hql = "from Resource r where r.project.id = ?0 order by r.upTime desc";
-		return super.getEntityManager().createQuery(hql).setParameter(0, project.getId()).getResultList();
+		return super.getEntityManager().createQuery(hql)
+				.setParameter(0, project.getId()).getResultList();
 	}
 
 	@Override
@@ -42,6 +43,18 @@ public class ResourceDaoImpl extends BaseDao<Resource> implements ResourceDao {
 	@Override
 	public List<Resource> findByType(Resource resource) throws Exception {
 		String hql = "from Resource r where r.type = ?0 and r.project.id = ?1 order by r.upTime desc";
-		return super.getEntityManager().createQuery(hql).setParameter(0, resource.getType()).setParameter(1, resource.getProject().getId()).getResultList();
+		return super.getEntityManager().createQuery(hql)
+				.setParameter(0, resource.getType())
+				.setParameter(1, resource.getProject().getId()).getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Resource> findByName(String projectId, String name)
+			throws Exception {
+		String hql = "from Resource r where r.project.id = ?0 and r.name like ?1 order by r.upTime desc";
+		return super.getEntityManager().createQuery(hql)
+				.setParameter(0, projectId).setParameter(1, "%" + name + "%")
+				.getResultList();
 	}
 }

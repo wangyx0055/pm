@@ -17,35 +17,37 @@ import javax.mail.internet.MimeMultipart;
 
 public class MailSender {
 	public static boolean sendHtmlMail(Mail mail) {
-		//身份认证，创建一个密码验证器 
-		Authenticator authenticator = new MyAuthenticator(mail.getUsername(), mail.getPassword());
-		//根据邮件会话属性和密码验证器构造一个发送邮件的session
-		Session session = Session.getDefaultInstance(mail.getProperties(), authenticator);
-		//根据session创建一个邮件消息 
+		// 身份认证，创建一个密码验证器
+		Authenticator authenticator = new MyAuthenticator(mail.getUsername(),
+				mail.getPassword());
+		// 根据邮件会话属性和密码验证器构造一个发送邮件的session
+		Session session = Session.getDefaultInstance(mail.getProperties(),
+				authenticator);
+		// 根据session创建一个邮件消息
 		Message message = new MimeMessage(session);
-		
+
 		try {
-			//设置发送人地址
+			// 设置发送人地址
 			Address fromAddress = new InternetAddress(mail.getFromAddress());
 			message.setFrom(fromAddress);
-			
-			//设置接收者地址
+
+			// 设置接收者地址
 			Address toAddress = new InternetAddress(mail.getToAddress());
 			message.addRecipient(RecipientType.TO, toAddress);
-			
-			//设置主题
+
+			// 设置主题
 			message.setSubject(mail.getSubject());
-			//设置内容
+			// 设置内容
 			Multipart multipart = new MimeMultipart();
 			BodyPart html = new MimeBodyPart();
-			html.setContent(mail.getContent(), "text/html; charset=utf-8");    
-			multipart.addBodyPart(html); 
-            message.setContent(multipart);
-            
-            //发送
-            Transport.send(message); 
-            System.out.println("发送成功");
-            return true;
+			html.setContent(mail.getContent(), "text/html; charset=utf-8");
+			multipart.addBodyPart(html);
+			message.setContent(multipart);
+
+			// 发送
+			Transport.send(message);
+			System.out.println("发送成功");
+			return true;
 		} catch (AddressException e) {
 			System.err.println("无此地址，或地址错误");
 			e.printStackTrace();
@@ -56,9 +58,9 @@ public class MailSender {
 		System.out.println("发送失败");
 		return false;
 	}
-	
+
 	public static boolean sendTextMail(Mail mail) {
 		return false;
-		
+
 	}
 }

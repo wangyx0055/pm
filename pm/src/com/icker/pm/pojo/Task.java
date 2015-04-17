@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "task", catalog = "pm")
-public class Task implements Serializable{
+public class Task implements Serializable {
 
 	/** 任务Id */
 	@Id
@@ -53,8 +53,10 @@ public class Task implements Serializable{
 	@Column(name = "priority")
 	private String priority;
 	/** 任务实现进度 0-100浮点数 */
-	@Column(name = "progress", scale=2)
+	@Column(name = "progress", scale = 2)
 	private Double progress;
+	/** 任务状态 0：未完成；1:完成；2：延期 */
+	private String status;
 	/** 任务所属项目 */
 	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectid", referencedColumnName = "id")
@@ -182,6 +184,14 @@ public class Task implements Serializable{
 		return priority;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
@@ -203,8 +213,9 @@ public class Task implements Serializable{
 	}
 
 	public Task(String id, String name, String description, String startDate,
-			String endDate, String finishDate, String createTime, String priority,
-			Double progress, Project project, User creator, User performer, String parentId) {
+			String endDate, String finishDate, String createTime,
+			String priority, Double progress, Project project, User creator,
+			User performer, String parentId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -250,6 +261,7 @@ public class Task implements Serializable{
 		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 
@@ -336,6 +348,11 @@ public class Task implements Serializable{
 			if (other.startDate != null)
 				return false;
 		} else if (!startDate.equals(other.startDate))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
 			return false;
 		return true;
 	}

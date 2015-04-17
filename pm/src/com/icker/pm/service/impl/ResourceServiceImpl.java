@@ -19,7 +19,7 @@ public class ResourceServiceImpl implements ResourceService {
 
 	@Autowired
 	private ResourceDao resourceDao;
-	
+
 	@Override
 	public boolean save(Resource resource) throws Exception {
 		return resourceDao.saveResource(resource);
@@ -35,9 +35,9 @@ public class ResourceServiceImpl implements ResourceService {
 		Resource resource = resourceDao.findById(vo.getId());
 		resourceDao.deleteResourceById(resource);
 		File file = new File(vo.getPath());
-		if(file.isFile() && file.exists()) 
+		if (file.isFile() && file.exists())
 			file.delete();
-		else 
+		else
 			return false;
 		return true;
 	}
@@ -46,5 +46,11 @@ public class ResourceServiceImpl implements ResourceService {
 	public List<Resource> findByType(Resource resource) throws Exception {
 		return resourceDao.findByType(resource);
 	}
-	
+
+	@Override
+	public List<Resource> findByName(String projectId, String name)
+			throws Exception {
+		return resourceDao.findByName(projectId, name);
+	}
+
 }

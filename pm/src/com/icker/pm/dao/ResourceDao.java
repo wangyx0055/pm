@@ -32,4 +32,6 @@ public interface ResourceDao {
 	public Resource findById(String id) throws Exception;
 
 	public List<Resource> findByType(Resource resource) throws Exception;
+
+	public List<Resource> findByName(String projectId, String name) throws Exception;
 }

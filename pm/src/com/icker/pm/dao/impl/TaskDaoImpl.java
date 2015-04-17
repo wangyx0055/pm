@@ -14,7 +14,7 @@ import com.icker.pm.vo.EmailTimerTaskVO;
 public class TaskDaoImpl extends BaseDao<Task> implements TaskDao {
 
 	@Override
-	public List<EmailTimerTaskVO> findEmailVO() throws Exception{
+	public List<EmailTimerTaskVO> findEmailVO() throws Exception {
 		List<EmailTimerTaskVO> vos = new ArrayList<EmailTimerTaskVO>();
 		List<Task> tasks = super.findAll("from Task t");
 		for (Task task : tasks) {
@@ -28,17 +28,19 @@ public class TaskDaoImpl extends BaseDao<Task> implements TaskDao {
 		return vos;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Task> findAll(Project project) throws Exception {
-//		super.findByParam(Task.class, project.getId(), hql);
-		return null;
+		String hql = "from Task t where t.project.id = ?0 order by t.createTime desc";
+		return super.getEntityManager().createQuery(hql).setParameter(0, project.getId()).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Task> findByName(String name) throws Exception {
-		String hql = "from Task t where t.name like :name";
-		List<Task> tasks = super.getEntityManager().createQuery(hql).setParameter("name","%"+name+"%").getResultList();
+		String hql = "from Task t where t.name like :name order by t.createTime desc";
+		List<Task> tasks = super.getEntityManager().createQuery(hql)
+				.setParameter("name", "%" + name + "%").getResultList();
 		return tasks;
 	}
 
@@ -60,5 +62,35 @@ public class TaskDaoImpl extends BaseDao<Task> implements TaskDao {
 	@Override
 	public void delete(Task task) throws Exception {
 		super.delete(task);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Task> findByStatus(String proId, String status)
+			throws Exception {
+		String hql = "from Task t where t.project.id = ?0 and t.status = ?1 order by t.createTime desc";
+		return super.getEntityManager().createQuery(hql).setParameter(0, proId)
+				.setParameter(1, status).getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Task> findAll(String performer, Project project, String status)
+			throws Exception {
+		String hql = "from Task t where t.performer.id = ?0 and t.project.id = ?1 and t.status = ?2 order by t.createTime desc";
+		return super.getEntityManager().createQuery(hql)
+				.setParameter(0, performer).setParameter(1, project.getId())
+				.setParameter(2, status).getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Task> findByName(String name, Project project, String status)
+			throws Exception {
+		String hql = "from Task t where t.name like ?0 and t.project.id = ?1 and t.status = ?2 order by t.createTime desc";
+		return super.getEntityManager().createQuery(hql)
+				.setParameter(0, "%" + name + "%")
+				.setParameter(1, project.getId()).setParameter(2, status)
+				.getResultList();
 	}
 }

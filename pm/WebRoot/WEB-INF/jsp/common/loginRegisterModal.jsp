@@ -104,7 +104,6 @@
 	}
 	//登录提交
 	$("#loginBtn").click(function() {
-		console.log("sasd");
 		$.post("user/UserLoginServlet", {
 			email : $("#email").val(),
 			password : $("#password").val(),

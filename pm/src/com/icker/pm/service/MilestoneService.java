@@ -11,5 +11,11 @@ public interface MilestoneService {
 	public boolean remove(Milestone milestone) throws Exception;
 	public boolean remove(String id) throws Exception;
 	public List<Milestone> findByStatus(Project project, String status) throws Exception;
+	public List<Milestone> findByName(Project p, String name, String status) throws Exception;
+	public List<Milestone> findByUser(Project p, String performer, String status) throws Exception;
+	public void complete(Milestone milestone) throws Exception;
+	public void release(Milestone milestone) throws Exception;
+	public List<Milestone> findAll(Project project) throws Exception;
+	public Milestone findById(String id) throws Exception;
 	
 }

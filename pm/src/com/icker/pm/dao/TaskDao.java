@@ -14,4 +14,7 @@ public interface TaskDao {
 	public Task findTask(String id) throws Exception;
 	public void update(Task task) throws Exception;
 	public void delete(Task task) throws Exception;
+	public List<Task> findByStatus(String proId, String status) throws Exception;
+	public List<Task> findAll(String performer, Project project, String status) throws Exception;
+	public List<Task> findByName(String name, Project project, String status) throws Exception;
 }

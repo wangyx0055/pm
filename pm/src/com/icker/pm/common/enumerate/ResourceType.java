@@ -10,8 +10,7 @@ public enum ResourceType {
 	DESIGN_DOCUMENT("2", "设计文档"),
 	PLAN_DOCUMENT("3", "策划文档"),
 	TECHNOLOGY_SHARING("4", "技术分享"),
-	CODE_SHARING("5", "代码分享"),
-	REFERENCE("6", "参考文献"),
+	CODE_SHARING("5", "参考文献"),
 	UNCLASSIFIED("0", "其他");
 	
 	private String type;

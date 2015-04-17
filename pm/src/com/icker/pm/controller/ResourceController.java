@@ -34,15 +34,16 @@ import com.icker.pm.vo.ResourceVO;
 @Controller
 @RequestMapping("/resourceController")
 @SessionAttributes(value = { "user" })
-public class ResourceController {
+public class ResourceController extends ExceptionController {
 
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
 	private ResourceService resourceService;
-	
+
 	/**
 	 * 文件资源首页
+	 * 
 	 * @param project
 	 * @param modelAndView
 	 * @param modelMap
@@ -64,6 +65,7 @@ public class ResourceController {
 
 	/**
 	 * 批量上传文件
+	 * 
 	 * @param resources
 	 * @param modelAndView
 	 * @param modelMap
@@ -72,17 +74,19 @@ public class ResourceController {
 	 */
 	@ResponseBody
 	@RequestMapping("/batchUpload")
-	public Map<String, Object> batchUpload(@RequestParam MultipartFile[] resources, String id,
-			String type, HttpServletRequest request, ModelMap modelMap) {
+	public Map<String, Object> batchUpload(
+			@RequestParam MultipartFile[] resources, String id, String type,
+			HttpServletRequest request, ModelMap modelMap) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User uploader = (User) modelMap.get("user");
 			Project p = new Project();
 			p.setId(id);
 			Project project = projectService.findById(p);
-			if(StringUtils.isBlank(type)) 
+			if (StringUtils.isBlank(type))
 				type = ResourceType.getType("其他");
-			List<Map<String, String>> maps = FileUploadUtil.multifileUpload(resources, request, null, true);
+			List<Map<String, String>> maps = FileUploadUtil.multifileUpload(
+					resources, request, null, true);
 			for (Map<String, String> map : maps) {
 				Resource resource = new Resource();
 				resource.setName(map.get("fileName"));
@@ -101,19 +105,21 @@ public class ResourceController {
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/changeType")
-	public ModelAndView changeType(String type, ModelAndView modelAndView, ModelMap modelMap) {
+	public ModelAndView changeType(String type, ModelAndView modelAndView,
+			ModelMap modelMap) {
 		modelAndView.addObject("type", type);
 		modelAndView.setViewName("file/upload");
 		return modelAndView;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/resourceTypes")
-	public List<Map<String, Object>> resourceTypes(ModelAndView modelAndView, ModelMap modelMap) {
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+	public List<Map<String, Object>> resourceTypes(ModelAndView modelAndView,
+			ModelMap modelMap) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < ResourceType.values().length; i++) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("type", String.valueOf(i));
@@ -122,9 +128,10 @@ public class ResourceController {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 查询项目所有资源文件
+	 * 
 	 * @param project
 	 * @param modelAndView
 	 * @param modelMap
@@ -132,11 +139,12 @@ public class ResourceController {
 	 */
 	@ResponseBody
 	@RequestMapping("/allResources")
-	public ModelAndView allResources(Project project, ModelAndView modelAndView, ModelMap modelMap) {
+	public ModelAndView allResources(Project project,
+			ModelAndView modelAndView, ModelMap modelMap) {
 		try {
 			List<Resource> list = resourceService.findAll(project);
 			List<ResourceVO> vos = this.getResourceVOs(list);
-			
+
 			modelAndView.addObject("resources", vos);
 			modelAndView.setViewName("file/files");
 		} catch (Exception e) {
@@ -144,9 +152,10 @@ public class ResourceController {
 		}
 		return modelAndView;
 	}
-	
+
 	/**
 	 * 文件资源下载
+	 * 
 	 * @param path
 	 * @param request
 	 * @param response
@@ -154,19 +163,20 @@ public class ResourceController {
 	 * @return
 	 */
 	@RequestMapping("/download")
-	public ModelAndView download(String path, HttpServletRequest request,  
-		      HttpServletResponse response, ModelAndView modelAndView){
-		String contentType = "application/octet-stream";  
+	public ModelAndView download(String path, HttpServletRequest request,
+			HttpServletResponse response, ModelAndView modelAndView) {
+		String contentType = "application/octet-stream";
 		try {
 			FileUploadUtil.download(request, response, path, contentType);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}  
+		}
 		return null;
-	}  
-	
+	}
+
 	/**
 	 * 删除文件资源
+	 * 
 	 * @param vo
 	 * @param modelAndView
 	 * @param modelMap
@@ -174,11 +184,14 @@ public class ResourceController {
 	 */
 	@ResponseBody
 	@RequestMapping("/deleteResource")
-	public ModelAndView deleteResource(ResourceVO vo, ModelAndView modelAndView, ModelMap modelMap, HttpServletRequest request) {
+	public ModelAndView deleteResource(ResourceVO vo,
+			ModelAndView modelAndView, ModelMap modelMap,
+			HttpServletRequest request) {
 		try {
-//			modelMap.
-			String path = File.separator+"WEB-INF"+vo.getPath();
-			String filePath = request.getSession().getServletContext().getRealPath(path);
+			// modelMap.
+			String path = File.separator + "WEB-INF" + vo.getPath();
+			String filePath = request.getSession().getServletContext()
+					.getRealPath(path);
 			vo.setPath(filePath);
 			Project project = projectService.findProject(vo.getProjectId());
 			resourceService.delete(vo);
@@ -207,19 +220,47 @@ public class ResourceController {
 			vo.setUploader(list.get(i).getUploader().getName());
 			vo.setUploaderId(list.get(i).getUploader().getId());
 			vo.setSize(list.get(i).getSize());
-			vo.setSequence(i+1);
+			vo.setSequence(i + 1);
 			vos.add(vo);
 		}
 		return vos;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/findResources")
-	public ModelAndView findResources(Resource resource, String projectId, ModelAndView modelAndView, ModelMap modelMap) {
+	public ModelAndView findResources(Resource resource, String projectId,
+			ModelAndView modelAndView, ModelMap modelMap) {
 		try {
 			Project project = projectService.findProject(projectId);
+			List<ResourceVO> resources = new ArrayList<ResourceVO>();
 			resource.setProject(project);
-			List<Resource> list = resourceService.findByType(resource);
+			if(StringUtils.isBlank(resource.getType())) {
+				List<Resource> list = resourceService.findAll(project);
+				resources = this.getResourceVOs(list);
+			} else {
+				List<Resource> list = resourceService.findByType(resource);
+				resources = this.getResourceVOs(list);
+			}
+			modelAndView.addObject("resources", resources);
+			modelAndView.setViewName("file/files");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+
+	/**
+	 * 根据文件名模糊查找
+	 * @param vo
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/findResourceByName")
+	public ModelAndView findResourceByName(ResourceVO vo, ModelAndView modelAndView, ModelMap modelMap) {
+		try {
+			List<Resource> list = resourceService.findByName(vo.getProjectId(), vo.getName());
 			List<ResourceVO> resources = this.getResourceVOs(list);
 			modelAndView.addObject("resources", resources);
 			modelAndView.setViewName("file/files");
@@ -228,42 +269,4 @@ public class ResourceController {
 		}
 		return modelAndView;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

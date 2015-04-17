@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
 <meta charset="utf-8">
-<title>404错误页面</title>
+<title>错误页面</title>
 <style type="text/css">
 	*{
 		font-family:"时尚中黑简体";
@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		height:100%;
 	}
 	body{
-		background-image:url(images/278353.jpg);
+		background-image:url("http://localhost:8089/pm/images/278353.jpg");
 	}
 	div{
 		color:#416ABC;
@@ -45,9 +45,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 
 <body>
-	<div>
-    	<h1><i>你</i></h1>&nbsp;&nbsp;&nbsp;&nbsp;个白痴，没这个页面，回家<label>种田</label>吧。
-        <p>Why are you so diao??</p>
-    </div>
+	<div><%=request.getAttribute("ex") %></div>
 </body>
 </html>

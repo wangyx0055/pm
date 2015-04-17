@@ -23,14 +23,14 @@ import com.icker.pm.vo.DiscussVO;
 @Service
 @Transactional
 public class DiscussServiceImpl implements DiscussService {
-	
+
 	@Autowired
 	private DiscussDao discussDao;
 	@Autowired
 	private ProjectDao projectDao;
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Override
 	public List<Discuss> findAll(Project project) throws Exception {
 		Project p = projectDao.findProjectById(project);
@@ -59,9 +59,8 @@ public class DiscussServiceImpl implements DiscussService {
 
 	@Override
 	public List<DiscussVO> findAllVOs(Project project) throws Exception {
-		Project p = projectDao.findProjectById(project);
 		List<DiscussVO> vos = new ArrayList<DiscussVO>();
-		List<Discuss> discusses = p.getDiscusses();
+		List<Discuss> discusses = discussDao.findByProject(project);
 		int sequence = 1;
 		for (Discuss discuss : discusses) {
 			DiscussVO vo = new DiscussVO();
@@ -104,7 +103,7 @@ public class DiscussServiceImpl implements DiscussService {
 		Iterator<Discuss> iterator = discusses.iterator();
 		while (iterator.hasNext()) {
 			Discuss discuss = (Discuss) iterator.next();
-			if(!type.equals(discuss.getType())) 
+			if (!type.equals(discuss.getType()))
 				iterator.remove();
 		}
 		int sequence = 1;
@@ -130,13 +129,20 @@ public class DiscussServiceImpl implements DiscussService {
 		Project p = new Project();
 		p.setId(vo.getProjectId());
 		Project project = projectDao.findProjectById(p);
-		Discuss discuss = new Discuss(vo.getId(), vo.getContent(), vo.getTitle(), vo.getType(), vo.getCreateTime(), user, project);
+		Discuss discuss = new Discuss(vo.getId(), vo.getContent(),
+				vo.getTitle(), vo.getType(), vo.getCreateTime(), user, project);
 		discussDao.update(discuss);
 	}
 
 	@Override
 	public Discuss findById(String id) throws Exception {
 		return discussDao.findById(id);
+	}
+
+	@Override
+	public List<Discuss> findByTitle(String proId, String title)
+			throws Exception {
+		return discussDao.findByTitle(proId, title);
 	}
 
 }

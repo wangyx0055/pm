@@ -15,7 +15,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	public boolean saveUser(User user) throws Exception {
 		return super.save(user);
 	}
-	
+
 	@Override
 	public boolean updateUser(User user) throws Exception {
 		return super.update(user);
@@ -34,10 +34,12 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public User findByEmail(String email) throws Exception {
-		List<User> users = super.getEntityManager().createQuery("from User user where user.email = ?0").setParameter(0, email).getResultList();
-		if(!users.isEmpty()) 
+		List<User> users = super.getEntityManager()
+				.createQuery("from User user where user.email = ?0")
+				.setParameter(0, email).getResultList();
+		if (!users.isEmpty())
 			return users.get(0);
-		else 
+		else
 			return null;
 	}
 
@@ -45,7 +47,8 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 	@Override
 	public List<User> findUsersByProject(Project project) throws Exception {
 		String hql = "select pm.id.user from ProjectMember pm join pm.id.project p where p.id = ?0";
-		return super.getEntityManager().createQuery(hql).setParameter(0, project.getId()).getResultList();
+		return super.getEntityManager().createQuery(hql)
+				.setParameter(0, project.getId()).getResultList();
 	}
 
 }

@@ -13,19 +13,20 @@ import com.icker.pm.service.UserService;
 
 @Controller
 @RequestMapping("/userController")
-@SessionAttributes(value={"user"})
-public class UserController {
+@SessionAttributes(value = { "user" })
+public class UserController extends ExceptionController {
 	@Autowired
 	private UserService userService;
-	
+
 	/**
 	 * 登陆
+	 * 
 	 * @param user
 	 * @param modelMap
 	 * @return
 	 */
 	@RequestMapping("/login")
-	public String login(User user, ModelMap modelMap) {
+	public String login(User user, ModelMap modelMap) throws Exception {
 		try {
 			if (userService.hasUser(user)) {
 				user = userService.findUserByEmail(user.getEmail());
@@ -34,32 +35,43 @@ public class UserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception(e.getMessage());
 		}
 		return "/";
 	}
-	
+
 	/**
 	 * 用户注册
+	 * 
 	 * @param user
 	 * @param modelAndView
 	 * @param modelMap
 	 * @return
 	 */
 	@RequestMapping("/signUp")
-	public ModelAndView signUp(User user, ModelAndView modelAndView, ModelMap modelMap, RedirectAttributes attributes) {
+	public ModelAndView signUp(User user, ModelAndView modelAndView,
+			ModelMap modelMap, RedirectAttributes attributes) {
 		try {
 			User u = userService.findUserByEmail(user.getEmail());
-			if(null != u)
+			if (null != u)
 				throw new Exception("已经存在该用户，请直接登陆。");
 			userService.addUser(user);
 			attributes.addAttribute("user", user);
-			modelAndView.setViewName("redirect:/userController/login");;
+			modelAndView.setViewName("redirect:/userController/login");
+			;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return modelAndView;
 	}
-	
+
+	/**
+	 * 首页
+	 * 
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
 	@RequestMapping("/home")
 	public String home(ModelAndView modelAndView, ModelMap modelMap) {
 		return "main";

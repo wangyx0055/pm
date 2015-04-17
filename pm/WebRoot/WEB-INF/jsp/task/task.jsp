@@ -90,13 +90,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        <div class="jumbotron" style="background-color: #ffffff">
 		        	<div class="row">
 		        		<!-- 表单内容：查找、新增 -->
-		        		<div class="col-xs-4">
+		        		<div class="col-xs-3">
   							<div class="input-group">
   								<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 		        				<select class="form-control" selector="select"></select>
 							</div>
 						</div>
-						<div class="col-xs-4">
+						<div class="col-xs-3">
 							<div class="input-group">
    								<input name="task_name" type="text" class="form-control" placeholder="任务名">
       							<span class="input-group-btn">
@@ -123,9 +123,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       							</script>
       						</div>
   						</div>
-  						<div class="col-xs-4">
+  						<div class="col-xs-3">
 							<div class="input-group">
-								<div class="col-xs-9"></div>
 								<div class="col-xs-3">
 									<button type="button" class="btn btn-primary" name="new_task">新增任务</button>
 								</div>
@@ -134,6 +133,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										$("#addTaskModal").modal('show');
 									});
 								</script>
+      						</div>
+  						</div>
+  						<div class="col-xs-3">
+							<div class="input-group">
+								<button type="button" class="btn btn-warning" id="calendar_btn">
+									<span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;日历
+								</button>
+								<script type="text/javascript">
+				        			$("#calendar_btn").click(function(e){
+				        				var scroll_offset = $("#calendar_div").offset();  //得到calendar_div这个div层的offset，包含两个值，top和left
+				        				$("body,html").animate({
+				        					scrollTop:scroll_offset.top  //让body的scrollTop等于calendar_div的top，就实现了滚动
+				        				},400);
+				        			});
+				        		</script>
       						</div>
   						</div>
 					</div>
@@ -177,107 +191,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        		});
 		        	</script>
 		        	<div style="height: 20px;"></div>
-		        	<div id="infoTable" class="row">
-		        	<table class="table table-striped table-hover">
-		        		<tr>
-		        			<th></th>
-		        			<th>#</th>
-		        			<th>名称</th>
-		        			<th>负责人</th>
-		        			<th>进度</th>
-		        			<th>截止时间</th>
-		        			<th></th>
-		        			<th></th>
-		        		</tr>
-		        		<c:forEach items="${tasks }" var="task">
-		        			<tr>
-		        			<td name="taskTD0" class="hide"><c:out value="${task.id }"></c:out></td>
-		        			<td name="taskTD1"><input type="checkbox"></td>
-		        			<td name="taskTD2"><c:out value="${task.sequence }"></c:out></td>
-		        			<td name="taskTD3">
-		        				<c:if test="${task.priority ==1}">
-		        					<span name="tName" class="label label-danger" data-container="body" data-toggle="popover" data-placement="right" title="细节描述" data-content="${task.description }" style="cursor: pointer;"><c:out value="${task.name }"></c:out></span>
-		        				</c:if>
-		        				<c:if test="${task.priority ==2}">
-		        					<span name="tName" class="label label-warning" data-container="body" data-toggle="popover" data-placement="right" title="细节描述" data-content="${task.description }" style="cursor: pointer;"><c:out value="${task.name }"></c:out></span>
-		        				</c:if>
-		        				<c:if test="${task.priority ==3}">
-		        					<span name="tName" class="label label-info" data-container="body" data-toggle="popover" data-placement="right" title="细节描述" data-content="${task.description }" style="cursor: pointer;"><c:out value="${task.name }"></c:out></span>
-		        				</c:if>
-		        				<script>
-		        				$(function (){
-		    			        	$("[data-toggle='popover']").popover().on("mouseenter", function () {
-		    		                    var _this = this;
-		    		                    $(this).popover("show");
-		    		                    $(this).siblings(".popover").on("mouseleave", function () {
-		    		                        $(_this).popover('hide');
-		    		                    });
-		    		                }).on("mouseleave", function () {
-		    		                    var _this = this;
-		    		                    setTimeout(function () {
-		    		                        if (!$(".popover:hover").length) {
-		    		                            $(_this).popover("hide");
-		    		                        }
-		    		                    }, 100);
-		    		                });
-		    	     			});
-   								</script>
-		        			</td>
-		        			<td name="taskTD4"><c:out value="${task.performer }"></c:out></td>
-		        			<td name="taskTD5" style="width: 150px;">
-		        				<div class="progress" name="sliderBar">
-  									<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="${task.progress }" aria-valuemin="0" aria-valuemax="100" style="width: ${task.progress }%">
-   										<c:out value="${task.progress }%"></c:out>
-  									</div>
+		        	<div id="infoTable">
+		        		<jsp:include page="userTasks.jsp"></jsp:include>
+					</div>
+					
+					<!-- 日历开始 -->
+					<div class="row" id="calendar_div">
+						<div class="col-xs-12">
+							<div class="panel-group" id="accordion_calendar" role="tablist"
+								aria-multiselectable="true">
+								<div class="panel panel-info">
+									<div class="panel-heading" role="tab" id="headingCalendar">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion_calendar"
+												href="#collapse_calendar" aria-expanded="true"
+												aria-controls="collapse"> 日历 </a>
+										</h4>
+									</div>
+									<div id="collapse_calendar" class="panel-collapse collapse in"
+										role="tabpanel" aria-labelledby="headingCalendar">
+										<div class="panel-body">
+											<jsp:include page="../common/calendar.jsp"></jsp:include>
+										</div>
+									</div>
 								</div>
-		        			</td>
-		        			<td name="taskTD6"><c:out value="${task.endDate }"></c:out></td>
-		        			<td name="taskTD7">
-		        				<a id="editTask" name='editTask' href="javascript:void(0)"><span class="glyphicon glyphicon-edit"></span></a>
-		        			</td>
-		        			<td name="taskTD8">
-		        				<a id="deleteTask" name='deleteTask' href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>
-		        			</td>
-		        			<td name="taskTD9" class="hide"><c:out value="${task.startDate }"></c:out></td>
-		        			<td name="taskTD10" class="hide"><c:out value="${task.priority }"></c:out></td>
-		        			<td name="taskTD11" class="hide"><c:out value="${task.progress }"></c:out></td>
-		        			<td name="taskTD12" class="hide"><c:out value="${task.performerId }"></c:out></td>
-		        			<td name="taskTD13" class="hide"><c:out value="${task.description }"></c:out></td>
-		        			</tr>
-		        		</c:forEach>
-					</table>
+							</div>
+							<!-- collapse结束 -->
+						</div>
+						<!-- 一列 -->
+					</div>
+					<!-- 一行 -->
+					
 					
 					<script type="text/javascript">
-						// 点击编辑修改任务
-						$("a[name='editTask']").click(function(e) {
-							var taskId = $(this).parent("td").parent("tr").children("td[name='taskTD0']").text().trim();
-							var performerId = $(this).parent("td").parent("tr").children("td[name='taskTD12']").text().trim();
-							var name = $(this).parent("td").parent("tr").children("td[name='taskTD3']").children("span").text().trim();
-							var startDate = $(this).parent("td").parent("tr").children("td[name='taskTD9']").text().trim();
-							var endDate = $(this).parent("td").parent("tr").children("td[name='taskTD6']").text().trim();
-							var priority = $(this).parent("td").parent("tr").children("td[name='taskTD10']").text().trim();
-							var progress = $(this).parent("td").parent("tr").children("td[name='taskTD11']").text().trim();
-							var description = $(this).parent("td").parent("tr").children("td[name='taskTD13']").text().trim();
-							$("#editTaskModal").modal('show');
-							$("#editTaskModal").find("#editTaskId").val(taskId);
-							$("#editTaskModal").find("#editTaskName").val(name);
-							$("#editTaskModal").find("#editUser").val(performerId);
-							$("#editTaskModal").find("#editStartDate").val(startDate);
-							$("#editTaskModal").find("#editEndDate").val(endDate);
-							$("#editTaskModal").find("#editPriority").val(priority);
-							$("#editTaskModal").find("#editTaskDesc").val(description);
-							$("#editTaskModal").find("#editProgress").children("div").attr("aria-valuenow",progress);
-							$("#editTaskModal").find("#editProgress").children("div[role='progressbar']").attr("aria-valuenow", progress).html(progress+"%");
-							$("#editTaskModal").find("#editProgress").children("div[role='progressbar']").css("width",+progress+"%");
-						});
-						// 点击删除任务
-						$("a[name='deleteTask']").click(function(e) {
-							var taskId = $(this).parent("td").parent("tr").children("td[name='taskTD0']").text().trim();
-							$("#deleteModal").modal('show');
-							$("#task_id_hidden").val(taskId);
+					$(document).ready(function(){
+						$("input[name='check']").change(
+							function(e) {
+								var taskId = $(this).parent("td").parent("tr").children(
+										"td[name='taskTD0']").text().trim();
+								var proId = $("#hiddenProId").val();
+								/* 当前被选中 */
+								if($(this)[0].checked) {
+									$.ajax({
+										url : "taskController/completeTask",
+										data : "id=" + taskId + "&proId=" + proId,
+										type : "post",
+										dataType : "html",
+										success : function(data) {
+											$("#infoTable").empty();
+											$("#infoTable").html(data);
+										},
+										error : function(data) {
+											alert("error" + data);
+										}
+									});
+								} else {	/* 当前被释放 */
+									$.ajax({
+										url : "taskController/releaseTask",
+										data : "id=" + taskId + "&proId=" + proId,
+										type : "post",
+										dataType : "html",
+										success : function(data) {
+											$("#infoTable").empty();
+											$("#infoTable").html(data);
+										},
+										error : function(data) {
+											alert("error" + data);
+										}
+									});
+								}
+							});
 						});
 					</script>
-					</div>
 				</div>
 	        </div>
 	        

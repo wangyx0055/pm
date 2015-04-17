@@ -90,11 +90,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        				<select id="find_discuss" class="form-control" selector="select"></select>
 							</div>
 						</div>
+						<div class="col-xs-4">
+							<div class="input-group">
+   								<input name="discuss_name" type="text" class="form-control" placeholder="写字板标题">
+      							<span class="input-group-btn">
+        							<button class="btn btn-default" type="button" name="go">搜索</button>
+      							</span>
+      							<script type="text/javascript">
+      								$("button[name='go']").click(function(e){
+      									var proId = $("#hiddenProId").val();
+      									var title = $("input[name='discuss_name']").val();
+      									$.ajax({
+      										url: "discussController/findDiscussByTitle",
+      										data: "projectId="+proId+"&title="+title,
+      										type: "post",
+      										dataType: "html",
+      										success: function(data) {
+      											$("#infoTable").empty();
+      											$("#infoTable").html(data);
+      										},
+      										error: function(data) {
+      											alert("error"+data);
+      										}
+      									});
+      								});
+      							</script>
+      						</div>
+      					</div>
   						<div class="col-xs-4">
 							<div class="input-group">
-								<div class="col-xs-9"></div>
-								<div class="col-xs-3">
-									<button type="button" class="btn btn-info" name="new_discuss_btn">新增写字板</button>
+								<div class="col-xs-8"></div>
+								<div class="col-xs-4">
+									<button type="button" class="btn btn-success" name="new_discuss_btn">新增写字板</button>
 								</div>
 								<script type="text/javascript">
 									$("button[name='new_discuss_btn']").click(function(e) {
@@ -215,6 +242,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var title = $("input[name='discuss_title']").val();
 						var type = $('#discuss_type').val();
 						var content = $('#summernote').code();
+						content = encodeURIComponent(content);
 						$.ajax({
 							url: "discussController/addDiscuss",
 							data: "title="+title+"&content="+content+"&type="+type+"&projectId="+projectId,
@@ -357,6 +385,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div><!-- /.modal -->
 	<!-- 删除写字板结束 -->
 	
+	<!-- 显示写字板具体内容 -->
+	<div id="showContent" class="modal fade bs-example-modal-lg" aria-hidden="true" data-backdrop="static">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	    	<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        	<div class="col-sm-1"></div><h4 id="show_title" class="modal-title"></h4>
+	      	</div>
+	      	<div class="modal-body">
+	      		<div class="row">
+	      			<div class="col-sm-1"></div>
+	      			<div id="show_content" class="col-sm-10">
+	      			</div>
+	      			<div class="col-sm-1"></div>
+	      		</div>
+	      	</div>
+	    </div>
+	  </div>
+	</div>
   </body>
 </html>
 

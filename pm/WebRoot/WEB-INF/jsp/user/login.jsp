@@ -70,8 +70,5 @@
 		</form>
 	</div>
 	<!-- /container -->
-<a href="viewPDF.shtml">PDF视图打开 </a>
-<br>
-<a href="viewExcel.shtml">Excel视图打开</a>
 </body>
 </html>

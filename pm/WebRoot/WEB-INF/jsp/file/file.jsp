@@ -79,154 +79,127 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     				});
     			</script>
 
-		        <!-- 主体内容 -->
-		        <div>
-		            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-					  <div class="panel panel-info">
-						<div class="panel-heading" role="tab" id="headingTwo">
-						  <h4 class="panel-title">
-							<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-							  资源预览下载
-							</a>
-						  </h4>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-						  <div class="panel-body">
-						  	<div class="row">
-						  		<div class="col-xs-4">
-						    		<div class="input-group">
-  										<span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
-						    			<select id="r_type" name="r_type" class="form-control" selector="select"></select>
-						    		</div>
-						    	</div>
-						  	</div>
-						  	<div style="height: 5px; "></div>
-						  	<div class="row" id="info_table">
-						  		<jsp:include page="files.jsp"></jsp:include>
-						  	</div>
-						  	<script type="text/javascript">
-						  		$(document).ready(function(){
-						  			$("a[href='#collapseTwo']").click(function(){
-						  				var proId = $("#hiddenProId").val();
-						  				$.ajax({
-						  					url: "resourceController/allResources",
-						  					data: "id="+proId,
-						  					type: "post",
-						  					dataType: "html",
-						  					success: function(data) {
-						  						$("#info_table").empty();
-						  						$("#info_table").html(data);
-						  					},
-						  					error: function(data) {
-						  						alert("error"+data);
-						  					}
-						  				});
-						  			});
-						  			
-						  			$("#r_type").change(function(e) {
-							    		var filetype = $("#r_type").val();
-							    		var proId = $("#hiddenProId").val();
-							    		$.ajax({
-							    			url: "resourceController/findResources",
-							    			data: "type="+filetype+"&projectId="+proId,
-							    			type: "post",
-							    			dataType: "html",
-							    			success: function(data) {
-							    				$("#info_table").empty();
-							    				$("#info_table").html(data);
-							    			},
-							    			error: function(data) {
-							    				alert("error"+data);
-							    			}
-							    		});
-							    	});
-						  		});
-						  	</script>
-						  </div>
-						</div>
-					  </div>
-					
-					  <div class="panel panel-success">
-						<div class="panel-heading" role="tab" id="headingOne">
-						  <h4 class="panel-title">
-						    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-						      文件上传
-						    </a>
-						  </h4>
-						</div>
-						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-						  <div class="panel-body">
-						    <div class="row">
-						    	<div class="col-xs-12">
-						    		<div class="input-group">
-  										<span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
-						    			<select id="resource_type" name="resource_type" class="form-control" selector="select"></select>
-						    		</div>
-						    	</div>
-						    	<div class="col-xs-12" style="height: 5px;"></div>
-						    	<script type="text/javascript">
-							    	$(document).ready(function(){
-								    	var proId = $("#hiddenProId").val();
-						        		$.ajax({
-						        			url: "resourceController/resourceTypes",
-						        			data: "id="+proId,
-						        			type: "post",
-						        			dataType: "json",
-						        			success: function(data) {
-						        				var discusses = data;
-						        				for(var i = 0; i < discusses.length; i++) {
-						        					var option = "<option value='"+discusses[i].type+"'>"+discusses[i].typeName+"</option>";
-						        					$("select[selector='select']").append(option);
-						        				}
-						        				$("select[selector='select']").val("");
-						        			},
-						        			error: function(data) {
-						        				alert("error"+data);
-						        			}
-						        		});
-						        		
-								    	$("#resource_type").change(function(e) {
-								    		var filetype = $("#resource_type").val();
-								    		$.ajax({
-								    			url: "resourceController/changeType",
-								    			data: "type="+filetype,
-								    			type: "post",
-								    			dataType: "html",
-								    			success: function(data) {
-								    				$("div[name='upload_div']").empty();
-								    				$("div[name='upload_div']").html(data);
-								    			},
-								    			error: function(data) {
-								    				alert("error"+data);
-								    			}
-								    		});
-								    	});
-							    	});
-						    	</script>
-						    </div>
-			      		    <!-- 文件上传 -->
-					        <div class="row" name="upload_div">
-					          <div class="col-xs-12">
-					        	<input id="input_files" name="resources" type="file" multiple class="file-loading">
-								<script>
-									$(document).ready(function(){
-										var proId = $("#hiddenProId").val();
-										var filetype = "";
-								    	$("#input_files").fileinput({
-											uploadUrl: "resourceController/batchUpload",
-											uploadAsync: false,
-											maxFileCount: 5,
-											uploadExtraData: {id: proId, type:filetype}
-										});
-									});
-								</script>
-							  </div>
+
+				<div class="jumbotron" style="background-color: #ffffff">
+					<div class="row">
+						<div class="col-xs-4">
+							<div class="input-group">
+  								<span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+								<select id="r_type" name="r_type" class="form-control" selector="select"></select>
 							</div>
-						  </div>
 						</div>
-					  </div>
-					  
+						<div class="col-xs-4">
+							<div class="input-group">
+  								<input name="resource_name" type="text" class="form-control" placeholder="文件名">
+      							<span class="input-group-btn">
+        							<button class="btn btn-default" type="button" name="go">搜索</button>
+      							</span>
+      							<script type="text/javascript">
+      								$("button[name='go']").click(function(e){
+      									var proId = $("#hiddenProId").val();
+      									var name = $("input[name='resource_name']").val();
+      									$.ajax({
+      										url: "resourceController/findResourceByName",
+      										data: "projectId="+proId+"&name="+name,
+      										type: "post",
+      										dataType: "html",
+      										success: function(data) {
+      											$("#info_table").empty();
+      											$("#info_table").html(data);
+      										},
+      										error: function(data) {
+      											alert("error"+data);
+      										}
+      									});
+      								});
+      							</script>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<div class="input-group">
+  								<button id="resource_btn" style="width:150px;" class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+								  <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;上&nbsp;传
+								</button>
+							</div>
+						</div>
 					</div>
+					
+					<div style="height: 20px; "></div>
+					<div class="collapse" id="collapseExample">
+						<div class="well">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="input-group">
+								  		<span class="input-group-addon">
+								  			<span class="glyphicon glyphicon-list"></span>
+								  		</span>
+										<select id="resource_type" name="resource_type" class="form-control" selector="select"></select>
+									</div>
+								</div>
+								<div class="col-xs-12" style="height: 5px;"></div>
+							</div>
+							<div class="row" name="upload_div">
+								<jsp:include page="upload.jsp"></jsp:include>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="info_table">
+						<%-- <jsp:include page="files.jsp"></jsp:include> --%>
+					</div>
+					<script type="text/javascript">
+						$(document).ready(function(){
+							var proId = $("#hiddenProId").val();
+							$.ajax({
+				 				url: "resourceController/allResources",
+				  				data: "id="+proId,
+				  				type: "post",
+				  				dataType: "html",
+				  				success: function(data) {
+				  					$("#info_table").empty();
+				  					$("#info_table").html(data);
+				  				},
+				  				error: function(data) {
+				  					alert("error"+data);
+				  				}
+				  			});
+			        		$.ajax({
+			        			url: "resourceController/resourceTypes",
+			        			data: "id="+proId,
+			        			type: "post",
+			        			dataType: "json",
+			        			success: function(data) {
+			        				var discusses = data;
+			        				$("select[selector='select']").append("<option value=''>所有文件</option>");
+			        				for(var i = 0; i < discusses.length; i++) {
+			        					var option = "<option value='"+discusses[i].type+"'>"+discusses[i].typeName+"</option>";
+			        					$("select[selector='select']").append(option);
+			        				}
+			        				$("select[selector='select']").val("");
+			        			},
+			        			error: function(data) {
+			        				alert("error"+data);
+			        			}
+			        		});
+				  			
+				  			$("#r_type").change(function(e) {
+					    		var filetype = $("#r_type").val();
+					    		var proId = $("#hiddenProId").val();
+					    		$.ajax({
+					    			url: "resourceController/findResources",
+					    			data: "type="+filetype+"&projectId="+proId,
+					    			type: "post",
+					    			dataType: "html",
+					    			success: function(data) {
+					    				$("#info_table").empty();
+					    				$("#info_table").html(data);
+					    			},
+					    			error: function(data) {
+					    				alert("error"+data);
+					    			}
+					    		});
+					    	});
+				  		});
+				  	</script>
 				</div>
 	        </div>
 	        <!-- 项目成员 -->

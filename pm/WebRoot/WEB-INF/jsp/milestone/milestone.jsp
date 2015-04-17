@@ -85,149 +85,145 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					});
     				});
     			</script>
-
-		        <!-- 主体内容 -->
-		        <div>
-		        	<div class="row">
-			        	<div class="col-xs-3">
-			        		<button id="add_milestone_btn" type="button" class="btn">创建里程碑</button>
-			        		<script type="text/javascript">
-			        			$("#add_milestone_btn").click(function(e){
-			        				$("#add_milestone_modal").modal("show");
-			        			});
-			        		</script>
-			        	</div>
-			        </div>
-			        <div style="height: 5px;"></div>
-			        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-						<div class="panel panel-danger">
-					    	<div class="panel-heading" role="tab" id="headingOne">
-					      		<h4 class="panel-title">
-					        	<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-					         		延期里程碑
-					        	</a>
-					        	<script type="text/javascript">
-									$("a[aria-controls='collapseOne']").click(function(){
-										var proId = $("#hiddenProId").val();
-										$.ajax({
-											url: "milestoneController/extension",
-											data: "id="+proId,
-											type: "post",
-											dataType: "html",
-											success: function(data) {
-												$("#extension").empty();
-												$("#extension").html(data);
-											},
-											error: function(data) {
-												alert("error"+data);
-											}
-										});
-									});
-								</script>
-					      		</h4>
-					    	</div>
-						    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-						    	<div class="panel-body">
-						        	<div class="row">
-						        		<div id="extension" class="col-xs-12">
-						        		<!-- 信息 -->
-						        		</div>
-						        	</div>
-						      	</div>
-						    </div>
-						</div>
-						<div class="panel panel-warning">
-							<div class="panel-heading" role="tab" id="headingTwo">
-								<h4 class="panel-title">
-								<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-							    	未完成里程碑
-								</a>
-							    </h4>
-							    <script type="text/javascript">
-									$("a[aria-controls='collapseTwo']").click(function(){
-										var proId = $("#hiddenProId").val();
-										$.ajax({
-											url: "milestoneController/unfinished",
-											data: "id="+proId,
-											type: "post",
-											dataType: "html",
-											success: function(data) {
-												$("#unfinished").empty();
-												$("#unfinished").html(data);
-											},
-											error: function(data) {
-												alert("error"+data);
-											}
-										});
-									});
-								</script>
-						    </div>
-						    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-								<div class="panel-body">
-						        	<div class="row">
-						        		<div id="unfinished" class="col-xs-12">
-						        			<!-- 信息 -->
-						        		</div>
-						        	</div>
-						      	</div>
+		
+		
+				<div class="jumbotron" style="background-color: #ffffff"><!-- 新的主要内容 -->
+					<div class="row">
+						<!-- 表单内容：查找、新增 -->
+						<div class="col-xs-3">
+  							<div class="input-group">
+  								<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+		        				<select class="form-control" selector="select"></select>
 							</div>
-						</div>
-						<div class="panel panel-success">
-							<div class="panel-heading" role="tab" id="headingThree">
-								<h4 class="panel-title">
-									<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-										已完成里程碑
-								    </a>
-							    </h4>
-							    <script type="text/javascript">
-									$("a[aria-controls='collapseThree']").click(function(){
-										var proId = $("#hiddenProId").val();
-										$.ajax({
-											url: "milestoneController/completed",
-											type: "post",
-											data: "id="+proId,
-											dataType: "html",
-											success: function(data) {
-												$("#completed").empty();
-												$("#completed").html(data);
-											},
-											error: function(data) {
-												alert("error"+data);
-											}
-										});
+							<script type="text/javascript">
+								var proId = $("#hiddenProId").val();
+				        		$.ajax({
+				        			url: "projectController/findUsers",
+				        			data: "id="+proId,
+				        			type: "post",
+				        			dataType: "json",
+				        			success: function(data) {
+				        				var users = data.users;
+				        				var op = "<option value=''>"+'所有成员'+"</option>";
+				        				$("select[selector='select']").append(op);
+				        				for(var i = 0; i < users.length; i++) {
+				        					var option = "<option value='"+users[i].id+"'>"+users[i].name+"</option>";
+				        					$("select[selector='select']").append(option);
+				        				}
+				        				$("select[selector='select']").val("");
+				        			},
+				        			error: function(data) {
+				        				alert("error"+data);
+				        			}
+				        		});
+				        		
+				        		$("select[selector='select']").change(function(e) {
+				        			var value = $("select[selector='select']").val();
+									$.ajax({
+										url: "milestoneController/findByUser",
+										data: "performer="+value+"&id="+proId,
+										type: "post",
+										dataType: "html",
+										success: function(data) {
+											$("#infoTable").empty();
+											$("#infoTable").html(data);
+										},
+										error: function(data) {
+											alert("error"+data);
+										}
 									});
-								</script>
-							</div>
-							<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-								<div class="panel-body">
-									<div class="row">
-						        		<div id="completed" class="col-xs-12">
-						        		<!-- 信息 -->
-						        		</div>
-						        	</div>
-								</div>
-							</div>
+				        		});
+							</script>
 						</div>
+						<div class="col-xs-3">
+							<div class="input-group">
+   								<input name="milestone_name" type="text" class="form-control" placeholder="里程碑名称">
+      							<span class="input-group-btn">
+        							<button class="btn btn-default" type="button" name="go">搜索</button>
+      							</span>
+      							<script type="text/javascript">
+      								$("button[name='go']").click(function(e){
+      									var proId = $("#hiddenProId").val();
+      									var name = $("input[name='milestone_name']").val();
+      									$.ajax({
+      										url: "milestoneController/findByName",
+      										data: "id="+proId+"&name="+name,
+      										type: "post",
+      										dataType: "html",
+      										success: function(data) {
+      											$("#infoTable").empty();
+      											$("#infoTable").html(data);
+      										},
+      										error: function(data) {
+      											alert("error"+data);
+      										}
+      									});
+      								});
+      							</script>
+      						</div>
+  						</div>
+  						<div class="col-xs-3">
+							<div class="input-group">
+								<button type="button" class="btn btn-primary" id="add_milestone_btn">创建里程碑</button>
+								<script type="text/javascript">
+				        			$("#add_milestone_btn").click(function(e){
+				        				$("#add_milestone_modal").modal("show");
+				        			});
+				        		</script>
+      						</div>
+  						</div>
+  						<div class="col-xs-3">
+							<div class="input-group">
+								<button type="button" class="btn btn-warning" id="calendar_btn">
+									<span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;日历
+								</button>
+								<script type="text/javascript">
+				        			$("#calendar_btn").click(function(e){
+				        				var scroll_offset = $("#calendar_div").offset();  //得到pos这个div层的offset，包含两个值，top和left
+				        				$("body,html").animate({
+				        					scrollTop:scroll_offset.top  //让body的scrollTop等于pos的top，就实现了滚动
+				        				},400);
+				        			});
+				        		</script>
+      						</div>
+  						</div>
+					</div><!-- 表单内容：查找、新增，结束 -->
+					
+					<div style="height: 20px;"></div>
+					
+					<!-- table内容开始 -->
+					<div class="row" id="infoTable">
+						<jsp:include page="unfinished.jsp"></jsp:include>
 					</div>
-			    </div>
+					<script type="text/javascript">
+						$(document).ready(function(){
+							var proId = $("#hiddenProId").val();
+							$.ajax({
+								url: "milestoneController/findAll",
+								data: "id="+proId,
+								type: "post",
+								dataType: "html",
+								success: function(data) {
+									$("#infoTable").empty();
+									$("#infoTable").html(data);
+								},
+								error: function(data) {
+									alert("error"+data);
+								}
+							});
+						});
+					</script>
+					<!-- table内容结束 -->	
+					
+					
+					
+				</div><!-- 新的主要内容结束 -->
+
 		    </div>
 	        <!-- 项目成员 -->
 	        <jsp:include page="../common/pro/members.jsp"></jsp:include>
         </div><!-- 内容区结束 -->
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     <!-- 新增里程碑 -->
@@ -241,15 +237,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      <div class="modal-body">
 	      	<form id="add_milestone_Form" class="form-horizontal" role="form">
 				<div class="form-group">
-					<label for="milestoneName" class="col-sm-3 control-label">里程碑名称</label>
-					<div class="col-sm-9">
+					<label for="milestoneName" class="col-sm-2 control-label">里程碑名称</label>
+					<div class="col-sm-4">
 						<input type="text" class="form-control" id="milestoneName"
 							placeholder="里程碑名称" required autofocus>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="userName" class="col-sm-3 control-label">负责人</label>
-					<div class="col-sm-9">
+					<label for="userName" class="col-sm-2 control-label">负责人</label>
+					<div class="col-sm-4">
 		        		<select class="form-control" name="userName"></select>
 		        	</div>
 		        	<script type="text/javascript">
@@ -274,8 +268,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        	</script>
 				</div>
 				<div class="form-group">
-					<label for="endDate" class="col-sm-3 control-label">截止日期</label>
-					<div id="endDateDiv" class="col-sm-9 input-append date form_datetime">
+					<label for="endDate" class="col-sm-2 control-label">截止日期</label>
+					<div id="endDateDiv" class="col-sm-4 input-append date form_datetime">
 						<input type="text" class="form-control" id="endDate"
 							value="" placeholder="截止日期" readonly required autofocus>
 					</div>
@@ -295,6 +289,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						});
 					</script>
 				</div>
+				<div id="descriptionDiv" class="form-group">
+					<label for="description" class="col-sm-2 control-label">里程碑描述</label>
+					<div class="col-sm-10">
+						<textarea rows="3" class="form-control" id="description"
+							placeholder="任务描述" required></textarea>
+					</div>
+				</div>
 			</form>
 	      </div>
 	      <div class="modal-footer">
@@ -306,15 +307,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        		var performer = $("select[name='userName']").val();
 	        		var proId = $("#hiddenProId").val();
 	        		var endDate = $("#endDate").val();
+	        		var description = $("#description").val();
 	        		$.ajax({
 	        			url: "milestoneController/saveMilestone",
-	        			data: "name="+name+"&performer="+performer+"&endDate="+endDate+"&projectId="+proId,
+	        			data: "name="+name+"&performer="+performer+"&endDate="+endDate+"&projectId="+proId+"&description="+description,
 	        			type: "post",
 	        			dataType: "html",
 	        			success: function(data) {
 	        				$("#add_milestone_modal").modal("hide");
-	        				$("#unfinished").empty();
-							$("#unfinished").html(data);
+	        				$("#infoTable").empty();
+							$("#infoTable").html(data);
 	        			},
 	        			error: function(data) {
 	        				alert("error"+data);
@@ -409,6 +411,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</script>
 						</div>
 					</div>
+					<div id="editDescriptionDiv" class="form-group">
+						<label for="editDesc" class="col-sm-2 control-label">里程碑描述</label>
+						<div class="col-sm-10">
+							<textarea rows="3" class="form-control" id="editDesc"
+								placeholder="里程碑描述" required></textarea>
+						</div>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -421,30 +430,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var mileName = $("#editmilestoneModal").find("#milestone_name").val();
 						var userName = $("#editmilestoneModal").find("#user_name").val();
 						var endDate = $("#editmilestoneModal").find("#end_date").val();
+						var editDesc = $("#editmilestoneModal").find("#editDesc").val();
+						alert(editDesc);
 						var progress = $("#editmilestoneModal").find("#mile_progress").children("div").attr("aria-valuenow");
 						$.ajax({
 							url: "milestoneController/editMilestone",
-							data: "id="+mileId+"&name="+mileName+"&performerId="+userName+"&endDate="+endDate+"&progress="+progress+"&projectId="+proId+"&status="+status,
+							data: "id="+mileId+"&name="+mileName+"&performerId="+userName+"&endDate="+endDate+"&progress="+progress+"&projectId="+proId+"&status="+status+"&description="+editDesc,
 							type: "post",
 							dataType: "html",
 							success: function(data) {
 								$("#editmilestoneModal").modal("hide");
-								if(status == "1") {
-			    					$("#completed").empty();
-									$("#completed").html(data);
-			    				} else if(status == "2") {
-			    					$("#unfinished").empty();
-									$("#unfinished").html(data);
-			    				} else if(status == "3") {
-			    					$("#extension").empty();
-									$("#extension").html(data);
-			    				}
+								$("#infoTable").empty();
+								$("#infoTable").html(data);
 							},
 							error: function(data){
 								alert("error"+data);
 							}
 						});
-						
 					});
 				</script>
 			</div>
@@ -483,16 +485,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    			dataType: "html",
 			    			success: function(data) {
 			    				$("#deleteModal").modal("hide");
-			    				if(status == "1") {
-			    					$("#completed").empty();
-									$("#completed").html(data);
-			    				} else if(status == "2") {
-			    					$("#unfinished").empty();
-									$("#unfinished").html(data);
-			    				} else if(status == "3") {
-			    					$("#extension").empty();
-									$("#extension").html(data);
-			    				}
+			    				$("#infoTable").empty();
+								$("#infoTable").html(data);
 			    			},
 			    			error: function(data) {
 			    				alert("error"+data);
@@ -503,7 +497,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-	
 	
   </body>
 </html>

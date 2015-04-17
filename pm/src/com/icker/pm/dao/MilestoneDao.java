@@ -12,4 +12,7 @@ public interface MilestoneDao {
 	public boolean remove(String id) throws Exception;
 	public List<Milestone> findByStatus(Project project, String status) throws Exception;
 	public Milestone findById(String id) throws Exception;
+	public List<Milestone> findByName(Project p, String name, String status) throws Exception;
+	public List<Milestone> findByUser(Project p, String performer, String status) throws Exception;
+	public List<Milestone> findAll(Project project) throws Exception;
 }

@@ -56,8 +56,8 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Project> pagingFindByUser(User user, PageUtil pageUtil, String status)
-			throws Exception {
+	public List<Project> pagingFindByUser(User user, PageUtil pageUtil,
+			String status) throws Exception {
 		String hql = "from Project p, ProjectMember pm where pm.id.user.id = ?0 and p.status = ?1 and pm.id.project.id = p.id order by p.createTime desc";
 		List<Project> projects = new ArrayList<Project>();
 		List<Object> objs = super.getEntityManager().createQuery(hql)
@@ -72,7 +72,7 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 		}
 		return projects;
 	}
-	
+
 	@Override
 	public boolean deleteProject(Project project) throws Exception {
 		return super.delete(project);
@@ -95,11 +95,12 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 	public int findCountOfPro(User user, String status) throws Exception {
 		int count = 0;
 		String hql = "from Project p where p.status = ?0";
-		List<Project> projects = super.getEntityManager().createQuery(hql).setParameter(0, status).getResultList();
+		List<Project> projects = super.getEntityManager().createQuery(hql)
+				.setParameter(0, status).getResultList();
 		for (Project project : projects) {
 			List<ProjectMember> pms = project.getProjectMembers();
 			for (ProjectMember pm : pms)
-				if(pm.getId().getUser().getId().equals(user.getId()))
+				if (pm.getId().getUser().getId().equals(user.getId()))
 					count++;
 		}
 		return count;
@@ -109,12 +110,13 @@ public class ProjectDaoImpl extends BaseDao<Project> implements ProjectDao {
 	@Override
 	public List<Project> findByUser(User user, String status) throws Exception {
 		String hql = "from Project p where p.status = ?0";
-		List<Project> list = new ArrayList<Project>(); 
-		List<Project> projects = super.getEntityManager().createQuery(hql).setParameter(0, status).getResultList();
+		List<Project> list = new ArrayList<Project>();
+		List<Project> projects = super.getEntityManager().createQuery(hql)
+				.setParameter(0, status).getResultList();
 		for (Project project : projects) {
 			List<ProjectMember> pms = project.getProjectMembers();
 			for (ProjectMember pm : pms)
-				if(pm.getId().getUser().getId().equals(user.getId()))
+				if (pm.getId().getUser().getId().equals(user.getId()))
 					list.add(project);
 		}
 		return list;

@@ -37,9 +37,9 @@
 				<td name="taskTD5"><c:out value="${resource.typeName }"></c:out></td>
 				<td name="taskTD6"><c:out value="${resource.upTime }"></c:out></td>
 				<td name="taskTD7"><c:out value="${resource.uploader }"></c:out></td>
-				<td name="taskTD8"><!-- 文件预览 -->
+				<td name="taskTD8"><!-- 文件下载 -->
 					<a id="previewResource" name='previewResource' href="javascript:void(0)">
-						<span class="glyphicon glyphicon-eye-open"></span>
+						<span class="glyphicon glyphicon-cloud-download"></span>
 					</a>
 				</td>
 				<td name="taskTD9">
@@ -92,18 +92,10 @@
 				window.location.href="resourceController/download?path="+path;
 			});
 			
-			// 文档预览
+			// 文件下载
 			$("a[name='previewResource']").click(function() {
-				var resource_id = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD0']").text().trim();
-				var resource_path = "<%=path%>"+$(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD11']").text().trim();
-				
-				$("#resource_path").val(resource_path);
-				$("#resource_id").val(resource_id);
-				$("#previewModal").modal("show");
-			});
-			$("#previewModal").on("show.bs.modal", function(e){
-				// alert($("#resource_id").val());
-				
+				var path = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD11']").text().trim();
+				window.location.href="resourceController/download?path="+path;
 			});
 			
 			$("a[name='deleteResource']").click(function() {

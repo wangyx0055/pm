@@ -17,4 +17,5 @@ public interface DiscussService {
 	public List<DiscussVO> findByType(Project project, String type) throws Exception;
 	public void update(DiscussVO vo) throws Exception;
 	public Discuss findById(String id) throws Exception;
+	public List<Discuss> findByTitle(String proId, String title) throws Exception;
 }

@@ -12,11 +12,11 @@ import com.icker.pm.service.UserService;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
-	
+public class UserServiceImpl implements UserService {
+
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Override
 	public boolean addUser(User user) throws Exception {
 		return userDao.saveUser(user);
@@ -41,10 +41,10 @@ public class UserServiceImpl implements UserService{
 	public boolean hasUser(User user) throws Exception {
 		boolean flag = false;
 		User u = userDao.findByEmail(user.getEmail());
-		flag = (u!=null)?true:false;
-		if(!flag)
+		flag = (u != null) ? true : false;
+		if (!flag)
 			throw new Exception("用户账号输入错误！");
-		else if(flag && !u.getPassword().equals(user.getPassword()))
+		else if (flag && !u.getPassword().equals(user.getPassword()))
 			throw new Exception("密码不正确");
 		return flag;
 	}
