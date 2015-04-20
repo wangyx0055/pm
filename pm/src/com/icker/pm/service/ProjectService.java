@@ -28,4 +28,6 @@ public interface ProjectService {
 	public boolean updateProject(Project project, String sendEmail) throws Exception;
 	public List<Integer> findActionCount(Project project) throws Exception;
 	public List<List<Object>> findTotalPieCharts(Project project) throws Exception;
+	public List<Integer> taskHistogram(Project project) throws Exception;
+	public List<Integer> mileHistogram(Project project) throws Exception;
 }

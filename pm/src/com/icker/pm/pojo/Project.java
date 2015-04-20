@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -39,6 +41,10 @@ public class Project implements Serializable{
 	/** 项目是否在实施，或已经结项。在实施：0；以完成：1 */
 	@Column(name = "status", length = 32)
 	private String status;
+	/** 项目创建人 */
+	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@JoinColumn(name = "creator", referencedColumnName = "id")
+	private User creator;
 
 	/**
 	 * 级联配置
@@ -103,6 +109,14 @@ public class Project implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public User getCreator() {
+		return creator;
+	}
+
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 
 	public List<ProjectMember> getProjectMembers() {
@@ -189,13 +203,16 @@ public class Project implements Serializable{
 		int result = 1;
 		result = prime * result
 				+ ((createTime == null) ? 0 : createTime.hashCode());
+		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((discusses == null) ? 0 : discusses.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((messages == null) ? 0 : messages.hashCode());
+		result = prime * result
+				+ ((milestones == null) ? 0 : milestones.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((projectMembers == null) ? 0 : projectMembers.hashCode());
@@ -220,25 +237,35 @@ public class Project implements Serializable{
 				return false;
 		} else if (!createTime.equals(other.createTime))
 			return false;
+		if (creator == null) {
+			if (other.creator != null)
+				return false;
+		} else if (!creator.equals(other.creator))
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (discusses == null) {
 			if (other.discusses != null)
 				return false;
 		} else if (!discusses.equals(other.discusses))
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (messages == null) {
 			if (other.messages != null)
 				return false;
 		} else if (!messages.equals(other.messages))
+			return false;
+		if (milestones == null) {
+			if (other.milestones != null)
+				return false;
+		} else if (!milestones.equals(other.milestones))
 			return false;
 		if (name == null) {
 			if (other.name != null)

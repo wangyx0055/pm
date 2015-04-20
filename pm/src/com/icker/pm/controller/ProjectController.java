@@ -235,6 +235,7 @@ public class ProjectController extends ExceptionController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		User creator = (User) modelMap.get("user");
 		Project project = new Project(proName, proDesc, date, Constant.IS_DOING);
+		project.setCreator(creator);
 		List<User> members = new ArrayList<User>();
 		for (int i = 0; i < proUserEmails.length; i++)
 			members.add(new User(proUserEmails[i], proUserPasswords[i],
@@ -422,6 +423,30 @@ public class ProjectController extends ExceptionController {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 		try {
 			result = projectService.findTotalPieCharts(project);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/taskHistogram")
+	public List<Map<String, Object>> taskHistogram(Project project) {
+		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		try {
+			List<Integer> taskCount = projectService.taskHistogram(project);
+			
+			Map<String, Object> task = new HashMap<String, Object>();
+			task.put("name", "任务");
+			task.put("data", taskCount);
+			
+			Map<String, Object> mile = new HashMap<String, Object>();
+			List<Integer> mileCount = projectService.mileHistogram(project);
+			mile.put("name", "里程碑");
+			mile.put("data", mileCount);
+			
+			result.add(task);
+			result.add(mile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

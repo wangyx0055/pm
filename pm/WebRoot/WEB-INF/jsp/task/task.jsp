@@ -56,13 +56,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	<div class="col-md-11">
 		        <div class="panel panel-default">
 		            <ul class="nav nav-pills" role="tablist">
-					  <li role="presentation"><a href="javascript:void(0)" id="proDetails">项目概览</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="msgEdition">消息版</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="milestone">里程碑</a></li>
-					  <li role="presentation" class="active"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="files">文件资料</a></li>
+						<li role="presentation"><a
+							href="javascript:void(0)" id="proDetails">项目概览</a></li>
+						<li role="presentation" class="active"><a href="javascript:void(0)"
+							id="taskList">任务列表</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="milestone">里程碑</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="writeBoard">写字板</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="files">文件资料</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="msgEdition">消息版</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="workHours">工时</a></li>
 					</ul>
 		        </div>
 		    	<script type="text/javascript">

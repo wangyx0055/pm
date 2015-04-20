@@ -41,13 +41,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	<div class="col-md-11">
 		        <div class="panel panel-default">
 		            <ul class="nav nav-pills" role="tablist">
-					  <li role="presentation"><a href="javascript:void(0)" id="proDetails">项目概览</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="msgEdition">消息版</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="milestone">里程碑</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
-					  <li role="presentation" class="active"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="files">文件资料</a></li>
+						<li role="presentation"><a
+							href="javascript:void(0)" id="proDetails">项目概览</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="taskList">任务列表</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="milestone">里程碑</a></li>
+						<li role="presentation" class="active"><a href="javascript:void(0)"
+							id="writeBoard">写字板</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="files">文件资料</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="msgEdition">消息版</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="workHours">工时</a></li>
 					</ul>
 		        </div>
 		        <script type="text/javascript">
@@ -216,10 +223,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 					<div class="row">
 						<div class="col-sm-12">
-							<div id="summernote"></div>
+							<div id="summernote" class="summernote"></div>
 		        		</div>
 		        		<script type="text/javascript">
-		        			$(document).ready(function() {
+			        		$(document).ready(function() {
+			        	       /*  $('#summernote').summernote(); */
+			        	        $('.summernote').summernote({
+			        	        	lang: 'zh-CN',
+		        					height : 300,
+		        					minHeight : null,
+		        					maxHeight : null,
+		        					focus : true
+			        	        });
+			        	    });
+		        			/* $(document).ready(function() {
 		        				$('#summernote').summernote({
 		        					lang: 'zh-CN',
 		        					height : 300,
@@ -227,7 +244,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        					maxHeight : null,
 		        					focus : true
 		        				});
-		        			});
+		        			}); */
+		        			
 		        		</script>
 					</div>
 				</form>
@@ -243,7 +261,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					});
 					$("#saveDiscuss").click(function(){
 						$(this).button('loading');
-						
 						var projectId = $('#hiddenProId').val();
 						var title = $("input[name='discuss_title']").val();
 						var type = $('#discuss_type').val();
@@ -336,6 +353,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var title = $("input[name='edit_discuss_title']").val();
 						var type = $('#edit_discuss_type').val();
 						var content = $('#edit_content').code();
+						content = encodeURIComponent(content);
 						$.ajax({
 							url: "discussController/editDiscuss",
 							data: "title="+title+"&content="+content+"&type="+type+"&projectId="+projectId+"&id="+discussId,

@@ -91,6 +91,7 @@ $(document).ready(function(data) {
 		var content = $(this).parent("td[name='taskTD8']").parent("tr").children("td[name='taskTD10']").text().trim();
 		$("#editDiscussModal").modal('show');
 		content = decodeURIComponent(content);
+		
 		$('#edit_content').code(content);
 		$('#edit_discuss_title').val(title);
 		$('#edit_discuss_type').val(type);

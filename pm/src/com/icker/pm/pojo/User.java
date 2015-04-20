@@ -77,7 +77,18 @@ public class User implements Serializable{
 	/** 执行的里程碑 */
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "performer")
 	private List<Milestone> milestones;
+	/** 创建的项目 */
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "creator")
+	private List<Project> createdPros;
 	
+	public List<Project> getCreatedPros() {
+		return createdPros;
+	}
+
+	public void setCreatedPros(List<Project> createdPros) {
+		this.createdPros = createdPros;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -248,12 +259,16 @@ public class User implements Serializable{
 		int result = 1;
 		result = prime * result + ((active == null) ? 0 : active.hashCode());
 		result = prime * result
+				+ ((createdPros == null) ? 0 : createdPros.hashCode());
+		result = prime * result
 				+ ((createdTasks == null) ? 0 : createdTasks.hashCode());
 		result = prime * result
 				+ ((discusses == null) ? 0 : discusses.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((logo == null) ? 0 : logo.hashCode());
+		result = prime * result
+				+ ((milestones == null) ? 0 : milestones.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
@@ -286,6 +301,11 @@ public class User implements Serializable{
 				return false;
 		} else if (!active.equals(other.active))
 			return false;
+		if (createdPros == null) {
+			if (other.createdPros != null)
+				return false;
+		} else if (!createdPros.equals(other.createdPros))
+			return false;
 		if (createdTasks == null) {
 			if (other.createdTasks != null)
 				return false;
@@ -310,6 +330,11 @@ public class User implements Serializable{
 			if (other.logo != null)
 				return false;
 		} else if (!logo.equals(other.logo))
+			return false;
+		if (milestones == null) {
+			if (other.milestones != null)
+				return false;
+		} else if (!milestones.equals(other.milestones))
 			return false;
 		if (name == null) {
 			if (other.name != null)

@@ -1,9 +1,11 @@
-<%@page import="com.icker.pm.*"%>
+<%@ page import="com.icker.pm.pojo.User"%>
+<%@ page import="com.icker.pm.*"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+User user = (User)request.getSession().getAttribute("user");
 %>
 
 <!DOCTYPE html>
@@ -41,36 +43,56 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <h2><i>${project.name }</i><span id="showTime2" class="label pull-right"></span><span id="showTime" class="label label-primary pull-right"></span></h2>
 	    <div class="line-spacing"></div>
 	    
-	    <!-- 内容区 -->	
-	    <div class="row">
-	    	<div class="col-md-11">
-		        <div class="panel panel-default">
-		            <ul class="nav nav-pills" role="tablist">
-					  <li role="presentation" class="active"><a href="javascript:void(0)" id="proDetails">项目概览</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="msgEdition">消息版</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="milestone">里程碑</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="taskList">任务列表</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="writeBoard">写字板</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="workHours">工时</a></li>
-					  <li role="presentation"><a href="javascript:void(0)" id="files">文件资料</a></li>
+	    <!-- 内容区 -->
+		<div class="row">
+			<div class="col-md-11">
+				<div class="panel panel-default">
+					<ul class="nav nav-pills" role="tablist">
+						<li role="presentation" class="active"><a
+							href="javascript:void(0)" id="proDetails">项目概览</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="taskList">任务列表</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="milestone">里程碑</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="writeBoard">写字板</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="files">文件资料</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="msgEdition">消息版</a></li>
+						<li role="presentation"><a href="javascript:void(0)"
+							id="workHours">工时</a></li>
 					</ul>
-		        </div>
-		        
-		        <!-- 主体内容 -->
-		        
-		        <div class="jumbotron" style="background-color: #ffffff">
-					<h4><label class="label label-info" style="font-size: 18px;">这是项目介绍：</label></h4>
-					<div style="height:15px;"></div>
-				 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${project.description }
-				 	<hr/>
-				 	<jsp:include page="charts.jsp"></jsp:include>
 				</div>
-	        </div>
-	        
-	        <!-- 项目成员 -->
-	        <jsp:include page="../common/pro/members.jsp"></jsp:include>
-        </div>
-    	<!-- 内容区结束 -->
+
+				<!-- 主体内容 -->
+				<div class="jumbotron" style="background-color: #ffffff">
+					<div class="media">
+						<div class="pull-left pull-middle">
+							<a href="javascript:void(0)"> <img class="media-object"
+								src="images/deng.jpg" style="width:64px; height:64px;">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">这是项目介绍</h4>
+							${project.description } <br> <label class="label label-info">项目经理</label>
+							${project.creator.name}； <label class="label label-success">项目成员</label>
+							<c:forEach items="${project.projectMembers }" var="pm">
+								<c:if test="${pm.id.user.name != project.creator.name}">
+					    		${ pm.id.user.name} &nbsp;
+					    	</c:if>
+							</c:forEach>
+						</div>
+					</div>
+					<hr />
+					<jsp:include page="charts.jsp"></jsp:include>
+				</div>
+			</div>
+
+			<!-- 项目成员 -->
+			<jsp:include page="../common/pro/members.jsp"></jsp:include>
+		</div>
+		<!-- 内容区结束 -->
     	
 		<script type="text/javascript">
     		$(document).ready(function(){

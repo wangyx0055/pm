@@ -1,4 +1,4 @@
-<%@page import="com.icker.pm.pojo.User"%>
+<%@ page import="com.icker.pm.pojo.User"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ page import="com.icker.pm.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

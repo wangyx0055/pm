@@ -19,6 +19,9 @@ Highcharts.theme = {
 			fontFamily: "微软雅黑"
 		}
 	},
+	credits: {
+		enabled: false	// 去除官网链接
+	},
 	title: {
 		style: {
 			fontSize: '16px',

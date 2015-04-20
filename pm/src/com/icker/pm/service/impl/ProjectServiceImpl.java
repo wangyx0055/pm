@@ -20,9 +20,11 @@ import com.icker.pm.dao.ProjectDao;
 import com.icker.pm.dao.ResourceDao;
 import com.icker.pm.dao.TaskDao;
 import com.icker.pm.dao.UserDao;
+import com.icker.pm.pojo.Milestone;
 import com.icker.pm.pojo.Project;
 import com.icker.pm.pojo.ProjectMember;
 import com.icker.pm.pojo.ProjectMemberId;
+import com.icker.pm.pojo.Task;
 import com.icker.pm.pojo.User;
 import com.icker.pm.server.email.Mail;
 import com.icker.pm.server.email.MailSender;
@@ -430,6 +432,50 @@ public class ProjectServiceImpl implements ProjectService {
 		result.add(resources);
 		result.add(discusses);
 		return result;
+	}
+
+	@Override
+	public List<Integer> taskHistogram(Project project) throws Exception {
+		List<Integer> counts = new ArrayList<Integer>();
+		int complete = taskDao.findByStatus(project.getId(), Constant.TASK_STATUS_COMPLETED).size();
+		int unfinished = taskDao.findByStatus(project.getId(), Constant.TASK_STATUS_UNFINISHED).size();
+		int extend = 0;
+		List<Task> all = taskDao.findAll(project);
+		Date now = new Date();
+		for (Task task : all) {
+			if(DateFormatUtil.StringToDate("yyyy/MM/dd hh:mm:ss", task.getEndDate()).getTime() < now.getTime()) {
+				if(task.getStatus().equals(Constant.TASK_STATUS_UNFINISHED)) {
+					extend++;
+					unfinished--;
+				}
+			}
+		}
+		counts.add(complete);
+		counts.add(unfinished);
+		counts.add(extend);
+		return counts;
+	}
+
+	@Override
+	public List<Integer> mileHistogram(Project project) throws Exception {
+		List<Integer> counts = new ArrayList<Integer>();
+		int complete = milestoneDao.findByStatus(project, Constant.MILE_COMPLETED).size();
+		int unfinished = milestoneDao.findByStatus(project, Constant.MILE_UNFINISHED).size();
+		int extend = 0;
+		List<Milestone> all = milestoneDao.findAll(project);
+		Date now = new Date();
+		for (Milestone milestone : all) {
+			if(DateFormatUtil.StringToDate("yyyy/MM/dd hh:mm:ss", milestone.getEndDate()).getTime() < now.getTime()) {
+				if(milestone.getStatus().equals(Constant.MILE_UNFINISHED)) {
+					extend++;
+					unfinished--;
+				}
+			}
+		}
+		counts.add(complete);
+		counts.add(unfinished);
+		counts.add(extend);
+		return counts;
 	}
 
 }
