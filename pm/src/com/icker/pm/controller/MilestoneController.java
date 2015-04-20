@@ -78,7 +78,7 @@ public class MilestoneController extends ExceptionController {
 			milestone.setDescription(vo.getDescription());
 			milestone.setStatus(Constant.MILE_UNFINISHED);
 			milestone.setProgress(0D);
-			milestoneService.save(milestone);
+			milestoneService.save(milestone, vo.getSendEmail());
 
 			List<Milestone> unfinished = milestoneService.findByStatus(project, Constant.MILE_UNFINISHED);
 			List<Milestone> finished = milestoneService.findByStatus(project, Constant.MILE_COMPLETED);
@@ -238,17 +238,8 @@ public class MilestoneController extends ExceptionController {
 			ModelAndView modelAndView, ModelMap modelMap) {
 		try {
 			Project project = projectService.findProject(vo.getProjectId());
-			User performer = userService.findUserById(vo.getPerformerId());
-			Milestone milestone = new Milestone();
-			milestone.setId(vo.getId());
-			milestone.setEndDate(vo.getEndDate());
-			milestone.setName(vo.getName());
-			milestone.setProgress(vo.getProgress());
-			milestone.setProject(project);
-			milestone.setPerformer(performer);
-			milestone.setStatus(vo.getStatus());
-			milestone.setDescription(vo.getDescription());
-			milestoneService.update(milestone);
+			
+			milestoneService.update(vo);
 
 			List<Milestone> unfinished = milestoneService.findByStatus(project, Constant.MILE_UNFINISHED);
 			List<Milestone> finished = milestoneService.findByStatus(project, Constant.MILE_COMPLETED);

@@ -33,6 +33,15 @@ public class TaskVO {
 	private String performerId;
 	/** 父任务 */
 	private String parentId;
+	/** 是否邮件通知 1：通知；0：不通知*/
+	private String sendEmail;
+	
+	public String getSendEmail() {
+		return sendEmail;
+	}
+	public void setSendEmail(String sendEmail) {
+		this.sendEmail = sendEmail;
+	}
 	public String getId() {
 		return id;
 	}
@@ -178,7 +187,12 @@ public class TaskVO {
 				+ ((progress == null) ? 0 : progress.hashCode());
 		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
+				+ ((sendEmail == null) ? 0 : sendEmail.hashCode());
+		result = prime * result
+				+ ((sequence == null) ? 0 : sequence.hashCode());
+		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 	@Override
@@ -255,10 +269,25 @@ public class TaskVO {
 				return false;
 		} else if (!project.equals(other.project))
 			return false;
+		if (sendEmail == null) {
+			if (other.sendEmail != null)
+				return false;
+		} else if (!sendEmail.equals(other.sendEmail))
+			return false;
+		if (sequence == null) {
+			if (other.sequence != null)
+				return false;
+		} else if (!sequence.equals(other.sequence))
+			return false;
 		if (startDate == null) {
 			if (other.startDate != null)
 				return false;
 		} else if (!startDate.equals(other.startDate))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
 			return false;
 		return true;
 	}

@@ -21,6 +21,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="js/bootstrap/js/bootstrap.js"></script>
 	<script src="js/highcharts/highcharts.js"></script>
 	<script src="js/highcharts/exporting.js"></script>
+	
+	<!-- 添加日历 -->
+	<link href="js/bootstrap-calendar/css/calendar.css" rel="stylesheet">
+	<script type="text/javascript" src="js/bootstrap-calendar/components/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/js/calendar.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/js/language/zh-CN.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/components/jstimezonedetect/jstz.min.js"></script>
     
   </head>
   
@@ -50,9 +57,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        </div>
 		        
 		        <!-- 主体内容 -->
+		        
 		        <div class="jumbotron" style="background-color: #ffffff">
-				 <label class="label label-success" style="font-size:24px;">${project.name }</label><hr>
-				 ${project.description }
+					<h4><label class="label label-info" style="font-size: 18px;">这是项目介绍：</label></h4>
+					<div style="height:15px;"></div>
+				 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${project.description }
+				 	<hr/>
+				 	<jsp:include page="charts.jsp"></jsp:include>
 				</div>
 	        </div>
 	        

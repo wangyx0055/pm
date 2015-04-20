@@ -31,6 +31,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- 添加bootstra-detetimepicker.js -->
 	<script type="text/javascript" src="js/bootstrap/datetimepicker/js/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="js/bootstrap/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	
+	<!-- 添加日历 -->
+	<link href="js/bootstrap-calendar/css/calendar.css" rel="stylesheet">
+	<script type="text/javascript" src="js/bootstrap-calendar/components/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/js/calendar.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/js/language/zh-CN.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/components/jstimezonedetect/jstz.min.js"></script>
+		
   </head>
   
   <body>
@@ -195,34 +203,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        		<jsp:include page="userTasks.jsp"></jsp:include>
 					</div>
 					
-					<!-- 日历开始 -->
-					<div class="row" id="calendar_div">
-						<div class="col-xs-12">
-							<div class="panel-group" id="accordion_calendar" role="tablist"
-								aria-multiselectable="true">
-								<div class="panel panel-info">
-									<div class="panel-heading" role="tab" id="headingCalendar">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion_calendar"
-												href="#collapse_calendar" aria-expanded="true"
-												aria-controls="collapse"> 日历 </a>
-										</h4>
-									</div>
-									<div id="collapse_calendar" class="panel-collapse collapse in"
-										role="tabpanel" aria-labelledby="headingCalendar">
-										<div class="panel-body">
-											<jsp:include page="../common/calendar.jsp"></jsp:include>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- collapse结束 -->
-						</div>
-						<!-- 一列 -->
-					</div>
-					<!-- 一行 -->
-					
-					
 					<script type="text/javascript">
 					$(document).ready(function(){
 						$("input[name='check']").change(
@@ -288,10 +268,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       			</div>
 			    <div class="modal-footer">
 			    	<button type="button" class="btn btn-default" data-dismiss="modal">不是</button>
-			    	<button id="removeTask" type="button" class="btn btn-primary">是的</button>
+			    	<button id="removeTask" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off">是的</button>
 			    </div>
 			    <script type="text/javascript">
+				    $("#deleteModal").on('hidden.bs.modal', function (e) {
+						$("#removeTask").button('reset');
+					});
 			    	$("#removeTask").click(function(e){
+			    		$(this).button('loading');
 			    		var proId = $("#hiddenProId").val();
 			    		var taskId = $("#task_id_hidden").val();
 			    		$.ajax({
@@ -409,6 +393,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<option value="3">低</option>
 							</select>
 						</div>
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary active">
+									<input type="radio" name="sendEmail" value="1" autocomplete="off" checked>邮件通知
+								</label>
+								<label class="btn btn-primary">
+									<input type="radio" name="sendEmail" value="0" autocomplete="off">不通知
+								</label>
+							</div>
+						</div>
 					</div>
 					<div id="taskDescDiv" class="form-group">
 						<label for="taskDesc" class="col-sm-2 control-label">任务描述</label>
@@ -421,7 +416,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button id="saveTask" type="button" class="btn btn-primary"
+				<button id="saveTask" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off"
 					form="addTaskForm">提交</button>
 			</div>
 		</div>
@@ -539,6 +534,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</script>
 						</div>
 					</div>
+					<div class="form-group">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary active">
+									<input type="radio" name="sendEmailEdit" value="1" autocomplete="off" checked>邮件通知
+								</label>
+								<label class="btn btn-primary">
+									<input type="radio" name="sendEmailEdit" value="0" autocomplete="off">不通知
+								</label>
+							</div>
+						</div>
+						
+					</div>
 					<div id="editTaskDescDiv" class="form-group">
 						<label for="taskDesc" class="col-sm-2 control-label">任务描述</label>
 						<div class="col-sm-10">
@@ -550,7 +559,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button id="editTaskBtn" type="button" class="btn btn-primary"
+				<button id="editTaskBtn" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off"
 					form="editTaskForm">提交</button>
 			</div>
 		</div>
@@ -570,14 +579,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$("select[name='userName']").change(function(e) {
 				performerId = $("select[name='userName']").val();
 			});
+			$("#addTaskModal").on('hidden.bs.modal', function (e) {
+				$("#saveTask").button('reset');
+			});
 			$("#saveTask").click(function(e) {
+				$(this).button('loading');
 				var startDate = $("#startDate").val();
 				var endDate = $("#endDate").val();
 				var taskDesc = $("#taskDesc").val();
 				var name = $("#taskName").val();
+				var sendEmail = "";
+				$("input[name='sendEmail']").each(function(){
+					if(this.checked) {
+					    sendEmail = this.value;
+					}
+				});
 				$.ajax({
 					url: "taskController/addTask",
-					data: "project="+proId+"&name="+name+"&performerId="+performerId+"&startDate="+startDate+"&endDate="+endDate+"&priority="+priority+"&description="+taskDesc,
+					data: "project="+proId+"&name="+name+"&performerId="+performerId+"&startDate="+startDate+"&endDate="+endDate+"&priority="+priority+"&description="+taskDesc+"&sendEmail="+sendEmail,
 					type: "post",
 					dataType: "html",
 					success: function(data) {
@@ -591,8 +610,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			});
 			
+			$("#editTaskModal").on('hidden.bs.modal', function (e) {
+				$("#editTaskBtn").button('reset');
+			});
 			// 编辑任务
 			$("#editTaskBtn").click(function(e){
+				$(this).button('loading');
 				var taskId = $("#editTaskModal").find("#editTaskId").val();
 				var taskName = $("#editTaskModal").find("#editTaskName").val();
 				var user = $("#editTaskModal").find("#editUser").val();
@@ -602,9 +625,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var progress = $("#editTaskModal").find("#editProgress").children("div").attr(
 						"aria-valuenow");
 				var description = $("#editTaskModal").find("#editTaskDesc").val();
+				var sendEmail = "";
+				$("input[name='sendEmailEdit']").each(function(){
+					if(this.checked) {
+						sendEmail = this.value;
+					}
+				});
 				$.ajax({
 					url: "taskController/updateTask",
-					data: "id="+taskId+"&name="+taskName+"&performerId="+user+"&startDate="+startDate+"&endDate="+endDate+"&priority="+priority+"&progress="+progress+"&description="+description+"&project="+proId,
+					data: "id="+taskId+"&name="+taskName+"&performerId="+user+"&startDate="+startDate+"&endDate="+endDate+"&priority="+priority+"&progress="+progress+"&description="+description+"&project="+proId+"&sendEmail="+sendEmail,
 					type: "post",
 					dataType: "html",
 					success: function(data) {
@@ -619,14 +648,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		});
 	</script>
-	
-	
-	
-	
-	
-	
-	
-	
 	
   </body>
 </html>

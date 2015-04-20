@@ -7,11 +7,9 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
-
-<link href="<%=basePath %>styles/bootstrap.css" rel="stylesheet">
 <div class="row">
 	<div class="col-xs-12">
-		<p>
+		 <p>
 			<c:if test="${task.status=='0' }">
 				<label class="label label-warning">未完成任务</label>
 			</c:if>

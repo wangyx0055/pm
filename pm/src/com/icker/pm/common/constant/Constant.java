@@ -68,5 +68,10 @@ public class Constant {
 	 * 1：里程碑事件
 	 */
 	public static String MILE_EVENT = "1";
+	
+	/** 是否邮件通知，1：是的；0：不是 */
+	public static String SEND_MAIL_YES = "1";
+	/** 是否邮件通知，1：是的；0：不是 */
+	public static String SEND_MAIL_NO = "0";
 
 }

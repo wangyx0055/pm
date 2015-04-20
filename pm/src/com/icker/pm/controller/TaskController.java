@@ -171,7 +171,7 @@ public class TaskController extends ExceptionController {
 		task.setStartDate(vo.getStartDate());
 		task.setStatus(Constant.TASK_STATUS_UNFINISHED);
 		try {
-			taskService.saveTask(task);
+			taskService.saveTask(task,vo.getSendEmail());
 			Project p = projectService.findById(project);
 			List<Task> unfinished = taskService.findByStatus(p.getId(), Constant.TASK_STATUS_UNFINISHED);
 			List<Task> completed = taskService.findByStatus(p.getId(), Constant.TASK_STATUS_COMPLETED);
@@ -208,7 +208,6 @@ public class TaskController extends ExceptionController {
 			project.setId(vo.getProject());
 			Project p = projectService.findById(project);
 			List<Task> unfinished = taskService.findByStatus(p.getId(), Constant.TASK_STATUS_UNFINISHED);
-			
 			List<Task> completed = taskService.findByStatus(p.getId(), Constant.TASK_STATUS_COMPLETED);
 			List<Task> extension = taskService.findByStatus(p.getId(), Constant.TASK_STATUS_EXTENSION);
 			List<TaskVO> unfinishedVOs = this.getVOs(unfinished);

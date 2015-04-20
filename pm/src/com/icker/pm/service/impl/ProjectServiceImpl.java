@@ -14,12 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.icker.pm.common.constant.Constant;
 import com.icker.pm.common.util.DateFormatUtil;
 import com.icker.pm.common.util.PageUtil;
+import com.icker.pm.dao.DiscussDao;
+import com.icker.pm.dao.MilestoneDao;
 import com.icker.pm.dao.ProjectDao;
+import com.icker.pm.dao.ResourceDao;
+import com.icker.pm.dao.TaskDao;
 import com.icker.pm.dao.UserDao;
 import com.icker.pm.pojo.Project;
 import com.icker.pm.pojo.ProjectMember;
 import com.icker.pm.pojo.ProjectMemberId;
 import com.icker.pm.pojo.User;
+import com.icker.pm.server.email.Mail;
+import com.icker.pm.server.email.MailSender;
 import com.icker.pm.service.ProjectService;
 
 @Service
@@ -30,6 +36,14 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectDao projectDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private TaskDao taskDao;
+	@Autowired
+	private MilestoneDao milestoneDao;
+	@Autowired
+	private ResourceDao resourceDao;
+	@Autowired
+	private DiscussDao discussDao;
 
 	@Override
 	public boolean addProject(Project project) throws Exception {
@@ -43,7 +57,22 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public boolean removeProject(Project project) throws Exception {
-		return projectDao.deleteProject(projectDao.findProjectById(project));
+		Project p = projectDao.findProjectById(project);
+		this.sendMail(p);
+		return projectDao.deleteProject(p);
+	}
+
+	private void sendMail(Project p) throws Exception {
+		List<ProjectMember> pms = p.getProjectMembers();
+		for (ProjectMember pm : pms) {
+			MailSender sender = new MailSender(new Mail(
+					"项目注销通知",
+					pm.getId().getUser().getName()
+							+ "，您好！<br><p>&nbsp;&nbsp;&nbsp;&nbsp; 您参与的项目：&nbsp;&nbsp;<b>"
+							+ p.getName() + "</b>&nbsp;&nbsp; 已被注销！",
+					pm.getId().getUser().getEmail()));
+			sender.start();
+		}
 	}
 
 	@Override
@@ -80,8 +109,8 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public boolean addProject(User creator, Project project, List<User> members)
-			throws Exception {
+	public boolean addProject(User creator, Project project,
+			List<User> members, String sendEmail) throws Exception {
 		List<ProjectMember> projectMembers = new ArrayList<ProjectMember>();
 		for (User member : members) {
 			User user = userDao.findByEmail(member.getEmail());
@@ -95,12 +124,56 @@ public class ProjectServiceImpl implements ProjectService {
 			ProjectMember pm = new ProjectMember(id, Constant.ROLE_MEMBER,
 					Constant.IS_NOT_ACCESS);
 			projectMembers.add(pm);
+
+			// 邮件通知项目成员
+			if (StringUtils.isNotBlank(sendEmail)
+					&& Constant.SEND_MAIL_YES.equals(sendEmail))
+				sendMail(pm, creator);
 		}
 		ProjectMember projectMember = new ProjectMember(new ProjectMemberId(
 				project, creator), Constant.ROLE_MEMBER, Constant.IS_NOT_ACCESS);
 		projectMembers.add(projectMember);
 		project.setProjectMembers(projectMembers);
+
 		return projectDao.saveProject(project);
+	}
+
+	/**
+	 * 新增项目：邮件通知，项目邀请成员
+	 * 
+	 * @param pm
+	 * @param creator
+	 * @return
+	 */
+	private boolean sendMail(ProjectMember pm, User creator) {
+		MailSender sender = new MailSender(new Mail("项目邀请通知", pm.getId().getUser()
+				.getName()
+				+ "，您好！<br>"
+				+ "<p>&nbsp;&nbsp;&nbsp;&nbsp; 您被<b>&nbsp;&nbsp;"
+				+ creator.getName()
+				+ "&nbsp;&nbsp;</b>邀请参与项目&nbsp;&nbsp;<b>"
+				+ pm.getId().getProject().getName() + "</b>&nbsp;&nbsp; 的研发。",
+				pm.getId().getUser().getEmail()));
+		sender.start();
+		return true;
+	}
+
+	/**
+	 * 修改项目是否通知
+	 * 
+	 * @param pm
+	 * @param creator
+	 * @return
+	 */
+	private boolean sendEditMail(ProjectMember pm, String oldProName) {
+		MailSender sender = new MailSender(new Mail("项目修改通知", pm.getId().getUser()
+				.getName()
+				+ "，您好！<br>"
+				+ "<p>&nbsp;&nbsp;&nbsp;&nbsp; 您参与的项目：&nbsp;&nbsp;<b>"
+				+ oldProName + "</b>&nbsp;&nbsp;已经做了修改。</p>", pm.getId()
+				.getUser().getEmail()));
+		sender.start();
+		return true;
 	}
 
 	@Override
@@ -291,6 +364,72 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public Project findProject(String id) throws Exception {
 		return projectDao.findById(id);
+	}
+
+	@Override
+	public boolean updateProject(Project project, String sendEmail)
+			throws Exception {
+		Project oldPro = projectDao.findProjectById(project);
+		List<ProjectMember> pms = oldPro.getProjectMembers();
+		if (StringUtils.isNotBlank(sendEmail)
+				&& Constant.SEND_MAIL_YES.equals(sendEmail))
+			for (ProjectMember projectMember : pms) {
+				this.sendEditMail(projectMember, oldPro.getName());
+			}
+		oldPro.setName(project.getName());
+		oldPro.setDescription(project.getDescription());
+		return projectDao.updateProject(oldPro);
+	}
+
+	@Override
+	public List<Integer> findActionCount(Project project) throws Exception {
+		List<Integer> counts = new ArrayList<Integer>();
+		Project p = projectDao.findProjectById(project);
+		int task = p.getTasks().size();
+		int mile = p.getMilestones().size();
+		int resource = p.getResources().size();
+		int discuss = p.getDiscusses().size();
+		int user = p.getProjectMembers().size();
+		counts.add(user);
+		counts.add(task);
+		counts.add(mile);
+		counts.add(resource);
+		counts.add(discuss);
+		
+		return counts;
+	}
+
+	@Override
+	public List<List<Object>> findTotalPieCharts(Project project)
+			throws Exception {
+		List<List<Object>> result = new ArrayList<List<Object>>();
+		Project p = projectDao.findProjectById(project);
+		int task = p.getTasks().size();
+		int mile = p.getMilestones().size();
+		int resource = p.getResources().size();
+		int discuss = p.getDiscusses().size();
+		int user = p.getProjectMembers().size();
+		List<Object> tasks = new ArrayList<Object>();
+		tasks.add("任务");
+		tasks.add(task);
+		List<Object> miles = new ArrayList<Object>();
+		miles.add("里程碑");
+		miles.add(mile);
+		List<Object> resources = new ArrayList<Object>();
+		resources.add("资源");
+		resources.add(resource);
+		List<Object> discusses = new ArrayList<Object>();
+		discusses.add("写字板");
+		discusses.add(discuss);
+		List<Object> users = new ArrayList<Object>();
+		users.add("项目成员");
+		users.add(user);
+		result.add(users);
+		result.add(tasks);
+		result.add(miles);
+		result.add(resources);
+		result.add(discusses);
+		return result;
 	}
 
 }

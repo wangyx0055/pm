@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.icker.pm.pojo.Milestone;
 import com.icker.pm.pojo.Project;
+import com.icker.pm.vo.MilestoneVO;
 
 public interface MilestoneService {
-	public boolean save(Milestone milestone) throws Exception;
+	public boolean save(Milestone milestone, String sendEmail) throws Exception;
 	public boolean update(Milestone milestone) throws Exception;
 	public boolean remove(Milestone milestone) throws Exception;
 	public boolean remove(String id) throws Exception;
@@ -17,5 +18,6 @@ public interface MilestoneService {
 	public void release(Milestone milestone) throws Exception;
 	public List<Milestone> findAll(Project project) throws Exception;
 	public Milestone findById(String id) throws Exception;
+	public void update(MilestoneVO vo) throws Exception;
 	
 }

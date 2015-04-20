@@ -7,7 +7,7 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
-<link href="<%=basePath %>styles/bootstrap.css" rel="stylesheet">
+
 <div class="row">
 	<div class="col-xs-11">
 		<p>

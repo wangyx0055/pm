@@ -16,6 +16,8 @@ import com.icker.pm.dao.UserDao;
 import com.icker.pm.pojo.Project;
 import com.icker.pm.pojo.Task;
 import com.icker.pm.pojo.User;
+import com.icker.pm.server.email.Mail;
+import com.icker.pm.server.email.MailSender;
 import com.icker.pm.service.TaskService;
 import com.icker.pm.vo.TaskVO;
 
@@ -97,7 +99,7 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public void saveTask(Task task) throws Exception {
+	public void saveTask(Task task, String sendEmail) throws Exception {
 		Task t = new Task();
 		t.setName(task.getName());
 		t.setDescription(task.getDescription());
@@ -113,21 +115,61 @@ public class TaskServiceImpl implements TaskService {
 		t.setProject(project);
 		t.setStartDate(task.getStartDate());
 		t.setStatus(task.getStatus());
+		
+		if(Constant.SEND_MAIL_YES.equals(sendEmail)) {
+			String title = "任务分配通知";
+			String content = performer.getName()
+					+ "，你好！<br>"
+					+ "<p>&nbsp;&nbsp;&nbsp;&nbsp;您被： <b>"
+					+ creator.getName()
+					+ "</b> 分配了一项新的任务："+task.getName()
+					+"，请核实。</p>";
+			String to = performer.getEmail();
+			this.sendEMail(title, content, to);
+		}
+		
 		taskDao.saveTask(t);
 	}
 
 	@Override
 	public void updateTask(TaskVO vo) throws Exception {
+		User performer = userDao.findUserById(vo.getPerformerId());
 		Task task = taskDao.findTask(vo.getId());
+		
+		if(Constant.SEND_MAIL_YES.equals(vo.getSendEmail())) {
+			String title = "任务修改通知";
+			String content = task.getPerformer().getName()
+							+ "，你好！<br>"
+							+ "<p>&nbsp;&nbsp;&nbsp;&nbsp;您当前负责的任务： <b>"
+							+ task.getName()
+							+ "</b> 已经有所修改，或许负责人不再是您，请核实。</p>";
+			String to = task.getPerformer().getEmail();
+			this.sendEMail(title, content, to);
+			if(!vo.getPerformerId().equals(task.getPerformer().getId())) {
+				String newContent = performer.getName()
+						+ "，你好！<br>"
+						+ "<p>&nbsp;&nbsp;&nbsp;&nbsp;您被： <b>"
+						+ task.getCreator().getName()
+						+ "</b> 分配了一项新的任务："+vo.getName()
+						+",请核实。</p>";
+				User user = userDao.findUserById(vo.getPerformerId());
+				this.sendEMail("任务分配通知", newContent, user.getEmail());
+			}
+		}
+		
 		task.setName(vo.getName());
 		task.setDescription(vo.getDescription());
 		task.setStartDate(vo.getStartDate());
 		task.setEndDate(vo.getEndDate());
 		task.setPriority(vo.getPriority());
 		task.setProgress(vo.getProgress());
-		User performer = userDao.findUserById(vo.getPerformerId());
 		task.setPerformer(performer);
 		taskDao.update(task);
+	}
+
+	private void sendEMail(String title, String content, String to) {
+		MailSender sender = new MailSender(new Mail(title,content,to));
+		sender.start();
 	}
 
 	@Override

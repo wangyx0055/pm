@@ -30,6 +30,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <!-- add bootstrap-datetimepicker.js -->
     <script type="text/javascript" src="js/bootstrap/datetimepicker/js/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="js/bootstrap/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	
+	<!-- 添加日历 -->
+	<link href="js/bootstrap-calendar/css/calendar.css" rel="stylesheet">
+	<script type="text/javascript" src="js/bootstrap-calendar/components/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/js/calendar.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/js/language/zh-CN.js"></script>
+	<script type="text/javascript" src="js/bootstrap-calendar/components/jstimezonedetect/jstz.min.js"></script>
   </head>
   
   <body>
@@ -237,7 +244,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      <div class="modal-body">
 	      	<form id="add_milestone_Form" class="form-horizontal" role="form">
 				<div class="form-group">
-					<label for="milestoneName" class="col-sm-2 control-label">里程碑名称</label>
+					<label for="milestoneName" class="col-sm-2 control-label">名称</label>
 					<div class="col-sm-4">
 						<input type="text" class="form-control" id="milestoneName"
 							placeholder="里程碑名称" required autofocus>
@@ -288,6 +295,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							});
 						});
 					</script>
+					<div class="col-sm-2"></div>
+					<div class="col-sm-4">
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-primary active">
+								<input type="radio" name="sendEmail" value="1" autocomplete="off" checked>邮件通知
+							</label>
+							<label class="btn btn-primary">
+								<input type="radio" name="sendEmail" value="0" autocomplete="off">不通知
+							</label>
+						</div>
+					</div>
 				</div>
 				<div id="descriptionDiv" class="form-group">
 					<label for="description" class="col-sm-2 control-label">里程碑描述</label>
@@ -300,17 +318,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	        <button id="save_milestone_btn" type="button" class="btn btn-primary">创建</button>
+	        <button id="save_milestone_btn" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off">创建</button>
 	        <script type="text/javascript">
+		        $("#add_milestone_modal").on('hidden.bs.modal', function (e) {
+					$("#save_milestone_btn").button('reset');
+				});
 	        	$("#save_milestone_btn").click(function(data) {
+	        		$(this).button('loading');
 	        		var name = $("#milestoneName").val();
 	        		var performer = $("select[name='userName']").val();
 	        		var proId = $("#hiddenProId").val();
 	        		var endDate = $("#endDate").val();
 	        		var description = $("#description").val();
+	        		var sendEmail = "";
+	        		$("input[name='sendEmail']").each(function(){
+	        			if(this.checked) {
+	        				sendEmail = this.value;
+	        			}
+	        		});
 	        		$.ajax({
 	        			url: "milestoneController/saveMilestone",
-	        			data: "name="+name+"&performer="+performer+"&endDate="+endDate+"&projectId="+proId+"&description="+description,
+	        			data: "name="+name+"&performer="+performer+"&endDate="+endDate+"&projectId="+proId+"&description="+description+"&sendEmail="+sendEmail,
 	        			type: "post",
 	        			dataType: "html",
 	        			success: function(data) {
@@ -395,7 +423,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								});
 							});
 						</script>
-						<label for="mile_progress" class="col-sm-2 control-label">里程碑进度</label>
+						<label for="mile_progress" class="col-sm-2 control-label">进度</label>
 						<div class="col-sm-4">
 							<div class="progress slider" id="mile_progress" name="mile_progress" style="height: 30px;">
   								<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="padding-top: 5px;">
@@ -411,6 +439,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</script>
 						</div>
 					</div>
+					<div class="form-group">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary active">
+									<input type="radio" name="sendEmailEdit" value="1" autocomplete="off" checked>邮件通知
+								</label>
+								<label class="btn btn-primary">
+									<input type="radio" name="sendEmailEdit" value="0" autocomplete="off">不通知
+								</label>
+							</div>
+						</div>
+					</div>
 					<div id="editDescriptionDiv" class="form-group">
 						<label for="editDesc" class="col-sm-2 control-label">里程碑描述</label>
 						<div class="col-sm-10">
@@ -422,20 +463,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button id="update_mile_btn" type="button" class="btn btn-primary" form="editTaskForm">提交</button>
+				<button id="update_mile_btn" type="button" class="btn btn-primary" form="editTaskForm" data-loading-text="Loading..." autocomplete="off">提交</button>
 				<script type="text/javascript">
+					$("#editmilestoneModal").on('hidden.bs.modal', function (e) {
+						$("#update_mile_btn").button('reset');
+					});
 					$("#update_mile_btn").click(function(e){
+						$(this).button('loading');
 						var mileId = $("#editmilestoneModal").find("#editMilestoneId").val();
 						var status = $("#editmilestoneModal").find("#mile_status").val();
 						var mileName = $("#editmilestoneModal").find("#milestone_name").val();
 						var userName = $("#editmilestoneModal").find("#user_name").val();
 						var endDate = $("#editmilestoneModal").find("#end_date").val();
 						var editDesc = $("#editmilestoneModal").find("#editDesc").val();
-						alert(editDesc);
+						var sendEmail = "";
+						$("input[name='sendEmailEdit']").each(function(){
+							if(this.checked) {
+								sendEmail = this.value;
+							}
+						});
 						var progress = $("#editmilestoneModal").find("#mile_progress").children("div").attr("aria-valuenow");
 						$.ajax({
 							url: "milestoneController/editMilestone",
-							data: "id="+mileId+"&name="+mileName+"&performerId="+userName+"&endDate="+endDate+"&progress="+progress+"&projectId="+proId+"&status="+status+"&description="+editDesc,
+							data: "id="+mileId+"&name="+mileName+"&performerId="+userName+"&endDate="+endDate+"&progress="+progress+"&projectId="+proId+"&status="+status+"&description="+editDesc+"&sendEmail="+sendEmail,
 							type: "post",
 							dataType: "html",
 							success: function(data) {
@@ -471,10 +521,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       			</div>
 			    <div class="modal-footer">
 			    	<button type="button" class="btn btn-default" data-dismiss="modal">不是</button>
-			    	<button id="removeMilestone" type="button" class="btn btn-primary">是的</button>
+			    	<button id="removeMilestone" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off">是的</button>
 			    </div>
 			    <script type="text/javascript">
+				    $("#deleteModal").on('hidden.bs.modal', function (e) {
+						$("#removeMilestone").button('reset');
+					});
 			    	$("#removeMilestone").click(function(e){
+			    		$(this).button('loading');
 			    		var proId = $("#hiddenProId").val();
 			    		var milestoneId = $("#milestone_id_hidden").val();
 			    		var status = $("#milestone_status_hidden").val();

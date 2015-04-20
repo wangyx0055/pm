@@ -15,8 +15,28 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 
-public class MailSender {
-	public static boolean sendHtmlMail(Mail mail) {
+public class MailSender extends Thread { 
+	
+	private Mail mail;
+	
+	public Mail getMail() {
+		return mail;
+	}
+	
+	public void setMail(Mail mail) {
+		this.mail = mail;
+	}
+	
+	public MailSender() {
+		super();
+	}
+
+	public MailSender(Mail mail) {
+		super();
+		this.mail = mail;
+	}
+
+	public boolean sendHtmlMail(Mail mail) {
 		// 身份认证，创建一个密码验证器
 		Authenticator authenticator = new MyAuthenticator(mail.getUsername(),
 				mail.getPassword());
@@ -59,8 +79,12 @@ public class MailSender {
 		return false;
 	}
 
-	public static boolean sendTextMail(Mail mail) {
+	public boolean sendTextMail(Mail mail) {
 		return false;
+	}
 
+	@Override
+	public void run() {
+		sendHtmlMail(mail);
 	}
 }

@@ -234,10 +234,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button id="saveDiscuss" type="button" class="btn btn-primary" form="addDiscussForm">提交</button>
+					<button id="saveDiscuss" type="button" class="btn btn-primary" form="addDiscussForm" data-loading-text="Loading..."
+					autocomplete="off">提交</button>
 				</div>
 				<script type="text/javascript">
+					$("#addDiscussModal").on('hidden.bs.modal', function (e) {
+						$("#saveDiscuss").button('reset');
+					});
 					$("#saveDiscuss").click(function(){
+						$(this).button('loading');
+						
 						var projectId = $('#hiddenProId').val();
 						var title = $("input[name='discuss_title']").val();
 						var type = $('#discuss_type').val();
@@ -315,10 +321,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button id="edit_discuss" type="button" class="btn btn-primary" form="editDiscussForm">提交</button>
+					<button id="edit_discuss" type="button" class="btn btn-primary" form="editDiscussForm" data-loading-text="Loading..."
+         				autocomplete="off">提交</button>
 				</div>
 				<script type="text/javascript">
+					$("#editDiscussModal").on('hidden.bs.modal', function (e) {
+						$("#edit_discuss").button('reset');
+					});
 					$("#edit_discuss").click(function(){
+						$(this).button('loading');
+						
 						var discussId = $("#edit_discuss_id").val();
 						var projectId = $('#hiddenProId').val();
 						var title = $("input[name='edit_discuss_title']").val();
@@ -358,9 +370,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">不</button>
-	        <button id="delete_discuss_btn" type="button" class="btn btn-primary">是的</button>
+	        <button id="delete_discuss_btn" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off">是的</button>
 	        <script type="text/javascript">
+		        $("#delete_discuss_modal").on('hidden.bs.modal', function (e) {
+					$("#delete_discuss_btn").button('reset');
+				});
 	        	$("#delete_discuss_btn").click(function(e){
+	        		$(this).button('loading');
 	        		var discuss_id = $("#delete_discuss").val();
 	        		var project_id = $("#hiddenProId").val();
 	        		$.ajax({

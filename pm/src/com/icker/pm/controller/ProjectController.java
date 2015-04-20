@@ -230,7 +230,7 @@ public class ProjectController extends ExceptionController {
 	@RequestMapping("/addProject")
 	public Map<String, Object> addProject(String[] proUserEmails,
 			String[] proUserNicks, String[] proUserPasswords, String proName,
-			String proDesc, ModelAndView modelAndView, ModelMap modelMap) {
+			String proDesc, String sendEmail, ModelAndView modelAndView, ModelMap modelMap) {
 		String date = DateFormatUtil.DateToString(new Date());
 		Map<String, Object> result = new HashMap<String, Object>();
 		User creator = (User) modelMap.get("user");
@@ -242,7 +242,7 @@ public class ProjectController extends ExceptionController {
 					null));
 		try {
 			result.put("success",
-					projectService.addProject(creator, project, members));
+					projectService.addProject(creator, project, members, sendEmail));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -303,7 +303,7 @@ public class ProjectController extends ExceptionController {
 	@ResponseBody
 	@RequestMapping("/editProject")
 	public Map<String, Object> editProject(Project project,
-			ModelAndView modelAndView, ModelMap modelMap) {
+			ModelAndView modelAndView, String sendEmail, ModelMap modelMap) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			Project oldPro = projectService.findById(project);
@@ -312,9 +312,7 @@ public class ProjectController extends ExceptionController {
 				map.put("success", false);
 				map.put("errMsg", "未做任何修改！");
 			} else {
-				oldPro.setName(project.getName());
-				oldPro.setDescription(project.getDescription());
-				map.put("success", projectService.updateProject(oldPro));
+				map.put("success", projectService.updateProject(project, sendEmail));
 				map.put("msg", "修改成功！");
 			}
 		} catch (Exception e) {
@@ -388,4 +386,45 @@ public class ProjectController extends ExceptionController {
 		return map;
 	}
 
+	/**
+	 * 项目柱状总报表
+	 * @param project
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/totalCharts")
+	public List<Map<String, Object>> totalCharts(Project project, ModelAndView modelAndView, ModelMap modelMap) {
+		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		try {
+			Map<String, Object> action = new HashMap<String, Object>();
+			action.put("name", "活动");
+			List<Integer> count = projectService.findActionCount(project);
+			action.put("data", count);
+			result.add(action);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 项目饼状总统计
+	 * @param project
+	 * @param modelAndView
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/totalPieCharts")
+	public List<List<Object>> totalPieCharts(Project project, ModelAndView modelAndView, ModelMap modelMap) {
+		List<List<Object>> result = new ArrayList<List<Object>>();
+		try {
+			result = projectService.findTotalPieCharts(project);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

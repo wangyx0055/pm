@@ -144,7 +144,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button id="btnSave" type="button" class="btn btn-primary">确认删除</button>
+				<button id="btnSave" type="button" class="btn btn-primary" data-loading-text="Loading..."
+					autocomplete="off">确认删除</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -184,9 +185,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<form id="addProjectForm" class="form-horizontal" role="form">
 					<div class="form-group">
 						<label for="proName" class="col-sm-2 control-label">项目名称</label>
-						<div class="col-sm-10">
+						<div class="col-sm-5">
 							<input type="text" class="form-control" id="proName"
 								placeholder="项目名称" required autofocus>
+						</div>
+						<div class="col-sm-4">
+							<div class="btn-group" data-toggle="buttons">
+							  <label class="btn btn-primary active">
+							    <input type="radio" name="sendEmail" id="sendEmail1" value="1" autocomplete="off" checked>邮件通知
+							  </label>
+							  <label class="btn btn-primary">
+							    <input type="radio" name="sendEmail" id="sendEmail2" value="0" autocomplete="off">不通知
+							  </label>
+							</div>
 						</div>
 					</div>
 					<div id="prodescDiv" class="form-group">
@@ -219,8 +230,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button id="savePro" type="button" class="btn btn-primary"
-					form="addProjectForm">提交</button>
+				<button id="savePro" type="button" class="btn btn-primary" data-loading-text="Loading..."
+					autocomplete="off" form="addProjectForm">提交</button>
 			</div>
 		</div>
 	</div>
@@ -243,9 +254,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input type="hidden" id="proType">
 					<div class="form-group">
 						<label for="proName" class="col-sm-2 control-label">项目名称</label>
-						<div class="col-sm-10">
+						<div class="col-sm-6">
 							<input type="text" class="form-control" id="editProName"
 								placeholder="项目名称" required autofocus>
+						</div>
+						<div class="col-sm-4">
+							<div class="btn-group" data-toggle="buttons">
+							  <label class="btn btn-primary active">
+							    <input type="radio" name="sendEmailEdit" id="sendEmailEdit1" value="1" autocomplete="off" checked>邮件通知
+							  </label>
+							  <label class="btn btn-primary">
+							    <input type="radio" name="sendEmailEdit" id="sendEmailEdit2" value="0" autocomplete="off">不通知
+							  </label>
+							</div>
 						</div>
 					</div>
 					<div id="editProdescDiv" class="form-group">
@@ -280,8 +301,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button id="editProject" type="button" class="btn btn-primary"
-					form="addProjectForm">提交</button>
+				<button id="editProject" type="button" class="btn btn-primary" data-loading-text="Loading..."
+					autocomplete="off" form="addProjectForm">提交</button>
 			</div>
 		</div>
 	</div>
@@ -312,6 +333,7 @@ $(document).ready(function() {
 		$("#deleteProModal").modal("show");
 	});
 	$("#btnSave").click(function(e) {
+		$(this).button('loading');
 		var proId = $("#hiddenProId").val();
 		$.ajax({
 			url: "projectController/deleteProject",
@@ -324,11 +346,13 @@ $(document).ready(function() {
 		});
 	});
 	$('#deleteProModal').on('hidden.bs.modal', function(){
+		$("#btnSave").button('reset');
 		showProjects($("#type").val());
 	});
 	
-	
 	$("#editProject").click(function(e) {
+		$(this).button('loading');
+		
 		var proId = $("#editProId").val();
 		var proName = $("#editProName").val();
 		var proDesc = $("#editProDesc").val();
@@ -336,6 +360,12 @@ $(document).ready(function() {
 		var userEmails = new Array();
 		var userNames= new Array();
 		var userPasswords = new Array();
+		var sendEmail = "";
+		$("input[name='sendEmailEdit']").each(function(){
+			if(this.checked) {
+				sendEmail = this.value;
+			}
+		});
 		
 		var i = 0;
 		$("[name='editAddMember']").each(function() {
@@ -347,7 +377,7 @@ $(document).ready(function() {
 		});
 		$.ajax({
 			url: "projectController/editProject",
-			data: "id="+proId+"&name="+proName+"&description="+proDesc,
+			data: "id="+proId+"&name="+proName+"&description="+proDesc+"&sendEmail="+sendEmail,
 			type: "post",
 			async: false,
 			success:function(data) {
@@ -361,6 +391,7 @@ $(document).ready(function() {
 			}
 		});
 		$('#editProModal').on('hidden.bs.modal', function(){
+			$("#editProject").button('reset');
 			showProjects($("#proType").val());
 		});
 	});
@@ -378,14 +409,21 @@ $(document).ready(function() {
 		});
 	});
 	$("#savePro").click(function() {
+		$(this).button('loading');
+		
 		var proName = $("#proName").val();
 		var proDesc = $("#proDesc").val();
 		var proUserEmails = new Array();
 		var proUserNicks = new Array();
 		var proUserPasswords = new Array();
-		
+		var sendEmail = "";
+		$("input[name='sendEmail']").each(function(){
+			if(this.checked) {
+				sendEmail = this.value;
+			}
+		});
 		//名字的each可以选中所有，id只能选择一个
-		var i = 0;
+		 var i = 0;
 		$("[name='addMember']").each(function() {
 			proUserEmails[i] = $(this).find("#proUserEmail").val();
 			proUserNicks[i] = $(this).find("#proUserNick").val();
@@ -394,7 +432,7 @@ $(document).ready(function() {
 		});
 		$.ajax({
 			url: 'projectController/addProject',
-			data: 'proName='+proName+'&proDesc='+proDesc+'&proUserEmails='+proUserEmails+'&proUserNicks='+proUserNicks+'&proUserPasswords='+proUserPasswords,
+			data: 'proName='+proName+'&proDesc='+proDesc+'&proUserEmails='+proUserEmails+'&proUserNicks='+proUserNicks+'&proUserPasswords='+proUserPasswords+'&sendEmail='+sendEmail,
 			type: 'post',
 			async: false,
 			success: function(data) {
@@ -405,6 +443,7 @@ $(document).ready(function() {
 			}
 		});
 		$('#addProModal').on('hidden.bs.modal', function(){
+			$("#savePro").button('reset');
 			showProjects();
 		});
 	});

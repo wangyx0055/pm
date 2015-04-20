@@ -29,10 +29,15 @@
 		<jsp:include page="common/header.jsp"></jsp:include>
 		<jsp:include page="common/sideBar.jsp"></jsp:include>
 		<h2>
-			<i>Project List</i><span id="showTime2" class="label pull-right"></span><span
+			<i>来到首页了哟</i><span id="showTime2" class="label pull-right"></span><span
 				id="showTime" class="label label-primary pull-right"></span>
 		</h2>
 		<div class="line-spacing"></div>
+		<div class="jumbotron" style="background-color: #ffffff">
+		  <h1>欢迎光临！谢谢惠顾！</h1>
+		  <hr>
+		  <p><a class="btn btn-primary btn-lg" href="projectController/projectList" role="button">Come on~</a></p>
+		</div>
 		
 		<!-- 项目报表 -->
 		<div id="chart">
@@ -40,6 +45,7 @@
 		</div>
 		<!-- 用于放置项目列表 -->
 		<div id="proList">
+			
 		</div>
 		<jsp:include page="common/loginRegisterModal.jsp"></jsp:include>
 	</div>

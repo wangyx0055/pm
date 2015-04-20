@@ -1,89 +1,38 @@
-
-var numberpanel = new FAPUI.form.FormPanel({
-	border : false,
-	columns : 4,
-	field : field,
-	height : 27,
-	items : [ {
-		allowBlank : true,
-		ctype : "combobox",
-		data : [ {
-			"text" : "等于",
-			"value" : "eq"
-		}, {
-			"text" : "大于",
-			"value" : "gt"
-		}, {
-			"text" : "小于",
-			"value" : "lt"
-		}, {
-			"text" : "小于等于",
-			"value" : "le"
-		}, {
-			"text" : "大于等于",
-			"value" : "ge"
-		} ],
-		fieldLabel : fieldLabel,
-		labelWidth : 40,
-		labelSplit : ':'
-	}, {
-		allowBlank : true,
-		ctype : "numberfield",
-		hideLabel : true
-	}, {
-		allowBlank : true,
-		ctype : "combobox",
-		data : [ {
-			"text" : "等于",
-			"value" : "eq"
-		}, {
-			"text" : "大于",
-			"value" : "gt"
-		}, {
-			"text" : "小于",
-			"value" : "lt"
-		}, {
-			"text" : "小于等于",
-			"value" : "le"
-		}, {
-			"text" : "大于等于",
-			"value" : "ge"
-		} ],
-		fieldLabel : "到",
-		labelAlign : "center",
-		labelWidth : 30
-	}, {
-		allowBlank : true,
-		ctype : "numberfield",
-		hideLabel : true
-	} ],
-	getResult : function() {
-		var value1 = this.items[1].getValue();
-		var value2 = this.items[3].getValue();
-		if ((value1 == null || value1 == "")
-				&& (value2 == null || value2 == ""))
-			return null;
-		var o = {};
-		o.type = "and";
-		o.data = [];
-
-		if (value1 != null && value1 != "") {
-			var o1 = {};
-			o1.type = "numeric";
-			o1.field = this.field;
-			o1.op = this.items[0].getValue();
-			o1.value = value1;
-			o.data.push(o1);
-		}
-
-		if (value2 != null && value2 != "") {
-			var o2 = {};
-			o2.type = "numeric";
-			o2.field = this.field;
-			o2.op = this.items[2].getValue();
-			o2.value = value2;
-			o.data.push(o2);
-		}
-		return o;
-	}
-});
+function showTotal(data) {
+	$('#total').highcharts({
+		chart : {
+			type : 'column'
+		},
+		title : {
+			text : '总统计报表'
+		},
+		subtitle : {
+			text : '项目相关任务、里程碑、文件、写字板总数'
+		},
+		xAxis : {
+			categories : [ '项目成员', '任务', '里程碑',
+					'资源', '写字板' ]
+		},
+		yAxis : {
+			min : 0,
+			title : {
+				text : '总数(个)'
+			}
+		},
+		tooltip : {
+			headerFormat : '<span style="font-size:10px">{point.key}</span><br>',
+			shared : true,
+			useHTML : true
+		},
+		plotOptions : {
+			column : {
+				pointPadding : 0.2,
+				borderWidth : 0
+			}
+		},
+		series : [ {
+			name : '活动',
+			data : [ 2, 5, 2, 6 ]
+		} ]
+	});
+}

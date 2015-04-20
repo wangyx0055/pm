@@ -12,7 +12,7 @@ public interface ProjectService {
 	public boolean addProject(Project project) throws Exception;
 	public boolean updateProject(Project project) throws Exception;
 	public boolean removeProject(Project project) throws Exception;
-	public boolean addProject(User creator, Project project, List<User> members) throws Exception;
+	public boolean addProject(User creator, Project project, List<User> members, String sendEmail) throws Exception;
 	public List<Project> pagingFindByUser(User user, PageUtil pageUtil) throws Exception;
 	public Project findById(Project project) throws Exception;
 	public List<Project> findByUser(User user) throws Exception;
@@ -25,4 +25,7 @@ public interface ProjectService {
 	public List<Project> pagingFindByUser(User user, PageUtil pageUtil, String status) throws Exception;
 	public List<Map<String, Object>> findUsers(Project project) throws Exception;
 	public Project findProject(String id) throws Exception;
+	public boolean updateProject(Project project, String sendEmail) throws Exception;
+	public List<Integer> findActionCount(Project project) throws Exception;
+	public List<List<Object>> findTotalPieCharts(Project project) throws Exception;
 }

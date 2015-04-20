@@ -23,6 +23,15 @@ public class MilestoneVO {
 	private String status;
 	/** 描述 */
 	private String description;
+	/** 是否邮件通知 */
+	private String sendEmail;
+	
+	public String getSendEmail() {
+		return sendEmail;
+	}
+	public void setSendEmail(String sendEmail) {
+		this.sendEmail = sendEmail;
+	}
 	public String getDescription() {
 		return description;
 	}
@@ -142,6 +151,8 @@ public class MilestoneVO {
 				+ ((projectId == null) ? 0 : projectId.hashCode());
 		result = prime * result
 				+ ((projectName == null) ? 0 : projectName.hashCode());
+		result = prime * result
+				+ ((sendEmail == null) ? 0 : sendEmail.hashCode());
 		result = prime * result + sequence;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
@@ -209,6 +220,11 @@ public class MilestoneVO {
 			if (other.projectName != null)
 				return false;
 		} else if (!projectName.equals(other.projectName))
+			return false;
+		if (sendEmail == null) {
+			if (other.sendEmail != null)
+				return false;
+		} else if (!sendEmail.equals(other.sendEmail))
 			return false;
 		if (sequence != other.sequence)
 			return false;

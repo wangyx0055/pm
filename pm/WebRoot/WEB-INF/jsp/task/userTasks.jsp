@@ -37,3 +37,30 @@
 	</script>
 </c:if>
 
+
+<!-- 日历开始 -->
+<div class="row" id="calendar_div">
+	<div class="col-xs-12">
+		<div class="panel-group" id="accordion_calendar" role="tablist"
+			aria-multiselectable="true">
+			<div class="panel panel-info">
+				<div class="panel-heading" role="tab" id="headingCalendar">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion_calendar"
+							href="#collapse_calendar" aria-expanded="true"
+							aria-controls="collapse"> 日历 </a>
+					</h4>
+				</div>
+				<div id="collapse_calendar" class="panel-collapse collapse in"
+					role="tabpanel" aria-labelledby="headingCalendar">
+					<div class="panel-body">
+						<jsp:include page="../common/calendar.jsp"></jsp:include>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- collapse结束 -->
+	</div>
+	<!-- 一列 -->
+</div>
+<!-- 一行 -->

@@ -11,12 +11,11 @@ Highcharts.createElement('link', {
 }, null, document.getElementsByTagName('head')[0]);
 
 Highcharts.theme = {
-	colors: ["#cde6c7", "#77ac98", "#6a6da9", "#46485f", "#2f271d", "#666666", 
-	"#4a3113", "#ac6767", "#464547", "#525f42", "#c99979"],
+	colors: ["#77ac98", "#6a6da9", "#525f42", "#46485f", "#2f271d", "#666666", 
+	"#4a3113", "#ac6767", "#464547", "#525f42", "#c99979", "#cde6c7"],
 	chart: {
 		backgroundColor: null,
 		style: {
-			// fontFamily: "Dosis, sans-serif"
 			fontFamily: "微软雅黑"
 		}
 	},

@@ -53,21 +53,23 @@ public class TaskTimer {
 			long endTime = date.getTime();
 			long time = endTime - currentTime;
 			if (time < 3600 * 24 * 1000) {
-				MailSender.sendHtmlMail(new Mail("任务到期通知", emailTimerTaskVO
-						.getNick()
-						+ "，你好！<br>"
+				String title = "任务到期通知";
+				String content = emailTimerTaskVO.getNick() + "，你好！<br>"
 						+ "<p>&nbsp;&nbsp;&nbsp;&nbsp;任务 <b>"
 						+ emailTimerTaskVO.getTaskName()
-						+ "</b> 还有不到一天就要到期，请加紧步伐！！</p>", emailTimerTaskVO
-						.getEmail()));
+						+ "</b> 还有不到一天就要到期，请加紧步伐！！</p>";
+				String to = emailTimerTaskVO.getEmail();
+				MailSender sender = new MailSender(new Mail(title, content, to));
+				sender.start();
 			} else if (time < 0) {
-				MailSender.sendHtmlMail(new Mail("任务到期通知", emailTimerTaskVO
-						.getNick()
-						+ "，你好！<br>"
+				String title = "任务到期通知";
+				String content = emailTimerTaskVO.getNick() + "，你好！<br>"
 						+ "<p>&nbsp;&nbsp;&nbsp;&nbsp;任务 <b>"
 						+ emailTimerTaskVO.getTaskName()
-						+ "</b> 已经过期，如有问题请及时联系项目相关人员！！</p>", emailTimerTaskVO
-						.getEmail()));
+						+ "</b> 已经过期，如有问题请及时联系项目相关人员！！</p>";
+				String to = emailTimerTaskVO.getEmail();
+				MailSender sender = new MailSender(new Mail(title, content, to));
+				sender.start();
 			}
 		}
 	}

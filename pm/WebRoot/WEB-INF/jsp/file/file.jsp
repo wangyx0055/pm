@@ -237,10 +237,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       			</div>
 			    <div class="modal-footer">
 			    	<button type="button" class="btn btn-default" data-dismiss="modal">不是</button>
-			    	<button id="removeResource" type="button" class="btn btn-primary">是的</button>
+			    	<button id="removeResource" type="button" class="btn btn-primary" data-loading-text="Loading..." autocomplete="off">是的</button>
 			    </div>
 			    <script type="text/javascript">
+				    $("#deleteModal").on('hidden.bs.modal', function (e) {
+						$("#removeResource").button('reset');
+					});
 			    	$("#removeResource").click(function(e){
+			    		$(this).button('loading');
 			    		var proId = $("#hiddenProId").val();
 			    		var path = $("#del_path").val();
 			    		var resourceId = $("#del_resource_id").val();

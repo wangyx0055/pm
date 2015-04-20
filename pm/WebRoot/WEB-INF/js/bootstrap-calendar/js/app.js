@@ -9,6 +9,7 @@
 		view : 'month',
 		tmpl_path : 'js/bootstrap-calendar/tmpls/',
 		tmpl_cache : false,
+		modal_type: "ajax",
 		onAfterEventsLoad : function(results) {
 			if (!results) {
 				return;
